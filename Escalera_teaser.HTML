@@ -1,0 +1,2645 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLB Escalera Model — Dashboard</title>
+<style>
+:root {
+  --bg:#07111f; --panel:#0d1b2f; --panel2:#10243e; --ink:#edf5ff; --muted:#9db2cc;
+  --line:rgba(255,255,255,.11); --green:#18d478; --green-bg:rgba(24,212,120,.18);
+  --blue:#4ca3ff; --blue-bg:rgba(76,163,255,.18); --gold:#ffd166; --red:#ff6b6b;
+  --shadow:0 24px 70px rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 20% 0%,#123763 0,#07111f 38%,#040913 100%);color:var(--ink);}
+header{padding:36px 28px 24px;position:sticky;top:0;background:linear-gradient(180deg,rgba(7,17,31,.97),rgba(7,17,31,.82));backdrop-filter:blur(12px);z-index:5;border-bottom:1px solid var(--line)}
+.wrap{max-width:1320px;margin:0 auto}
+.hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-end}
+h1{font-size:40px;line-height:1;margin:0 0 10px;font-weight:900;letter-spacing:-.04em}
+.sub{color:var(--muted);font-size:15px;max-width:900px}
+.file{font-size:12px;color:var(--muted);margin-top:8px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:18px}
+input,select,button{background:#0b1729;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:14px;outline:none}
+button{cursor:pointer;background:linear-gradient(135deg,#0e6cff,#1ac77a);border:none;font-weight:800}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+.kpi{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.kpi span{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+.kpi b{display:block;font-size:26px;margin-top:7px}
+.top-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0 28px}
+.top-card,.game-card,.panel{background:rgba(13,27,47,.92);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.top-card{padding:16px;overflow:hidden}
+h3{margin:0 0 10px;font-size:16px}
+table{width:100%;border-collapse:collapse}
+td,th{padding:9px 8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.game-card{padding:22px;margin:18px 0}
+.game-top{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}
+.eyebrow{color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:.15em;font-weight:900}
+h2{font-size:28px;margin:5px 0 8px;letter-spacing:-.03em}
+.pitchers{margin:0;color:var(--muted)}
+.scorebox{min-width:230px;background:linear-gradient(135deg,#142945,#0b1627);border:1px solid var(--line);border-radius:20px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:8px;font-variant-numeric:tabular-nums}
+.scorebox b{font-size:22px;color:#fff}
+.scorebox small{grid-column:1/3;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+.picks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.pick{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:14px}
+.pick.wide{grid-column:span 4}
+.pick>span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;border-radius:999px;padding:8px 10px;background:rgba(255,255,255,.08);border:1px solid var(--line);font-weight:800;font-size:13px}
+.badge.green,.green-hit{background:var(--green-bg)!important;border-color:rgba(24,212,120,.55)!important}
+.badge.blue,.blue-value{background:var(--blue-bg)!important;border-color:rgba(76,163,255,.55)!important}
+.badge.greenblue{background:linear-gradient(90deg,var(--green-bg),var(--blue-bg));border-color:rgba(255,255,255,.25)}
+.ladder-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel{padding:16px}
+.legend{color:var(--muted);font-size:12px;line-height:1.55;margin-top:-2px}
+.ladder td{padding:10px 8px}
+.bar{height:9px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;min-width:110px}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#497cff,#19d47b);border-radius:999px}
+details{margin-top:14px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:16px;padding:12px}
+summary{cursor:pointer;color:var(--muted);font-weight:800}
+.layers{margin-top:10px;table-layout:fixed}
+.layers th,.layers td{padding:10px 12px}
+.layers th:first-child,.layers td:first-child{width:52%;text-align:left}
+.layers .num{width:16%;text-align:right}
+.layer-name{font-weight:700;color:#eaf3ff}
+.footer{color:var(--muted);font-size:12px;padding:30px 0 50px}
+@media(max-width:980px){.top-grid,.kpis,.ladder-grid,.picks-grid{grid-template-columns:1fr}.pick.wide{grid-column:span 1}.game-top,.hero{display:block}.scorebox{margin-top:15px}}
+@media print{header{position:relative}body{background:#fff;color:#111}.game-card,.panel,.top-card,.kpi{box-shadow:none;background:#fff;color:#111;border-color:#ddd}.sub,.file,.pitchers,.legend,.footer{color:#555}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap hero">
+    <div>
+      <h1>MLB Escalera Model</h1>
+      <div class="sub">Dashboard profesional con posturas ML, Run Line, F5, OU, side de carreras y escaleras tipo “teaser MLB”. 🟩 marca la mayor probabilidad pura; 🟦 marca el punto óptimo entre probabilidad y valor/precio.</div>
+      <div class="file">Generado: 2026-05-27 07:53</div>
+    </div>
+    <div class="controls">
+      <input id="q" placeholder="Filtrar juego/equipo/pick..." oninput="filterGames()">
+      <button onclick="window.print()">Imprimir / PDF</button>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <div class="kpis">
+    <div class="kpi"><span>Juegos analizados</span><b>15</b></div>
+    <div class="kpi"><span>Mejor ML</span><b>NYY ML · NYY @ KC</b></div>
+    <div class="kpi"><span>Mejor RL valor</span><b>NYY +1.5 · NYY @ KC</b></div>
+    <div class="kpi"><span>Mejor OU valor</span><b>Under 9.0 · PHI @ SD</b></div>
+  </div>
+
+  <div class="top-grid">
+    <div class='top-card'><h3>Top 10 ML</h3><table><thead><tr><th>#</th><th>Juego</th><th>Pick</th><th>Prob.</th></tr></thead><tbody><tr><td>1</td><td><b>NYY @ KC</b><br><span class='mini'>COLE.G vs CAMERON.N</span></td><td>NYY ML</td><td class='num'>84.3%</td></tr><tr><td>2</td><td><b>COL @ LAD</b><br><span class='mini'>SUGANO.T vs OHTANI.S</span></td><td>LAD ML</td><td class='num'>77.9%</td></tr><tr><td>3</td><td><b>CIN @ NYM</b><br><span class='mini'>ABBOTT.A vs TONG.J</span></td><td>CIN ML</td><td class='num'>77.7%</td></tr><tr><td>4</td><td><b>WAS @ CLE</b><br><span class='mini'>MIKOLAS.M vs WILLIAMS.G</span></td><td>WAS ML</td><td class='num'>70.2%</td></tr><tr><td>5</td><td><b>ARI @ SF</b><br><span class='mini'>SOROKA.M vs MCDONALD.T</span></td><td>ARI ML</td><td class='num'>66.7%</td></tr><tr><td>6</td><td><b>CHC @ PIT</b><br><span class='mini'>TAILLON.J vs CHANDLER.B</span></td><td>PIT ML</td><td class='num'>66.1%</td></tr><tr><td>7</td><td><b>MIN @ CHW</b><br><span class='mini'>PRIELIPP.C vs MARTIN.D</span></td><td>CHW ML</td><td class='num'>65.4%</td></tr><tr><td>8</td><td><b>HOU @ TEX</b><br><span class='mini'>BURROWS.M vs DEGROM.J</span></td><td>HOU ML</td><td class='num'>62.8%</td></tr><tr><td>9</td><td><b>SEA @ OAK</b><br><span class='mini'>GILBERT.L vs SPRINGS.J</span></td><td>SEA ML</td><td class='num'>61.0%</td></tr><tr><td>10</td><td><b>PHI @ SD</b><br><span class='mini'>SANCHEZ.C vs BUEHLER.W</span></td><td>PHI ML</td><td class='num'>60.9%</td></tr></tbody></table></div>
+    <div class='top-card'><h3>Top 10 Run Line valor</h3><table><thead><tr><th>#</th><th>Juego</th><th>Pick</th><th>Prob.</th></tr></thead><tbody><tr><td>1</td><td><b>NYY @ KC</b><br><span class='mini'>COLE.G vs CAMERON.N</span></td><td>NYY +1.5</td><td class='num'>93.3%</td></tr><tr><td>2</td><td><b>WAS @ CLE</b><br><span class='mini'>MIKOLAS.M vs WILLIAMS.G</span></td><td>WAS +2.5</td><td class='num'>91.2%</td></tr><tr><td>3</td><td><b>COL @ LAD</b><br><span class='mini'>SUGANO.T vs OHTANI.S</span></td><td>LAD +1.5</td><td class='num'>89.6%</td></tr><tr><td>4</td><td><b>CIN @ NYM</b><br><span class='mini'>ABBOTT.A vs TONG.J</span></td><td>CIN +1.5</td><td class='num'>89.5%</td></tr><tr><td>5</td><td><b>ARI @ SF</b><br><span class='mini'>SOROKA.M vs MCDONALD.T</span></td><td>ARI +2.5</td><td class='num'>89.3%</td></tr><tr><td>6</td><td><b>CHC @ PIT</b><br><span class='mini'>TAILLON.J vs CHANDLER.B</span></td><td>PIT +2.5</td><td class='num'>89.1%</td></tr><tr><td>7</td><td><b>MIN @ CHW</b><br><span class='mini'>PRIELIPP.C vs MARTIN.D</span></td><td>CHW +2.5</td><td class='num'>88.8%</td></tr><tr><td>8</td><td><b>HOU @ TEX</b><br><span class='mini'>BURROWS.M vs DEGROM.J</span></td><td>HOU +2.5</td><td class='num'>87.3%</td></tr><tr><td>9</td><td><b>SEA @ OAK</b><br><span class='mini'>GILBERT.L vs SPRINGS.J</span></td><td>SEA +2.5</td><td class='num'>86.4%</td></tr><tr><td>10</td><td><b>PHI @ SD</b><br><span class='mini'>SANCHEZ.C vs BUEHLER.W</span></td><td>PHI +2.5</td><td class='num'>86.4%</td></tr></tbody></table></div>
+    <div class='top-card'><h3>Top 10 OU valor</h3><table><thead><tr><th>#</th><th>Juego</th><th>Pick</th><th>Prob.</th></tr></thead><tbody><tr><td>1</td><td><b>PHI @ SD</b><br><span class='mini'>SANCHEZ.C vs BUEHLER.W</span></td><td>Under 9.0</td><td class='num'>89.4%</td></tr><tr><td>2</td><td><b>STL @ MIL</b><br><span class='mini'>MAY.D vs PATRICK.C</span></td><td>Under 10.5</td><td class='num'>84.3%</td></tr><tr><td>3</td><td><b>ATL @ BOS</b><br><span class='mini'>ELDER.B vs EARLY.C</span></td><td>Under 10.5</td><td class='num'>83.9%</td></tr><tr><td>4</td><td><b>SEA @ OAK</b><br><span class='mini'>GILBERT.L vs SPRINGS.J</span></td><td>Under 11.0</td><td class='num'>83.4%</td></tr><tr><td>5</td><td><b>CHC @ PIT</b><br><span class='mini'>TAILLON.J vs CHANDLER.B</span></td><td>Under 10.5</td><td class='num'>79.8%</td></tr><tr><td>6</td><td><b>NYY @ KC</b><br><span class='mini'>COLE.G vs CAMERON.N</span></td><td>Under 11.0</td><td class='num'>79.4%</td></tr><tr><td>7</td><td><b>ARI @ SF</b><br><span class='mini'>SOROKA.M vs MCDONALD.T</span></td><td>Over 5.5</td><td class='num'>79.3%</td></tr><tr><td>8</td><td><b>HOU @ TEX</b><br><span class='mini'>BURROWS.M vs DEGROM.J</span></td><td>Over 5.5</td><td class='num'>78.2%</td></tr><tr><td>9</td><td><b>TB @ BAL</b><br><span class='mini'>MATZ.S vs BASSITT.C</span></td><td>Under 11.0</td><td class='num'>75.2%</td></tr><tr><td>10</td><td><b>CIN @ NYM</b><br><span class='mini'>ABBOTT.A vs TONG.J</span></td><td>Under 10.0</td><td class='num'>74.7%</td></tr></tbody></table></div>
+    <div class='top-card'><h3>Top 10 Side carreras</h3><table><thead><tr><th>#</th><th>Juego</th><th>Pick</th><th>Prob.</th></tr></thead><tbody><tr><td>1</td><td><b>PHI @ SD</b><br><span class='mini'>SANCHEZ.C vs BUEHLER.W</span></td><td>SD menos de 5 carreras</td><td class='num'>93.9%</td></tr><tr><td>2</td><td><b>NYY @ KC</b><br><span class='mini'>COLE.G vs CAMERON.N</span></td><td>KC menos de 5 carreras</td><td class='num'>91.1%</td></tr><tr><td>3</td><td><b>COL @ LAD</b><br><span class='mini'>SUGANO.T vs OHTANI.S</span></td><td>LAD 3+ carreras</td><td class='num'>90.6%</td></tr><tr><td>4</td><td><b>ARI @ SF</b><br><span class='mini'>SOROKA.M vs MCDONALD.T</span></td><td>ARI 3+ carreras</td><td class='num'>88.8%</td></tr><tr><td>5</td><td><b>CIN @ NYM</b><br><span class='mini'>ABBOTT.A vs TONG.J</span></td><td>NYM menos de 5 carreras</td><td class='num'>88.5%</td></tr><tr><td>6</td><td><b>HOU @ TEX</b><br><span class='mini'>BURROWS.M vs DEGROM.J</span></td><td>HOU 3+ carreras</td><td class='num'>86.6%</td></tr><tr><td>7</td><td><b>WAS @ CLE</b><br><span class='mini'>MIKOLAS.M vs WILLIAMS.G</span></td><td>WAS 3+ carreras</td><td class='num'>84.8%</td></tr><tr><td>8</td><td><b>MIN @ CHW</b><br><span class='mini'>PRIELIPP.C vs MARTIN.D</span></td><td>CHW 3+ carreras</td><td class='num'>82.3%</td></tr><tr><td>9</td><td><b>TB @ BAL</b><br><span class='mini'>MATZ.S vs BASSITT.C</span></td><td>TB 3+ carreras</td><td class='num'>82.1%</td></tr><tr><td>10</td><td><b>CHC @ PIT</b><br><span class='mini'>TAILLON.J vs CHANDLER.B</span></td><td>CHC menos de 5 carreras</td><td class='num'>81.2%</td></tr></tbody></table></div>
+  </div>
+
+  <div id="games">
+    
+    <section class="game-card" id="game-1">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #1 · MLB</div>
+          <h2>MIA @ TOR</h2>
+          <p class="pitchers">MIA: <b>PEREZ.E</b> · TOR: <b>GAUSMAN.K</b></p>
+        </div>
+        <div class="scorebox">
+          <span>MIA</span><b>3.64</b>
+          <span>TOR</span><b>3.53</b>
+          <small>Total 7.16 · OU 7.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">MIA ML · 51.4%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">MIA +2.5 · 80.4%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">MIA F5 ML/DNB · 51.1%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 9.5 · 73.1%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">TOR menos de 5 carreras · 72.0%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>TOR +3.5 86.7%</b><br>🟦 óptima valor/precio: <b>MIA +2.5 80.4%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="blue-value">
+          <td>🟦 MIA +2.5</td>
+          <td><div class="bar"><span style="width:80.4%"></span></div></td>
+          <td class="num">80.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIA +1.5</td>
+          <td><div class="bar"><span style="width:70.1%"></span></div></td>
+          <td class="num">70.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIA ML</td>
+          <td><div class="bar"><span style="width:51.4%"></span></div></td>
+          <td class="num">51.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIA -1.5</td>
+          <td><div class="bar"><span style="width:32.4%"></span></div></td>
+          <td class="num">32.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIA -2.5</td>
+          <td><div class="bar"><span style="width:21.7%"></span></div></td>
+          <td class="num">21.7%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 TOR +3.5</td>
+          <td><div class="bar"><span style="width:86.7%"></span></div></td>
+          <td class="num">86.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>TOR +2.5</td>
+          <td><div class="bar"><span style="width:78.3%"></span></div></td>
+          <td class="num">78.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>TOR +1.5</td>
+          <td><div class="bar"><span style="width:67.6%"></span></div></td>
+          <td class="num">67.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>TOR ML</td>
+          <td><div class="bar"><span style="width:48.6%"></span></div></td>
+          <td class="num">48.6%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 10.5 81.0%</b><br>🟦 óptima valor/precio: <b>Under 9.5 73.1%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 4.5</td>
+          <td><div class="bar"><span style="width:75.8%"></span></div></td>
+          <td class="num">75.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 5.5</td>
+          <td><div class="bar"><span style="width:66.9%"></span></div></td>
+          <td class="num">66.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:56.9%"></span></div></td>
+          <td class="num">56.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:46.5%"></span></div></td>
+          <td class="num">46.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:36.2%"></span></div></td>
+          <td class="num">36.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 8.5</td>
+          <td><div class="bar"><span style="width:63.8%"></span></div></td>
+          <td class="num">63.8%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 9.5</td>
+          <td><div class="bar"><span style="width:73.1%"></span></div></td>
+          <td class="num">73.1%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 10.5</td>
+          <td><div class="bar"><span style="width:81.0%"></span></div></td>
+          <td class="num">81.0%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">MIA</th><th class="num">TOR</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>3.27</td>
+          <td class='num'>3.47</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>3.38</td>
+          <td class='num'>3.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>2.33</td>
+          <td class='num'>2.33</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>6.00</td>
+          <td class='num'>4.00</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-2">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #2 · MLB</div>
+          <h2>WAS @ CLE</h2>
+          <p class="pitchers">WAS: <b>MIKOLAS.M</b> · CLE: <b>WILLIAMS.G</b></p>
+        </div>
+        <div class="scorebox">
+          <span>WAS</span><b>4.70</b>
+          <span>CLE</span><b>3.08</b>
+          <small>Total 7.79 · OU 8.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">WAS ML · 70.2%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">WAS +2.5 · 91.2%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">WAS F5 ML/DNB · 65.7%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 10.0 · 71.2%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">WAS 3+ carreras · 84.8%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>WAS +2.5 91.2%</b><br>🟦 óptima valor/precio: <b>WAS +2.5 91.2%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 WAS +2.5</td>
+          <td><div class="bar"><span style="width:91.2%"></span></div></td>
+          <td class="num">91.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>WAS +1.5</td>
+          <td><div class="bar"><span style="width:84.7%"></span></div></td>
+          <td class="num">84.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>WAS ML</td>
+          <td><div class="bar"><span style="width:70.2%"></span></div></td>
+          <td class="num">70.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>WAS -1.5</td>
+          <td><div class="bar"><span style="width:51.6%"></span></div></td>
+          <td class="num">51.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>WAS -2.5</td>
+          <td><div class="bar"><span style="width:38.7%"></span></div></td>
+          <td class="num">38.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>CLE +3.5</td>
+          <td><div class="bar"><span style="width:73.1%"></span></div></td>
+          <td class="num">73.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>CLE +2.5</td>
+          <td><div class="bar"><span style="width:61.3%"></span></div></td>
+          <td class="num">61.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>CLE +1.5</td>
+          <td><div class="bar"><span style="width:48.4%"></span></div></td>
+          <td class="num">48.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>CLE ML</td>
+          <td><div class="bar"><span style="width:29.8%"></span></div></td>
+          <td class="num">29.8%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 11.0 79.1%</b><br>🟦 óptima valor/precio: <b>Under 10.0 71.2%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.0</td>
+          <td><div class="bar"><span style="width:75.9%"></span></div></td>
+          <td class="num">75.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:67.4%"></span></div></td>
+          <td class="num">67.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:57.9%"></span></div></td>
+          <td class="num">57.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:47.9%"></span></div></td>
+          <td class="num">47.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:38.0%"></span></div></td>
+          <td class="num">38.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.0</td>
+          <td><div class="bar"><span style="width:62.0%"></span></div></td>
+          <td class="num">62.0%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 10.0</td>
+          <td><div class="bar"><span style="width:71.2%"></span></div></td>
+          <td class="num">71.2%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 11.0</td>
+          <td><div class="bar"><span style="width:79.1%"></span></div></td>
+          <td class="num">79.1%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">WAS</th><th class="num">CLE</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>4.26</td>
+          <td class='num'>2.28</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>5.25</td>
+          <td class='num'>2.38</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>2</td>
+          <td class='num'>—</td>
+          <td class='num'>4.50</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>5.12</td>
+          <td class='num'>5.38</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-3">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #3 · MLB</div>
+          <h2>STL @ MIL</h2>
+          <p class="pitchers">STL: <b>MAY.D</b> · MIL: <b>PATRICK.C</b></p>
+        </div>
+        <div class="scorebox">
+          <span>STL</span><b>3.15</b>
+          <span>MIL</span><b>3.63</b>
+          <small>Total 6.78 · OU 8.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">MIL ML · 56.3%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">MIL +2.5 · 83.6%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">MIL F5 ML/DNB · 54.8%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 10.5 · 84.3%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">STL menos de 5 carreras · 79.0%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>STL +3.5 83.9%</b><br>🟦 óptima valor/precio: <b>MIL +2.5 83.6%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="blue-value">
+          <td>🟦 MIL +2.5</td>
+          <td><div class="bar"><span style="width:83.6%"></span></div></td>
+          <td class="num">83.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIL +1.5</td>
+          <td><div class="bar"><span style="width:74.2%"></span></div></td>
+          <td class="num">74.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIL ML</td>
+          <td><div class="bar"><span style="width:56.3%"></span></div></td>
+          <td class="num">56.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIL -1.5</td>
+          <td><div class="bar"><span style="width:36.9%"></span></div></td>
+          <td class="num">36.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIL -2.5</td>
+          <td><div class="bar"><span style="width:25.4%"></span></div></td>
+          <td class="num">25.4%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 STL +3.5</td>
+          <td><div class="bar"><span style="width:83.9%"></span></div></td>
+          <td class="num">83.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>STL +2.5</td>
+          <td><div class="bar"><span style="width:74.6%"></span></div></td>
+          <td class="num">74.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>STL +1.5</td>
+          <td><div class="bar"><span style="width:63.1%"></span></div></td>
+          <td class="num">63.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>STL ML</td>
+          <td><div class="bar"><span style="width:43.7%"></span></div></td>
+          <td class="num">43.7%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 11.5 89.9%</b><br>🟦 óptima valor/precio: <b>Under 10.5 84.3%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.5</td>
+          <td><div class="bar"><span style="width:63.5%"></span></div></td>
+          <td class="num">63.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:53.0%"></span></div></td>
+          <td class="num">53.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:42.2%"></span></div></td>
+          <td class="num">42.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:32.1%"></span></div></td>
+          <td class="num">32.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.5</td>
+          <td><div class="bar"><span style="width:23.1%"></span></div></td>
+          <td class="num">23.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.5</td>
+          <td><div class="bar"><span style="width:76.9%"></span></div></td>
+          <td class="num">76.9%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 10.5</td>
+          <td><div class="bar"><span style="width:84.3%"></span></div></td>
+          <td class="num">84.3%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 11.5</td>
+          <td><div class="bar"><span style="width:89.9%"></span></div></td>
+          <td class="num">89.9%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">STL</th><th class="num">MIL</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.58</td>
+          <td class='num'>3.13</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>3.25</td>
+          <td class='num'>4.88</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>3.17</td>
+          <td class='num'>2.67</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>3.25</td>
+          <td class='num'>3.38</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-4">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #4 · MLB</div>
+          <h2>SEA @ OAK</h2>
+          <p class="pitchers">SEA: <b>GILBERT.L</b> · OAK: <b>SPRINGS.J</b></p>
+        </div>
+        <div class="scorebox">
+          <span>SEA</span><b>4.07</b>
+          <span>OAK</span><b>3.22</b>
+          <small>Total 7.29 · OU 9.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">SEA ML · 61.0%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">SEA +2.5 · 86.4%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">SEA F5 ML/DNB · 58.4%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 11.0 · 83.4%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">OAK menos de 5 carreras · 77.7%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>SEA +2.5 86.4%</b><br>🟦 óptima valor/precio: <b>SEA +2.5 86.4%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 SEA +2.5</td>
+          <td><div class="bar"><span style="width:86.4%"></span></div></td>
+          <td class="num">86.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>SEA +1.5</td>
+          <td><div class="bar"><span style="width:77.9%"></span></div></td>
+          <td class="num">77.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>SEA ML</td>
+          <td><div class="bar"><span style="width:61.0%"></span></div></td>
+          <td class="num">61.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>SEA -1.5</td>
+          <td><div class="bar"><span style="width:41.5%"></span></div></td>
+          <td class="num">41.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>SEA -2.5</td>
+          <td><div class="bar"><span style="width:29.4%"></span></div></td>
+          <td class="num">29.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>OAK +3.5</td>
+          <td><div class="bar"><span style="width:80.8%"></span></div></td>
+          <td class="num">80.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>OAK +2.5</td>
+          <td><div class="bar"><span style="width:70.6%"></span></div></td>
+          <td class="num">70.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>OAK +1.5</td>
+          <td><div class="bar"><span style="width:58.5%"></span></div></td>
+          <td class="num">58.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>OAK ML</td>
+          <td><div class="bar"><span style="width:39.0%"></span></div></td>
+          <td class="num">39.0%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 12.0 89.1%</b><br>🟦 óptima valor/precio: <b>Under 11.0 83.4%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:63.1%"></span></div></td>
+          <td class="num">63.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:53.0%"></span></div></td>
+          <td class="num">53.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:42.6%"></span></div></td>
+          <td class="num">42.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:32.7%"></span></div></td>
+          <td class="num">32.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 10.0</td>
+          <td><div class="bar"><span style="width:24.0%"></span></div></td>
+          <td class="num">24.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.0</td>
+          <td><div class="bar"><span style="width:76.0%"></span></div></td>
+          <td class="num">76.0%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 11.0</td>
+          <td><div class="bar"><span style="width:83.4%"></span></div></td>
+          <td class="num">83.4%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 12.0</td>
+          <td><div class="bar"><span style="width:89.1%"></span></div></td>
+          <td class="num">89.1%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">SEA</th><th class="num">OAK</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>4.30</td>
+          <td class='num'>2.57</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>4.12</td>
+          <td class='num'>4.25</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>4</td>
+          <td class='num'>2.62</td>
+          <td class='num'>2.33</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>4.88</td>
+          <td class='num'>3.25</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-5">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #5 · MLB</div>
+          <h2>ARI @ SF</h2>
+          <p class="pitchers">ARI: <b>SOROKA.M</b> · SF: <b>MCDONALD.T</b></p>
+        </div>
+        <div class="scorebox">
+          <span>ARI</span><b>5.16</b>
+          <span>SF</span><b>3.83</b>
+          <small>Total 8.98 · OU 7.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">ARI ML · 66.7%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">ARI +2.5 · 89.3%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">ARI F5 ML/DNB · 63.0%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Over 5.5 · 79.3%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">ARI 3+ carreras · 88.8%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>ARI +2.5 89.3%</b><br>🟦 óptima valor/precio: <b>ARI +2.5 89.3%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 ARI +2.5</td>
+          <td><div class="bar"><span style="width:89.3%"></span></div></td>
+          <td class="num">89.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>ARI +1.5</td>
+          <td><div class="bar"><span style="width:82.1%"></span></div></td>
+          <td class="num">82.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>ARI ML</td>
+          <td><div class="bar"><span style="width:66.7%"></span></div></td>
+          <td class="num">66.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>ARI -1.5</td>
+          <td><div class="bar"><span style="width:47.8%"></span></div></td>
+          <td class="num">47.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>ARI -2.5</td>
+          <td><div class="bar"><span style="width:35.2%"></span></div></td>
+          <td class="num">35.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>SF +3.5</td>
+          <td><div class="bar"><span style="width:75.9%"></span></div></td>
+          <td class="num">75.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>SF +2.5</td>
+          <td><div class="bar"><span style="width:64.8%"></span></div></td>
+          <td class="num">64.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>SF +1.5</td>
+          <td><div class="bar"><span style="width:52.2%"></span></div></td>
+          <td class="num">52.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>SF ML</td>
+          <td><div class="bar"><span style="width:33.3%"></span></div></td>
+          <td class="num">33.3%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Over 4.5 85.4%</b><br>🟦 óptima valor/precio: <b>Over 5.5 79.3%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 Over 4.5</td>
+          <td><div class="bar"><span style="width:85.4%"></span></div></td>
+          <td class="num">85.4%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Over 5.5</td>
+          <td><div class="bar"><span style="width:79.3%"></span></div></td>
+          <td class="num">79.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:72.0%"></span></div></td>
+          <td class="num">72.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:63.6%"></span></div></td>
+          <td class="num">63.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:54.5%"></span></div></td>
+          <td class="num">54.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 8.5</td>
+          <td><div class="bar"><span style="width:45.5%"></span></div></td>
+          <td class="num">45.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.5</td>
+          <td><div class="bar"><span style="width:54.8%"></span></div></td>
+          <td class="num">54.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.5</td>
+          <td><div class="bar"><span style="width:63.9%"></span></div></td>
+          <td class="num">63.9%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">ARI</th><th class="num">SF</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>4.82</td>
+          <td class='num'>3.36</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>13</td>
+          <td class='num'>5.25</td>
+          <td class='num'>4.62</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>2</td>
+          <td class='num'>—</td>
+          <td class='num'>1.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>6.38</td>
+          <td class='num'>3.25</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-6">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #6 · MLB</div>
+          <h2>PHI @ SD</h2>
+          <p class="pitchers">PHI: <b>SANCHEZ.C</b> · SD: <b>BUEHLER.W</b></p>
+        </div>
+        <div class="scorebox">
+          <span>PHI</span><b>2.93</b>
+          <span>SD</span><b>2.09</b>
+          <small>Total 5.02 · OU 7.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">PHI ML · 60.9%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">PHI +2.5 · 86.4%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">PHI F5 ML/DNB · 58.3%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 9.0 · 89.4%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">SD menos de 5 carreras · 93.9%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>PHI +2.5 86.4%</b><br>🟦 óptima valor/precio: <b>PHI +2.5 86.4%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 PHI +2.5</td>
+          <td><div class="bar"><span style="width:86.4%"></span></div></td>
+          <td class="num">86.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>PHI +1.5</td>
+          <td><div class="bar"><span style="width:77.9%"></span></div></td>
+          <td class="num">77.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>PHI ML</td>
+          <td><div class="bar"><span style="width:60.9%"></span></div></td>
+          <td class="num">60.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>PHI -1.5</td>
+          <td><div class="bar"><span style="width:41.5%"></span></div></td>
+          <td class="num">41.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>PHI -2.5</td>
+          <td><div class="bar"><span style="width:29.4%"></span></div></td>
+          <td class="num">29.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>SD +3.5</td>
+          <td><div class="bar"><span style="width:80.8%"></span></div></td>
+          <td class="num">80.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>SD +2.5</td>
+          <td><div class="bar"><span style="width:70.6%"></span></div></td>
+          <td class="num">70.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>SD +1.5</td>
+          <td><div class="bar"><span style="width:58.5%"></span></div></td>
+          <td class="num">58.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>SD ML</td>
+          <td><div class="bar"><span style="width:39.1%"></span></div></td>
+          <td class="num">39.1%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 10.0 94.1%</b><br>🟦 óptima valor/precio: <b>Under 9.0 89.4%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.0</td>
+          <td><div class="bar"><span style="width:50.3%"></span></div></td>
+          <td class="num">50.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:37.9%"></span></div></td>
+          <td class="num">37.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:26.7%"></span></div></td>
+          <td class="num">26.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:17.5%"></span></div></td>
+          <td class="num">17.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 8.0</td>
+          <td><div class="bar"><span style="width:82.5%"></span></div></td>
+          <td class="num">82.5%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 9.0</td>
+          <td><div class="bar"><span style="width:89.4%"></span></div></td>
+          <td class="num">89.4%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 10.0</td>
+          <td><div class="bar"><span style="width:94.1%"></span></div></td>
+          <td class="num">94.1%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">PHI</th><th class="num">SD</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.76</td>
+          <td class='num'>1.47</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>2.62</td>
+          <td class='num'>2.38</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>2.17</td>
+          <td class='num'>1.00</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>3.50</td>
+          <td class='num'>2.50</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-7">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #7 · MLB</div>
+          <h2>TB @ BAL</h2>
+          <p class="pitchers">TB: <b>MATZ.S</b> · BAL: <b>BASSITT.C</b></p>
+        </div>
+        <div class="scorebox">
+          <span>TB</span><b>4.45</b>
+          <span>BAL</span><b>3.78</b>
+          <small>Total 8.23 · OU 9.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">TB ML · 58.8%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">TB +2.5 · 85.1%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">TB F5 ML/DNB · 56.7%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 11.0 · 75.2%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">TB 3+ carreras · 82.1%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>TB +2.5 85.1%</b><br>🟦 óptima valor/precio: <b>TB +2.5 85.1%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 TB +2.5</td>
+          <td><div class="bar"><span style="width:85.1%"></span></div></td>
+          <td class="num">85.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>TB +1.5</td>
+          <td><div class="bar"><span style="width:76.2%"></span></div></td>
+          <td class="num">76.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>TB ML</td>
+          <td><div class="bar"><span style="width:58.8%"></span></div></td>
+          <td class="num">58.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>TB -1.5</td>
+          <td><div class="bar"><span style="width:39.3%"></span></div></td>
+          <td class="num">39.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>TB -2.5</td>
+          <td><div class="bar"><span style="width:27.5%"></span></div></td>
+          <td class="num">27.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>BAL +3.5</td>
+          <td><div class="bar"><span style="width:82.3%"></span></div></td>
+          <td class="num">82.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>BAL +2.5</td>
+          <td><div class="bar"><span style="width:72.5%"></span></div></td>
+          <td class="num">72.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>BAL +1.5</td>
+          <td><div class="bar"><span style="width:60.7%"></span></div></td>
+          <td class="num">60.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>BAL ML</td>
+          <td><div class="bar"><span style="width:41.2%"></span></div></td>
+          <td class="num">41.2%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 12.0 82.3%</b><br>🟦 óptima valor/precio: <b>Under 11.0 75.2%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:70.8%"></span></div></td>
+          <td class="num">70.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:61.9%"></span></div></td>
+          <td class="num">61.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:52.2%"></span></div></td>
+          <td class="num">52.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:42.5%"></span></div></td>
+          <td class="num">42.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 10.0</td>
+          <td><div class="bar"><span style="width:33.2%"></span></div></td>
+          <td class="num">33.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.0</td>
+          <td><div class="bar"><span style="width:66.8%"></span></div></td>
+          <td class="num">66.8%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 11.0</td>
+          <td><div class="bar"><span style="width:75.2%"></span></div></td>
+          <td class="num">75.2%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 12.0</td>
+          <td><div class="bar"><span style="width:82.3%"></span></div></td>
+          <td class="num">82.3%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">TB</th><th class="num">BAL</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.86</td>
+          <td class='num'>3.40</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>13</td>
+          <td class='num'>5.38</td>
+          <td class='num'>4.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>5.67</td>
+          <td class='num'>2.00</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>5.50</td>
+          <td class='num'>4.88</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-8">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #8 · MLB</div>
+          <h2>CHC @ PIT</h2>
+          <p class="pitchers">CHC: <b>TAILLON.J</b> · PIT: <b>CHANDLER.B</b></p>
+        </div>
+        <div class="scorebox">
+          <span>CHC</span><b>3.02</b>
+          <span>PIT</span><b>4.28</b>
+          <small>Total 7.30 · OU 8.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">PIT ML · 66.1%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">PIT +2.5 · 89.1%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">PIT F5 ML/DNB · 62.4%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 10.5 · 79.8%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">CHC menos de 5 carreras · 81.2%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>PIT +2.5 89.1%</b><br>🟦 óptima valor/precio: <b>PIT +2.5 89.1%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 PIT +2.5</td>
+          <td><div class="bar"><span style="width:89.1%"></span></div></td>
+          <td class="num">89.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>PIT +1.5</td>
+          <td><div class="bar"><span style="width:81.8%"></span></div></td>
+          <td class="num">81.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>PIT ML</td>
+          <td><div class="bar"><span style="width:66.1%"></span></div></td>
+          <td class="num">66.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>PIT -1.5</td>
+          <td><div class="bar"><span style="width:46.9%"></span></div></td>
+          <td class="num">46.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>PIT -2.5</td>
+          <td><div class="bar"><span style="width:34.3%"></span></div></td>
+          <td class="num">34.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHC +3.5</td>
+          <td><div class="bar"><span style="width:76.8%"></span></div></td>
+          <td class="num">76.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHC +2.5</td>
+          <td><div class="bar"><span style="width:65.7%"></span></div></td>
+          <td class="num">65.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHC +1.5</td>
+          <td><div class="bar"><span style="width:53.1%"></span></div></td>
+          <td class="num">53.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHC ML</td>
+          <td><div class="bar"><span style="width:33.9%"></span></div></td>
+          <td class="num">33.9%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 11.5 86.3%</b><br>🟦 óptima valor/precio: <b>Under 10.5 79.8%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.5</td>
+          <td><div class="bar"><span style="width:68.1%"></span></div></td>
+          <td class="num">68.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:58.3%"></span></div></td>
+          <td class="num">58.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:48.0%"></span></div></td>
+          <td class="num">48.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:37.8%"></span></div></td>
+          <td class="num">37.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.5</td>
+          <td><div class="bar"><span style="width:28.3%"></span></div></td>
+          <td class="num">28.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.5</td>
+          <td><div class="bar"><span style="width:71.7%"></span></div></td>
+          <td class="num">71.7%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 10.5</td>
+          <td><div class="bar"><span style="width:79.8%"></span></div></td>
+          <td class="num">79.8%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 11.5</td>
+          <td><div class="bar"><span style="width:86.3%"></span></div></td>
+          <td class="num">86.3%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">CHC</th><th class="num">PIT</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.72</td>
+          <td class='num'>4.65</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>1.75</td>
+          <td class='num'>5.12</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>3.83</td>
+          <td class='num'>2.67</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>3.50</td>
+          <td class='num'>3.88</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-9">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #9 · MLB</div>
+          <h2>LAA @ DET</h2>
+          <p class="pitchers">LAA: <b>SORIANO.J</b> · DET: <b>MIZE.C</b></p>
+        </div>
+        <div class="scorebox">
+          <span>LAA</span><b>3.89</b>
+          <span>DET</span><b>4.24</b>
+          <small>Total 8.14 · OU 7.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">DET ML · 54.5%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">DET +2.5 · 82.5%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">DET F5 ML/DNB · 53.4%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Over 5.5 · 74.2%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">DET 3+ carreras · 79.5%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>LAA +3.5 84.9%</b><br>🟦 óptima valor/precio: <b>DET +2.5 82.5%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="blue-value">
+          <td>🟦 DET +2.5</td>
+          <td><div class="bar"><span style="width:82.5%"></span></div></td>
+          <td class="num">82.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>DET +1.5</td>
+          <td><div class="bar"><span style="width:72.8%"></span></div></td>
+          <td class="num">72.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>DET ML</td>
+          <td><div class="bar"><span style="width:54.5%"></span></div></td>
+          <td class="num">54.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>DET -1.5</td>
+          <td><div class="bar"><span style="width:35.3%"></span></div></td>
+          <td class="num">35.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>DET -2.5</td>
+          <td><div class="bar"><span style="width:24.0%"></span></div></td>
+          <td class="num">24.0%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 LAA +3.5</td>
+          <td><div class="bar"><span style="width:84.9%"></span></div></td>
+          <td class="num">84.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>LAA +2.5</td>
+          <td><div class="bar"><span style="width:76.0%"></span></div></td>
+          <td class="num">76.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>LAA +1.5</td>
+          <td><div class="bar"><span style="width:64.7%"></span></div></td>
+          <td class="num">64.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>LAA ML</td>
+          <td><div class="bar"><span style="width:45.5%"></span></div></td>
+          <td class="num">45.5%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Over 4.5 81.5%</b><br>🟦 óptima valor/precio: <b>Over 5.5 74.2%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 Over 4.5</td>
+          <td><div class="bar"><span style="width:81.5%"></span></div></td>
+          <td class="num">81.5%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Over 5.5</td>
+          <td><div class="bar"><span style="width:74.2%"></span></div></td>
+          <td class="num">74.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:65.7%"></span></div></td>
+          <td class="num">65.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:56.2%"></span></div></td>
+          <td class="num">56.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:46.4%"></span></div></td>
+          <td class="num">46.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 8.5</td>
+          <td><div class="bar"><span style="width:53.6%"></span></div></td>
+          <td class="num">53.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.5</td>
+          <td><div class="bar"><span style="width:63.2%"></span></div></td>
+          <td class="num">63.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.5</td>
+          <td><div class="bar"><span style="width:72.0%"></span></div></td>
+          <td class="num">72.0%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">LAA</th><th class="num">DET</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.96</td>
+          <td class='num'>3.46</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>5.12</td>
+          <td class='num'>3.12</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>3.17</td>
+          <td class='num'>4.67</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>4.75</td>
+          <td class='num'>7.38</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-10">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #10 · MLB</div>
+          <h2>ATL @ BOS</h2>
+          <p class="pitchers">ATL: <b>ELDER.B</b> · BOS: <b>EARLY.C</b></p>
+        </div>
+        <div class="scorebox">
+          <span>ATL</span><b>3.48</b>
+          <span>BOS</span><b>3.35</b>
+          <small>Total 6.83 · OU 8.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">ATL ML · 51.7%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">ATL +2.5 · 80.6%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">ATL F5 ML/DNB · 51.3%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 10.5 · 83.9%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">BOS menos de 5 carreras · 75.3%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>BOS +3.5 86.5%</b><br>🟦 óptima valor/precio: <b>ATL +2.5 80.6%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="blue-value">
+          <td>🟦 ATL +2.5</td>
+          <td><div class="bar"><span style="width:80.6%"></span></div></td>
+          <td class="num">80.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>ATL +1.5</td>
+          <td><div class="bar"><span style="width:70.3%"></span></div></td>
+          <td class="num">70.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>ATL ML</td>
+          <td><div class="bar"><span style="width:51.7%"></span></div></td>
+          <td class="num">51.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>ATL -1.5</td>
+          <td><div class="bar"><span style="width:32.7%"></span></div></td>
+          <td class="num">32.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>ATL -2.5</td>
+          <td><div class="bar"><span style="width:21.8%"></span></div></td>
+          <td class="num">21.8%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 BOS +3.5</td>
+          <td><div class="bar"><span style="width:86.5%"></span></div></td>
+          <td class="num">86.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>BOS +2.5</td>
+          <td><div class="bar"><span style="width:78.2%"></span></div></td>
+          <td class="num">78.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>BOS +1.5</td>
+          <td><div class="bar"><span style="width:67.3%"></span></div></td>
+          <td class="num">67.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>BOS ML</td>
+          <td><div class="bar"><span style="width:48.3%"></span></div></td>
+          <td class="num">48.3%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 11.5 89.6%</b><br>🟦 óptima valor/precio: <b>Under 10.5 83.9%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.5</td>
+          <td><div class="bar"><span style="width:64.0%"></span></div></td>
+          <td class="num">64.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:53.5%"></span></div></td>
+          <td class="num">53.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:42.8%"></span></div></td>
+          <td class="num">42.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:32.6%"></span></div></td>
+          <td class="num">32.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.5</td>
+          <td><div class="bar"><span style="width:23.6%"></span></div></td>
+          <td class="num">23.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.5</td>
+          <td><div class="bar"><span style="width:76.4%"></span></div></td>
+          <td class="num">76.4%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 10.5</td>
+          <td><div class="bar"><span style="width:83.9%"></span></div></td>
+          <td class="num">83.9%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 11.5</td>
+          <td><div class="bar"><span style="width:89.6%"></span></div></td>
+          <td class="num">89.6%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">ATL</th><th class="num">BOS</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.57</td>
+          <td class='num'>2.79</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>4.88</td>
+          <td class='num'>4.25</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>2.00</td>
+          <td class='num'>2.83</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>4.62</td>
+          <td class='num'>3.00</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-11">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #11 · MLB</div>
+          <h2>CIN @ NYM</h2>
+          <p class="pitchers">CIN: <b>ABBOTT.A</b> · NYM: <b>TONG.J</b></p>
+        </div>
+        <div class="scorebox">
+          <span>CIN</span><b>4.88</b>
+          <span>NYM</span><b>2.55</b>
+          <small>Total 7.42 · OU 8.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">CIN ML · 77.7%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">CIN +1.5 · 89.5%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">CIN F5 ML/DNB · 71.9%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 10.0 · 74.7%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">NYM menos de 5 carreras · 88.5%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>CIN +2.5 94.3%</b><br>🟦 óptima valor/precio: <b>CIN +1.5 89.5%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 CIN +2.5</td>
+          <td><div class="bar"><span style="width:94.3%"></span></div></td>
+          <td class="num">94.3%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 CIN +1.5</td>
+          <td><div class="bar"><span style="width:89.5%"></span></div></td>
+          <td class="num">89.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>CIN ML</td>
+          <td><div class="bar"><span style="width:77.7%"></span></div></td>
+          <td class="num">77.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>CIN -1.5</td>
+          <td><div class="bar"><span style="width:60.7%"></span></div></td>
+          <td class="num">60.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>CIN -2.5</td>
+          <td><div class="bar"><span style="width:47.7%"></span></div></td>
+          <td class="num">47.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYM +3.5</td>
+          <td><div class="bar"><span style="width:65.0%"></span></div></td>
+          <td class="num">65.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYM +2.5</td>
+          <td><div class="bar"><span style="width:52.3%"></span></div></td>
+          <td class="num">52.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYM +1.5</td>
+          <td><div class="bar"><span style="width:39.3%"></span></div></td>
+          <td class="num">39.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYM ML</td>
+          <td><div class="bar"><span style="width:22.3%"></span></div></td>
+          <td class="num">22.3%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 11.0 82.2%</b><br>🟦 óptima valor/precio: <b>Under 10.0 74.7%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.0</td>
+          <td><div class="bar"><span style="width:73.5%"></span></div></td>
+          <td class="num">73.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:64.4%"></span></div></td>
+          <td class="num">64.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:54.4%"></span></div></td>
+          <td class="num">54.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:44.1%"></span></div></td>
+          <td class="num">44.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:34.2%"></span></div></td>
+          <td class="num">34.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.0</td>
+          <td><div class="bar"><span style="width:65.8%"></span></div></td>
+          <td class="num">65.8%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 10.0</td>
+          <td><div class="bar"><span style="width:74.7%"></span></div></td>
+          <td class="num">74.7%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 11.0</td>
+          <td><div class="bar"><span style="width:82.2%"></span></div></td>
+          <td class="num">82.2%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">CIN</th><th class="num">NYM</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>5.07</td>
+          <td class='num'>1.43</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>5.25</td>
+          <td class='num'>2.25</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>4.00</td>
+          <td class='num'>3.58</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>5.25</td>
+          <td class='num'>2.88</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-12">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #12 · MLB</div>
+          <h2>NYY @ KC</h2>
+          <p class="pitchers">NYY: <b>COLE.G</b> · KC: <b>CAMERON.N</b></p>
+        </div>
+        <div class="scorebox">
+          <span>NYY</span><b>5.41</b>
+          <span>KC</span><b>2.35</b>
+          <small>Total 7.76 · OU 9.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">NYY ML · 84.3%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">NYY +1.5 · 93.3%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">NYY F5 ML/DNB · 77.8%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 11.0 · 79.4%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">KC menos de 5 carreras · 91.1%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>NYY +2.5 96.6%</b><br>🟦 óptima valor/precio: <b>NYY +1.5 93.3%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 NYY +2.5</td>
+          <td><div class="bar"><span style="width:96.6%"></span></div></td>
+          <td class="num">96.6%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 NYY +1.5</td>
+          <td><div class="bar"><span style="width:93.3%"></span></div></td>
+          <td class="num">93.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYY ML</td>
+          <td><div class="bar"><span style="width:84.3%"></span></div></td>
+          <td class="num">84.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYY -1.5</td>
+          <td><div class="bar"><span style="width:69.6%"></span></div></td>
+          <td class="num">69.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>NYY -2.5</td>
+          <td><div class="bar"><span style="width:57.4%"></span></div></td>
+          <td class="num">57.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>KC +3.5</td>
+          <td><div class="bar"><span style="width:55.6%"></span></div></td>
+          <td class="num">55.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>KC +2.5</td>
+          <td><div class="bar"><span style="width:42.6%"></span></div></td>
+          <td class="num">42.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>KC +1.5</td>
+          <td><div class="bar"><span style="width:30.4%"></span></div></td>
+          <td class="num">30.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>KC ML</td>
+          <td><div class="bar"><span style="width:15.7%"></span></div></td>
+          <td class="num">15.7%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 12.0 85.8%</b><br>🟦 óptima valor/precio: <b>Under 11.0 79.4%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:67.2%"></span></div></td>
+          <td class="num">67.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:57.6%"></span></div></td>
+          <td class="num">57.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:47.6%"></span></div></td>
+          <td class="num">47.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:37.7%"></span></div></td>
+          <td class="num">37.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 10.0</td>
+          <td><div class="bar"><span style="width:28.6%"></span></div></td>
+          <td class="num">28.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.0</td>
+          <td><div class="bar"><span style="width:71.4%"></span></div></td>
+          <td class="num">71.4%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 11.0</td>
+          <td><div class="bar"><span style="width:79.4%"></span></div></td>
+          <td class="num">79.4%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 12.0</td>
+          <td><div class="bar"><span style="width:85.8%"></span></div></td>
+          <td class="num">85.8%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">NYY</th><th class="num">KC</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>4.68</td>
+          <td class='num'>1.87</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>4.50</td>
+          <td class='num'>2.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>7.08</td>
+          <td class='num'>1.67</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>7.50</td>
+          <td class='num'>1.88</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-13">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #13 · MLB</div>
+          <h2>MIN @ CHW</h2>
+          <p class="pitchers">MIN: <b>PRIELIPP.C</b> · CHW: <b>MARTIN.D</b></p>
+        </div>
+        <div class="scorebox">
+          <span>MIN</span><b>3.27</b>
+          <span>CHW</span><b>4.47</b>
+          <small>Total 7.74 · OU 8.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">CHW ML · 65.4%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">CHW +2.5 · 88.8%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">CHW F5 ML/DNB · 61.8%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Under 10.0 · 71.6%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">CHW 3+ carreras · 82.3%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>CHW +2.5 88.8%</b><br>🟦 óptima valor/precio: <b>CHW +2.5 88.8%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 CHW +2.5</td>
+          <td><div class="bar"><span style="width:88.8%"></span></div></td>
+          <td class="num">88.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHW +1.5</td>
+          <td><div class="bar"><span style="width:81.2%"></span></div></td>
+          <td class="num">81.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHW ML</td>
+          <td><div class="bar"><span style="width:65.4%"></span></div></td>
+          <td class="num">65.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHW -1.5</td>
+          <td><div class="bar"><span style="width:46.1%"></span></div></td>
+          <td class="num">46.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>CHW -2.5</td>
+          <td><div class="bar"><span style="width:33.5%"></span></div></td>
+          <td class="num">33.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIN +3.5</td>
+          <td><div class="bar"><span style="width:77.4%"></span></div></td>
+          <td class="num">77.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIN +2.5</td>
+          <td><div class="bar"><span style="width:66.5%"></span></div></td>
+          <td class="num">66.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIN +1.5</td>
+          <td><div class="bar"><span style="width:53.9%"></span></div></td>
+          <td class="num">53.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>MIN ML</td>
+          <td><div class="bar"><span style="width:34.6%"></span></div></td>
+          <td class="num">34.6%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Under 11.0 79.5%</b><br>🟦 óptima valor/precio: <b>Under 10.0 71.6%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="">
+          <td>Over 5.0</td>
+          <td><div class="bar"><span style="width:75.6%"></span></div></td>
+          <td class="num">75.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.0</td>
+          <td><div class="bar"><span style="width:67.0%"></span></div></td>
+          <td class="num">67.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:57.4%"></span></div></td>
+          <td class="num">57.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:47.4%"></span></div></td>
+          <td class="num">47.4%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:37.5%"></span></div></td>
+          <td class="num">37.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.0</td>
+          <td><div class="bar"><span style="width:62.5%"></span></div></td>
+          <td class="num">62.5%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Under 10.0</td>
+          <td><div class="bar"><span style="width:71.6%"></span></div></td>
+          <td class="num">71.6%</td>
+        </tr>
+
+        <tr class="green-hit">
+          <td>🟩 Under 11.0</td>
+          <td><div class="bar"><span style="width:79.5%"></span></div></td>
+          <td class="num">79.5%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">MIN</th><th class="num">CHW</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>2.45</td>
+          <td class='num'>2.80</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>4.38</td>
+          <td class='num'>3.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>2.50</td>
+          <td class='num'>7.00</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>3.50</td>
+          <td class='num'>6.75</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-14">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #14 · MLB</div>
+          <h2>HOU @ TEX</h2>
+          <p class="pitchers">HOU: <b>BURROWS.M</b> · TEX: <b>DEGROM.J</b></p>
+        </div>
+        <div class="scorebox">
+          <span>HOU</span><b>4.89</b>
+          <span>TEX</span><b>3.89</b>
+          <small>Total 8.78 · OU 7.5</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">HOU ML · 62.8%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge greenblue">HOU +2.5 · 87.3%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">HOU F5 ML/DNB · 59.8%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Over 5.5 · 78.2%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">HOU 3+ carreras · 86.6%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>HOU +2.5 87.3%</b><br>🟦 óptima valor/precio: <b>HOU +2.5 87.3%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit blue-value">
+          <td>🟩 🟦 HOU +2.5</td>
+          <td><div class="bar"><span style="width:87.3%"></span></div></td>
+          <td class="num">87.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>HOU +1.5</td>
+          <td><div class="bar"><span style="width:79.2%"></span></div></td>
+          <td class="num">79.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>HOU ML</td>
+          <td><div class="bar"><span style="width:62.8%"></span></div></td>
+          <td class="num">62.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>HOU -1.5</td>
+          <td><div class="bar"><span style="width:43.5%"></span></div></td>
+          <td class="num">43.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>HOU -2.5</td>
+          <td><div class="bar"><span style="width:31.2%"></span></div></td>
+          <td class="num">31.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>TEX +3.5</td>
+          <td><div class="bar"><span style="width:79.3%"></span></div></td>
+          <td class="num">79.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>TEX +2.5</td>
+          <td><div class="bar"><span style="width:68.8%"></span></div></td>
+          <td class="num">68.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>TEX +1.5</td>
+          <td><div class="bar"><span style="width:56.5%"></span></div></td>
+          <td class="num">56.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>TEX ML</td>
+          <td><div class="bar"><span style="width:37.2%"></span></div></td>
+          <td class="num">37.2%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Over 4.5 84.6%</b><br>🟦 óptima valor/precio: <b>Over 5.5 78.2%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 Over 4.5</td>
+          <td><div class="bar"><span style="width:84.6%"></span></div></td>
+          <td class="num">84.6%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Over 5.5</td>
+          <td><div class="bar"><span style="width:78.2%"></span></div></td>
+          <td class="num">78.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 6.5</td>
+          <td><div class="bar"><span style="width:70.6%"></span></div></td>
+          <td class="num">70.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.5</td>
+          <td><div class="bar"><span style="width:62.0%"></span></div></td>
+          <td class="num">62.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.5</td>
+          <td><div class="bar"><span style="width:52.7%"></span></div></td>
+          <td class="num">52.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 8.5</td>
+          <td><div class="bar"><span style="width:47.3%"></span></div></td>
+          <td class="num">47.3%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.5</td>
+          <td><div class="bar"><span style="width:56.8%"></span></div></td>
+          <td class="num">56.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.5</td>
+          <td><div class="bar"><span style="width:65.8%"></span></div></td>
+          <td class="num">65.8%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">HOU</th><th class="num">TEX</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>5.10</td>
+          <td class='num'>3.47</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>15</td>
+          <td class='num'>4.62</td>
+          <td class='num'>5.00</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>4</td>
+          <td class='num'>5.08</td>
+          <td class='num'>3.12</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>4.88</td>
+          <td class='num'>3.62</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+
+    <section class="game-card" id="game-15">
+      <div class="game-top">
+        <div>
+          <div class="eyebrow">Juego #15 · MLB</div>
+          <h2>COL @ LAD</h2>
+          <p class="pitchers">COL: <b>SUGANO.T</b> · LAD: <b>OHTANI.S</b></p>
+        </div>
+        <div class="scorebox">
+          <span>COL</span><b>3.06</b>
+          <span>LAD</span><b>5.41</b>
+          <small>Total 8.46 · OU 8.0</small>
+        </div>
+      </div>
+
+      <div class="picks-grid">
+        <div class="pick"><span>ML</span><span class="badge">LAD ML · 77.9%</span></div>
+        <div class="pick"><span>Run Line / Escalera</span><span class="badge blue">LAD +1.5 · 89.6%</span></div>
+        <div class="pick"><span>F5</span><span class="badge">LAD F5 ML/DNB · 72.0%</span></div>
+        <div class="pick"><span>OU</span><span class="badge blue">Over 6.0 · 72.5%</span></div>
+        <div class="pick wide"><span>Side carreras</span><span class="badge">LAD 3+ carreras · 90.6%</span></div>
+      </div>
+
+      <div class="ladder-grid">
+        <div class="panel">
+          <h3>Run Line escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>LAD +2.5 94.4%</b><br>🟦 óptima valor/precio: <b>LAD +1.5 89.6%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 LAD +2.5</td>
+          <td><div class="bar"><span style="width:94.4%"></span></div></td>
+          <td class="num">94.4%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 LAD +1.5</td>
+          <td><div class="bar"><span style="width:89.6%"></span></div></td>
+          <td class="num">89.6%</td>
+        </tr>
+
+        <tr class="">
+          <td>LAD ML</td>
+          <td><div class="bar"><span style="width:77.9%"></span></div></td>
+          <td class="num">77.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>LAD -1.5</td>
+          <td><div class="bar"><span style="width:60.9%"></span></div></td>
+          <td class="num">60.9%</td>
+        </tr>
+
+        <tr class="">
+          <td>LAD -2.5</td>
+          <td><div class="bar"><span style="width:48.0%"></span></div></td>
+          <td class="num">48.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>COL +3.5</td>
+          <td><div class="bar"><span style="width:64.7%"></span></div></td>
+          <td class="num">64.7%</td>
+        </tr>
+
+        <tr class="">
+          <td>COL +2.5</td>
+          <td><div class="bar"><span style="width:52.0%"></span></div></td>
+          <td class="num">52.0%</td>
+        </tr>
+
+        <tr class="">
+          <td>COL +1.5</td>
+          <td><div class="bar"><span style="width:39.1%"></span></div></td>
+          <td class="num">39.1%</td>
+        </tr>
+
+        <tr class="">
+          <td>COL ML</td>
+          <td><div class="bar"><span style="width:22.1%"></span></div></td>
+          <td class="num">22.1%</td>
+        </tr></tbody></table>
+        </div>
+        <div class="panel">
+          <h3>OU escalera</h3>
+          <p class="legend">🟩 mayor probabilidad pura: <b>Over 5.0 79.9%</b><br>🟦 óptima valor/precio: <b>Over 6.0 72.5%</b></p>
+          <table class='ladder'><tbody>
+        <tr class="green-hit">
+          <td>🟩 Over 5.0</td>
+          <td><div class="bar"><span style="width:79.9%"></span></div></td>
+          <td class="num">79.9%</td>
+        </tr>
+
+        <tr class="blue-value">
+          <td>🟦 Over 6.0</td>
+          <td><div class="bar"><span style="width:72.5%"></span></div></td>
+          <td class="num">72.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 7.0</td>
+          <td><div class="bar"><span style="width:63.8%"></span></div></td>
+          <td class="num">63.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 8.0</td>
+          <td><div class="bar"><span style="width:54.5%"></span></div></td>
+          <td class="num">54.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Over 9.0</td>
+          <td><div class="bar"><span style="width:44.8%"></span></div></td>
+          <td class="num">44.8%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 9.0</td>
+          <td><div class="bar"><span style="width:55.2%"></span></div></td>
+          <td class="num">55.2%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 10.0</td>
+          <td><div class="bar"><span style="width:64.5%"></span></div></td>
+          <td class="num">64.5%</td>
+        </tr>
+
+        <tr class="">
+          <td>Under 11.0</td>
+          <td><div class="bar"><span style="width:73.0%"></span></div></td>
+          <td class="num">73.0%</td>
+        </tr></tbody></table>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver capas usadas</summary>
+        <table class="layers">
+          <thead><tr><th>Capa</th><th class="num">Filas</th><th class="num">COL</th><th class="num">LAD</th></tr></thead>
+          <tbody>
+        <tr>
+          <td class='layer-name'>Abridor general e @ e</td>
+          <td class='num'>12</td>
+          <td class='num'>1.75</td>
+          <td class='num'>4.85</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Estado actual EQUIPO</td>
+          <td class='num'>16</td>
+          <td class='num'>2.75</td>
+          <td class='num'>5.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Pitcher vs rival PITCHER</td>
+          <td class='num'>3</td>
+          <td class='num'>4.75</td>
+          <td class='num'>4.75</td>
+        </tr>
+        <tr>
+          <td class='layer-name'>Equipo vs equipo @@</td>
+          <td class='num'>8</td>
+          <td class='num'>3.50</td>
+          <td class='num'>8.00</td>
+        </tr></tbody>
+        </table>
+      </details>
+    </section>
+    
+  </div>
+  <div class="footer">
+    Modelo basado únicamente en el Excel seleccionado. Las probabilidades son estimaciones modeladas para comparar mercados; no garantizan resultados. Si falta una capa, el modelo ajusta internamente la lectura con las capas disponibles.
+  </div>
+</main>
+<script>
+const GAME_DATA = [{"order": 1, "game": "MIA @ TOR", "away_runs": 3.64, "home_runs": 3.53, "total": 7.16, "ml": "MIA ML", "ml_prob": 0.5144, "rl": "MIA +2.5", "rl_prob": 0.8039, "ou": "Under 9.5", "ou_prob": 0.7308}, {"order": 2, "game": "WAS @ CLE", "away_runs": 4.7, "home_runs": 3.08, "total": 7.79, "ml": "WAS ML", "ml_prob": 0.7024, "rl": "WAS +2.5", "rl_prob": 0.9117, "ou": "Under 10.0", "ou_prob": 0.7117}, {"order": 3, "game": "STL @ MIL", "away_runs": 3.15, "home_runs": 3.63, "total": 6.78, "ml": "MIL ML", "ml_prob": 0.5627, "rl": "MIL +2.5", "rl_prob": 0.8358, "ou": "Under 10.5", "ou_prob": 0.8431}, {"order": 4, "game": "SEA @ OAK", "away_runs": 4.07, "home_runs": 3.22, "total": 7.29, "ml": "SEA ML", "ml_prob": 0.6096, "rl": "SEA +2.5", "rl_prob": 0.8639, "ou": "Under 11.0", "ou_prob": 0.8336}, {"order": 5, "game": "ARI @ SF", "away_runs": 5.16, "home_runs": 3.83, "total": 8.98, "ml": "ARI ML", "ml_prob": 0.6673, "rl": "ARI +2.5", "rl_prob": 0.8933, "ou": "Over 5.5", "ou_prob": 0.7933}, {"order": 6, "game": "PHI @ SD", "away_runs": 2.93, "home_runs": 2.09, "total": 5.02, "ml": "PHI ML", "ml_prob": 0.6093, "rl": "PHI +2.5", "rl_prob": 0.8637, "ou": "Under 9.0", "ou_prob": 0.8945}, {"order": 7, "game": "TB @ BAL", "away_runs": 4.45, "home_runs": 3.78, "total": 8.23, "ml": "TB ML", "ml_prob": 0.5876, "rl": "TB +2.5", "rl_prob": 0.8511, "ou": "Under 11.0", "ou_prob": 0.7518}, {"order": 8, "game": "CHC @ PIT", "away_runs": 3.02, "home_runs": 4.28, "total": 7.3, "ml": "PIT ML", "ml_prob": 0.6608, "rl": "PIT +2.5", "rl_prob": 0.8915, "ou": "Under 10.5", "ou_prob": 0.7976}, {"order": 9, "game": "LAA @ DET", "away_runs": 3.89, "home_runs": 4.24, "total": 8.14, "ml": "DET ML", "ml_prob": 0.5454, "rl": "DET +2.5", "rl_prob": 0.8248, "ou": "Over 5.5", "ou_prob": 0.7424}, {"order": 10, "game": "ATL @ BOS", "away_runs": 3.48, "home_runs": 3.35, "total": 6.83, "ml": "ATL ML", "ml_prob": 0.5169, "rl": "ATL +2.5", "rl_prob": 0.8057, "ou": "Under 10.5", "ou_prob": 0.8386}, {"order": 11, "game": "CIN @ NYM", "away_runs": 4.88, "home_runs": 2.55, "total": 7.42, "ml": "CIN ML", "ml_prob": 0.7772, "rl": "CIN +1.5", "rl_prob": 0.8952, "ou": "Under 10.0", "ou_prob": 0.7472}, {"order": 12, "game": "NYY @ KC", "away_runs": 5.41, "home_runs": 2.35, "total": 7.76, "ml": "NYY ML", "ml_prob": 0.8428, "rl": "NYY +1.5", "rl_prob": 0.9329, "ou": "Under 11.0", "ou_prob": 0.7937}, {"order": 13, "game": "MIN @ CHW", "away_runs": 3.27, "home_runs": 4.47, "total": 7.74, "ml": "CHW ML", "ml_prob": 0.6535, "rl": "CHW +2.5", "rl_prob": 0.8877, "ou": "Under 10.0", "ou_prob": 0.7163}, {"order": 14, "game": "HOU @ TEX", "away_runs": 4.89, "home_runs": 3.89, "total": 8.78, "ml": "HOU ML", "ml_prob": 0.6278, "rl": "HOU +2.5", "rl_prob": 0.8731, "ou": "Over 5.5", "ou_prob": 0.7823}, {"order": 15, "game": "COL @ LAD", "away_runs": 3.06, "home_runs": 5.41, "total": 8.46, "ml": "LAD ML", "ml_prob": 0.7792, "rl": "LAD +1.5", "rl_prob": 0.8964, "ou": "Over 6.0", "ou_prob": 0.7245}];
+function filterGames() {
+  const q = document.getElementById('q').value.toLowerCase().trim();
+  document.querySelectorAll('.game-card').forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

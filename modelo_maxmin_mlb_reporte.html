@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Modelo MaxMin MLB</title>
+  <style>
+    :root {
+      --bg1: #0f172a;
+      --bg2: #111827;
+      --panel: rgba(255,255,255,0.08);
+      --panel-border: rgba(255,255,255,0.14);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --gold: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.20), transparent 30%),
+        radial-gradient(circle at top right, rgba(34,197,94,0.18), transparent 28%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 36px 24px 60px; }
+    .hero {
+      padding: 28px;
+      border: 1px solid var(--panel-border);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+      margin-bottom: 26px;
+    }
+    h1 { margin: 0 0 8px; font-size: 2.2rem; }
+    .lead { color: var(--muted); font-size: 1.03rem; line-height: 1.55; max-width: 1000px; }
+    .meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .pill { padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid var(--panel-border); font-size: 0.92rem; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 22px; }
+    .section { background: rgba(255,255,255,0.06); border: 1px solid var(--panel-border); border-radius: 24px; padding: 22px; box-shadow: 0 16px 40px rgba(0,0,0,0.18); }
+    .section h2 { margin: 0 0 6px; font-size: 1.35rem; }
+    .section p { margin: 0 0 16px; color: var(--muted); }
+    .cards { display: grid; gap: 14px; }
+    .card { position: relative; padding: 18px 18px 18px 62px; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.14); }
+    .rank { position: absolute; left: 16px; top: 16px; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--gold), #f97316); color: #111827; font-weight: 800; }
+    .title { font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; }
+    .metric { font-size: 1rem; margin-bottom: 6px; }
+    .sub { color: var(--muted); font-size: 0.95rem; line-height: 1.45; }
+    .footer { margin-top: 24px; color: var(--muted); font-size: 0.92rem; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class='wrap'>
+    <div class='hero'>
+      <h1>Modelo MaxMin MLB</h1>
+      <div class='lead'>Modelo predictivo enfoque especializado en OU de tendencia media y side bet de tendencia media general.</div>
+      <div class='meta'>
+        <div class='pill'>Generado: 2026-05-27 07:55:48</div>
+        <div class='pill'>Top 3 juegos &lt; 7 carreras</div>
+        <div class='pill'>Top 3 juegos 7+ carreras</div>
+        <div class='pill'>Top 3 equipos 4+ carreras</div>
+        <div class='pill'>Top 3 equipos &lt; 4 carreras</div>
+      </div>
+    </div>
+
+    <div class='grid'>
+      <section class='section'>
+        <h2>Juegos con mayor probabilidad de terminar por debajo de 7 carreras</h2>
+        <p>Esta métrica representa la probabilidad de que el juego termine con 6 o menos carreras.</p>
+        <div class='cards'>
+          
+            <div class='card'>
+              <div class='rank'>#1</div>
+              <div class='title'>PHI @@ SD</div>
+              <div class='metric'>Probabilidad &lt; 7 carreras: <strong>91.3%</strong></div>
+              <div class='sub'>Proyección total: <strong>3.76</strong></div>
+              <div class='sub'>PHI: 2.20 | SD: 1.56</div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#2</div>
+              <div class='title'>SEA @@ OAK</div>
+              <div class='metric'>Probabilidad &lt; 7 carreras: <strong>78.0%</strong></div>
+              <div class='sub'>Proyección total: <strong>4.88</strong></div>
+              <div class='sub'>SEA: 2.64 | OAK: 2.24</div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#3</div>
+              <div class='title'>ATL @@ BOS</div>
+              <div class='metric'>Probabilidad &lt; 7 carreras: <strong>66.1%</strong></div>
+              <div class='sub'>Proyección total: <strong>5.66</strong></div>
+              <div class='sub'>ATL: 2.97 | BOS: 2.69</div>
+            </div>
+            
+        </div>
+      </section>
+
+      <section class='section'>
+        <h2>Juegos con mayor probabilidad de terminar con 7 o más carreras</h2>
+        <p>Esta métrica representa la probabilidad de que el juego termine con 7 o más carreras.</p>
+        <div class='cards'>
+          
+            <div class='card'>
+              <div class='rank'>#1</div>
+              <div class='title'>COL @@ LAD</div>
+              <div class='metric'>Probabilidad 7+ carreras: <strong>71.8%</strong></div>
+              <div class='sub'>Proyección total: <strong>8.26</strong></div>
+              <div class='sub'>COL: 3.40 | LAD: 4.86</div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#2</div>
+              <div class='title'>HOU @@ TEX</div>
+              <div class='metric'>Probabilidad 7+ carreras: <strong>61.3%</strong></div>
+              <div class='sub'>Proyección total: <strong>7.44</strong></div>
+              <div class='sub'>HOU: 3.42 | TEX: 4.01</div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#3</div>
+              <div class='title'>WAS @@ CLE</div>
+              <div class='metric'>Probabilidad 7+ carreras: <strong>60.5%</strong></div>
+              <div class='sub'>Proyección total: <strong>7.38</strong></div>
+              <div class='sub'>WAS: 3.92 | CLE: 3.47</div>
+            </div>
+            
+        </div>
+      </section>
+
+      <section class='section'>
+        <h2>Equipos con mayor probabilidad de 4 o más carreras</h2>
+        <p>Se muestran los equipos con mayor probabilidad de anotar 4 o más carreras, indicando el juego y el equipo seleccionado.</p>
+        <div class='cards'>
+          
+            <div class='card'>
+              <div class='rank'>#1</div>
+              <div class='title'>Juego: NYY @@ KC</div>
+              <div class='metric'>Equipo seleccionado: <strong>NYY</strong> (Visitante)</div>
+              <div class='metric'>Probabilidad 4+ carreras: <strong>74.8%</strong></div>
+              <div class='sub'>Rival: <strong>KC</strong></div>
+              <div class='sub'>Proyección del equipo seleccionado: <strong>5.09</strong></div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#2</div>
+              <div class='title'>Juego: COL @@ LAD</div>
+              <div class='metric'>Equipo seleccionado: <strong>LAD</strong> (Local)</div>
+              <div class='metric'>Probabilidad 4+ carreras: <strong>71.5%</strong></div>
+              <div class='sub'>Rival: <strong>COL</strong></div>
+              <div class='sub'>Proyección del equipo seleccionado: <strong>4.86</strong></div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#3</div>
+              <div class='title'>Juego: ARI @@ SF</div>
+              <div class='metric'>Equipo seleccionado: <strong>ARI</strong> (Visitante)</div>
+              <div class='metric'>Probabilidad 4+ carreras: <strong>65.0%</strong></div>
+              <div class='sub'>Rival: <strong>SF</strong></div>
+              <div class='sub'>Proyección del equipo seleccionado: <strong>4.46</strong></div>
+            </div>
+            
+        </div>
+      </section>
+
+      <section class='section'>
+        <h2>Equipos con mayor probabilidad de menos de 4 carreras</h2>
+        <p>Se muestran los equipos con mayor probabilidad de anotar menos de 4 carreras, indicando el juego y el equipo seleccionado.</p>
+        <div class='cards'>
+          
+            <div class='card'>
+              <div class='rank'>#1</div>
+              <div class='title'>Juego: NYY @@ KC</div>
+              <div class='metric'>Equipo seleccionado: <strong>KC</strong> (Local)</div>
+              <div class='metric'>Probabilidad &lt; 4 carreras: <strong>93.1%</strong></div>
+              <div class='sub'>Rival: <strong>NYY</strong></div>
+              <div class='sub'>Proyección del equipo seleccionado: <strong>1.53</strong></div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#2</div>
+              <div class='title'>Juego: PHI @@ SD</div>
+              <div class='metric'>Equipo seleccionado: <strong>SD</strong> (Local)</div>
+              <div class='metric'>Probabilidad &lt; 4 carreras: <strong>92.6%</strong></div>
+              <div class='sub'>Rival: <strong>PHI</strong></div>
+              <div class='sub'>Proyección del equipo seleccionado: <strong>1.56</strong></div>
+            </div>
+            
+
+            <div class='card'>
+              <div class='rank'>#3</div>
+              <div class='title'>Juego: PHI @@ SD</div>
+              <div class='metric'>Equipo seleccionado: <strong>PHI</strong> (Visitante)</div>
+              <div class='metric'>Probabilidad &lt; 4 carreras: <strong>82.0%</strong></div>
+              <div class='sub'>Rival: <strong>SD</strong></div>
+              <div class='sub'>Proyección del equipo seleccionado: <strong>2.20</strong></div>
+            </div>
+            
+        </div>
+      </section>
+    </div>
+
+    <div class='footer'>Muestra diaria de acuerdo a los juegos del día y ponderando picheo abridor.</div>
+  </div>
+</body>
+</html>
