@@ -1,0 +1,3094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>F5 v1 · Modelo erl/erv</title>
+<style>
+:root {
+  --bg:#07111f;
+  --panel:#0d1b2d;
+  --panel2:#11243a;
+  --line:rgba(255,255,255,.09);
+  --text:#eef6ff;
+  --muted:#8fa5bb;
+  --cyan:#31d7ff;
+  --green:#2ce6a2;
+  --red:#ff667d;
+  --amber:#ffca62;
+  --violet:#9a8cff;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(49,215,255,.13), transparent 28%),
+    radial-gradient(circle at 90% 10%, rgba(154,140,255,.12), transparent 24%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+.container { width:min(1500px,94vw); margin:auto; }
+.hero { padding:58px 0 32px; }
+.hero-row { display:flex; justify-content:space-between; gap:28px; align-items:flex-end; }
+.logo {
+  display:inline-flex; align-items:center; gap:10px; font-weight:900;
+  letter-spacing:.18em; color:var(--cyan); font-size:14px;
+}
+.logo:before {
+  content:""; width:36px; height:4px; border-radius:9px;
+  background:linear-gradient(90deg,var(--cyan),var(--green));
+  box-shadow:0 0 20px rgba(49,215,255,.5);
+}
+h1 { font-size:clamp(38px,6vw,82px); margin:12px 0 8px; line-height:.96; letter-spacing:-.05em; }
+.hero p { color:var(--muted); max-width:820px; font-size:16px; line-height:1.7; }
+.source {
+  min-width:270px; padding:16px 18px; border:1px solid var(--line);
+  background:rgba(13,27,45,.72); border-radius:18px; color:var(--muted);
+}
+.source strong { color:var(--text); display:block; margin-top:5px; word-break:break-word; }
+.stats {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin:24px 0 34px;
+}
+.stat {
+  padding:20px; border-radius:20px; background:linear-gradient(145deg,rgba(17,36,58,.95),rgba(9,23,39,.95));
+  border:1px solid var(--line); box-shadow:0 18px 45px rgba(0,0,0,.18);
+}
+.stat small,.eyebrow { color:var(--muted); letter-spacing:.14em; font-size:11px; font-weight:800; }
+.stat strong { display:block; font-size:28px; margin-top:8px; }
+.section-title { margin:44px 0 18px; display:flex; justify-content:space-between; align-items:end; gap:20px; }
+.section-title h2 { margin:0; font-size:30px; letter-spacing:-.03em; }
+.section-title p { color:var(--muted); margin:0; }
+.action-list { display:grid; gap:14px; }
+.side-list { display:grid; gap:14px; }
+.side-card {
+  display:grid; grid-template-columns:64px 1fr 90px; gap:18px; align-items:center;
+  background:linear-gradient(110deg,rgba(20,42,55,.98),rgba(10,27,37,.98));
+  border:1px solid rgba(44,230,162,.16); border-radius:22px; padding:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+.side-rank { font-size:25px; font-weight:900; color:var(--green); text-align:center; }
+.side-card h3 { margin:10px 0 5px; font-size:20px; }
+.side-card p { color:var(--muted); line-height:1.55; margin:8px 0; }
+.side-comparison { display:flex; flex-wrap:wrap; gap:9px; margin-top:12px; }
+.side-comparison span {
+  padding:7px 10px; border-radius:10px; color:#bfd7d0;
+  background:rgba(44,230,162,.055); border:1px solid rgba(44,230,162,.10);
+  font-size:12px;
+}
+.side-ring { border-color:rgba(44,230,162,.32); }
+.side-strip {
+  display:grid; grid-template-columns:1.35fr 1fr 1fr; gap:10px; margin:0 0 18px;
+}
+.side-strip > div {
+  padding:14px 16px; border-radius:15px; background:rgba(44,230,162,.055);
+  border:1px solid rgba(44,230,162,.12);
+}
+.side-strip small {
+  display:block; color:var(--muted); font-size:9px; letter-spacing:.09em;
+}
+.side-strip strong { display:block; margin:6px 0 4px; }
+.side-strip span { color:#a9c5bc; font-size:12px; }
+.action-card {
+  display:grid; grid-template-columns:64px 1fr 90px; gap:18px; align-items:center;
+  background:linear-gradient(110deg,rgba(17,36,58,.98),rgba(9,24,41,.98));
+  border:1px solid var(--line); border-radius:22px; padding:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+.rank { font-size:25px; font-weight:900; color:var(--cyan); text-align:center; }
+.action-top { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.market-tag,.confidence,.pill {
+  display:inline-flex; border-radius:999px; padding:6px 10px; font-size:10px;
+  font-weight:900; letter-spacing:.08em;
+}
+.market-tag { color:var(--cyan); background:rgba(49,215,255,.1); border:1px solid rgba(49,215,255,.22); }
+.conf-very-high,.pill.green { color:var(--green); background:rgba(44,230,162,.11); }
+.conf-high { color:#87ffc8; background:rgba(44,230,162,.08); }
+.conf-medium { color:var(--amber); background:rgba(255,202,98,.1); }
+.conf-low,.pill.red { color:var(--red); background:rgba(255,102,125,.1); }
+.action-card h3 { margin:10px 0 5px; font-size:20px; }
+.pick { font-size:25px; font-weight:900; color:#fff; }
+.action-card p { color:var(--muted); line-height:1.55; margin:8px 0; }
+.secondary { color:#bfd0e2; font-size:14px; }
+.score-ring {
+  width:76px; height:76px; border-radius:50%; display:grid; place-content:center; text-align:center;
+  border:5px solid rgba(49,215,255,.28); box-shadow:inset 0 0 24px rgba(49,215,255,.08);
+}
+.score-ring strong { font-size:23px; }
+.score-ring small { font-size:8px; color:var(--muted); letter-spacing:.12em; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.panel {
+  background:rgba(13,27,45,.88); border:1px solid var(--line);
+  border-radius:22px; overflow:hidden;
+}
+.panel-head { padding:20px 22px; border-bottom:1px solid var(--line); }
+.panel-head h3 { margin:0; }
+.table-wrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; }
+th {
+  text-align:left; padding:12px 14px; color:var(--muted); font-size:10px;
+  letter-spacing:.09em; border-bottom:1px solid var(--line); white-space:nowrap;
+}
+td { padding:13px 14px; border-bottom:1px solid rgba(255,255,255,.055); }
+tr:last-child td { border-bottom:0; }
+.sub,.muted { color:var(--muted); font-size:12px; }
+.game-block {
+  margin:18px 0; padding:24px; border-radius:26px;
+  background:linear-gradient(150deg,rgba(13,27,45,.97),rgba(7,20,35,.97));
+  border:1px solid var(--line);
+}
+.game-header { display:flex; justify-content:space-between; gap:20px; align-items:center; }
+.game-header h2 { margin:5px 0 0; font-size:28px; }
+.game-verdict { text-align:right; }
+.game-verdict strong { display:block; margin:8px 0 3px; font-size:20px; color:#fff; }
+.game-verdict small { color:var(--muted); }
+.game-reason {
+  margin:18px 0; padding:14px 16px; color:#bed0e1; line-height:1.6;
+  background:rgba(255,255,255,.025); border-left:3px solid var(--cyan); border-radius:0 12px 12px 0;
+}
+.pitcher-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.pitcher-card {
+  border-radius:20px; background:rgba(17,36,58,.7); border:1px solid var(--line);
+  overflow:hidden;
+}
+.pitcher-head { display:flex; justify-content:space-between; gap:12px; padding:18px; align-items:center; }
+.pitcher-head h3 { margin:5px 0 0; }
+.trend { padding:7px 10px; border-radius:999px; font-size:10px; font-weight:900; white-space:nowrap; }
+.trend.positive { color:var(--green); background:rgba(44,230,162,.1); }
+.trend.negative { color:var(--red); background:rgba(255,102,125,.1); }
+.trend.neutral { color:var(--amber); background:rgba(255,202,98,.1); }
+.metrics { display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+.metrics div { padding:14px; border-right:1px solid var(--line); }
+.metrics div:last-child { border-right:0; }
+.metrics small { display:block; color:var(--muted); font-size:9px; letter-spacing:.08em; }
+.metrics strong { display:block; margin-top:5px; }
+.mini-table td,.mini-table th { padding:10px 12px; font-size:12px; }
+.score { font-weight:900; font-variant-numeric:tabular-nums; }
+.result { padding:5px 8px; border-radius:999px; font-size:9px; font-weight:900; }
+.result.win { color:var(--green); background:rgba(44,230,162,.1); }
+.result.loss { color:var(--red); background:rgba(255,102,125,.1); }
+.result.tie { color:var(--amber); background:rgba(255,202,98,.1); }
+.method {
+  margin:38px 0 60px; padding:22px; border-radius:20px; color:var(--muted);
+  border:1px dashed rgba(255,255,255,.15); line-height:1.65;
+}
+.method strong { color:var(--text); }
+.footer { text-align:center; color:var(--muted); padding:0 0 40px; font-size:12px; }
+.empty { padding:24px; color:var(--muted); border:1px solid var(--line); border-radius:18px; }
+@media(max-width:1000px) {
+  .stats { grid-template-columns:repeat(2,1fr); }
+  .two-col,.pitcher-grid,.side-strip { grid-template-columns:1fr; }
+  .hero-row { align-items:flex-start; flex-direction:column; }
+  .source { width:100%; }
+}
+@media(max-width:680px) {
+  .stats { grid-template-columns:1fr; }
+  .action-card,.side-card { grid-template-columns:42px 1fr; }
+  .score-ring { display:none; }
+  .game-header { align-items:flex-start; flex-direction:column; }
+  .game-verdict { text-align:left; }
+  .metrics { grid-template-columns:repeat(2,1fr); }
+}
+@media print {
+  body { background:#fff; color:#111; }
+  .panel,.game-block,.pitcher-card,.action-card,.stat { box-shadow:none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <div class="hero-row">
+      <div>
+        <div class="logo">F5 v1 · ERL/ERV ENGINE</div>
+        <h1>Ventaja al salir.</h1>
+        <p>
+          Modelo especializado en identificar abridores que dejaron a su equipo
+          ganando o perdiendo en sus tres aperturas más recientes. La lectura
+          se concentra en mercados de primeras cinco entradas y sides de carreras por equipo.
+        </p>
+      </div>
+      <div class="source">
+        ARCHIVO ANALIZADO
+        <strong>Analisis_MLB_IA2.xlsx</strong>
+        <span>Generado: 16/06/2026 05:14</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><small>JUEGOS</small><strong>15</strong></div>
+      <div class="stat"><small>ABRIDORES 3–0</small><strong>5</strong></div>
+      <div class="stat"><small>ABRIDORES 0–3</small><strong>5</strong></div>
+      <div class="stat"><small>SIDES ACCIONABLES</small><strong>15</strong></div>
+      <div class="stat"><small>SEÑAL PRINCIPAL</small><strong style="font-size:18px">2 cruce(s) perfecto(s) 3–0 vs 0–3</strong></div>
+    </div>
+  </header>
+
+  <div class="section-title">
+    <div>
+      <span class="eyebrow">RANKING CUANTITATIVO</span>
+      <h2>Posturas más accionables</h2>
+    </div>
+    <p>El índice mide fuerza relativa de esta capa; no es probabilidad de hit.</p>
+  </div>
+  <section class="action-list">
+        <article class="action-card">
+          <div class="rank">#1</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">CRUCE PERFECTO</span>
+              <span class="confidence conf-very-high">MUY ALTA</span>
+            </div>
+            <h3>KC @ WAS</h3>
+            <div class="pick">WAS F5 ML</div>
+            <p>GRIFFIN.F dejó 3/3 ganando y WACHA.M dejó 3/3 perdiendo. Diferencial medio al salir: +3.67 vs -3.33.</p>
+            <div class="secondary"><strong>Alternativa:</strong> WAS ML / WAS 3+ carreras</div>
+          </div>
+          <div class="score-ring">
+            <strong>100</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#2</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">CRUCE PERFECTO</span>
+              <span class="confidence conf-very-high">MUY ALTA</span>
+            </div>
+            <h3>SD @ STL</h3>
+            <div class="pick">STL F5 ML</div>
+            <p>PALLANTE.A dejó 3/3 ganando y KING.M dejó 3/3 perdiendo. Diferencial medio al salir: +2.67 vs -2.00.</p>
+            <div class="secondary"><strong>Alternativa:</strong> STL ML / STL 3+ carreras</div>
+          </div>
+          <div class="score-ring">
+            <strong>100</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#3</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">FADE 0–3</span>
+              <span class="confidence conf-high">ALTA</span>
+            </div>
+            <h3>LAA @ ARI</h3>
+            <div class="pick">LAA F5 ML</div>
+            <p>KELLY.M dejó a ARI perdiendo en sus 3 salidas. Su diferencial medio fue -3.33.</p>
+            <div class="secondary"><strong>Alternativa:</strong> LAA 3+ carreras</div>
+          </div>
+          <div class="score-ring">
+            <strong>89</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#4</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">FADE 0–3</span>
+              <span class="confidence conf-high">ALTA</span>
+            </div>
+            <h3>NYM @ CIN</h3>
+            <div class="pick">CIN F5 ML</div>
+            <p>SENGA.K dejó a NYM perdiendo en sus 3 salidas. Su diferencial medio fue -2.67.</p>
+            <div class="secondary"><strong>Alternativa:</strong> CIN 3+ carreras</div>
+          </div>
+          <div class="score-ring">
+            <strong>89</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#5</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">FADE 0–3</span>
+              <span class="confidence conf-medium">MEDIA</span>
+            </div>
+            <h3>CLE @ MIL</h3>
+            <div class="pick">CLE F5 ML</div>
+            <p>GASSER.R dejó a MIL perdiendo en sus 3 salidas. Su diferencial medio fue -1.33.</p>
+            <div class="secondary"><strong>Alternativa:</strong> CLE 3+ carreras</div>
+          </div>
+          <div class="score-ring">
+            <strong>81</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#6</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">IMPULSO 3–0</span>
+              <span class="confidence conf-medium">MEDIA–ALTA</span>
+            </div>
+            <h3>MIN @ TEX</h3>
+            <div class="pick">TEX F5 ML</div>
+            <p>ROCKER.K dejó a TEX ganando en 3/3; el rival no presenta un 0–3 perfecto.</p>
+            <div class="secondary"><strong>Alternativa:</strong> TEX F5 0.0</div>
+          </div>
+          <div class="score-ring">
+            <strong>78</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#7</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">IMPULSO 3–0</span>
+              <span class="confidence conf-medium">MEDIA–ALTA</span>
+            </div>
+            <h3>TB @ LAD</h3>
+            <div class="pick">LAD F5 ML</div>
+            <p>WROBLESKI.J dejó a LAD ganando en 3/3; el rival no presenta un 0–3 perfecto.</p>
+            <div class="secondary"><strong>Alternativa:</strong> LAD F5 0.0</div>
+          </div>
+          <div class="score-ring">
+            <strong>75</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#8</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">IMPULSO 3–0</span>
+              <span class="confidence conf-medium">MEDIA–ALTA</span>
+            </div>
+            <h3>BAL @ SEA</h3>
+            <div class="pick">SEA F5 ML</div>
+            <p>GILBERT.L dejó a SEA ganando en 3/3; el rival no presenta un 0–3 perfecto.</p>
+            <div class="secondary"><strong>Alternativa:</strong> SEA F5 0.0</div>
+          </div>
+          <div class="score-ring">
+            <strong>75</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#9</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <span class="confidence conf-medium">MEDIA</span>
+            </div>
+            <h3>COL @ CHC</h3>
+            <div class="pick">COL F5 0.0</div>
+            <p>Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+            <div class="secondary"><strong>Alternativa:</strong> Esperar precio; no forzar ML</div>
+          </div>
+          <div class="score-ring">
+            <strong>68</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#10</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <span class="confidence conf-medium">MEDIA</span>
+            </div>
+            <h3>TOR @ BOS</h3>
+            <div class="pick">BOS F5 0.0</div>
+            <p>Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+            <div class="secondary"><strong>Alternativa:</strong> Esperar precio; no forzar ML</div>
+          </div>
+          <div class="score-ring">
+            <strong>68</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#11</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <span class="confidence conf-medium">MEDIA</span>
+            </div>
+            <h3>SF @ ATL</h3>
+            <div class="pick">ATL F5 0.0</div>
+            <p>Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+            <div class="secondary"><strong>Alternativa:</strong> Esperar precio; no forzar ML</div>
+          </div>
+          <div class="score-ring">
+            <strong>67</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#12</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <span class="confidence conf-medium">MEDIA</span>
+            </div>
+            <h3>DET @ HOU</h3>
+            <div class="pick">HOU F5 0.0</div>
+            <p>Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+            <div class="secondary"><strong>Alternativa:</strong> Esperar precio; no forzar ML</div>
+          </div>
+          <div class="score-ring">
+            <strong>63</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        
+        <article class="action-card">
+          <div class="rank">#13</div>
+          <div class="action-main">
+            <div class="action-top">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <span class="confidence conf-medium">MEDIA</span>
+            </div>
+            <h3>MIA @ PHI</h3>
+            <div class="pick">PHI F5 0.0</div>
+            <p>Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+            <div class="secondary"><strong>Alternativa:</strong> Esperar precio; no forzar ML</div>
+          </div>
+          <div class="score-ring">
+            <strong>63</strong>
+            <small>ÍNDICE</small>
+          </div>
+        </article>
+        </section>
+
+  <div class="section-title">
+    <div>
+      <span class="eyebrow">SIDES DE CARRERAS</span>
+      <h2>3+ o menos de 5</h2>
+    </div>
+    <p>Solo aparecen como accionables los lados con estimación mínima de 66%.</p>
+  </div>
+  <section class="side-list">
+        <article class="side-card">
+          <div class="side-rank">#1</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>LAA @ ARI</h3>
+            <div class="pick">ARI menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>0.88</strong> carreras ·
+              Probabilidad estimada: <strong>99.8%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>LAA: LAA menos de 5 carreras · 80.4%</span>
+              <span>ARI: ARI menos de 5 carreras · 99.8%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>100</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#2</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>KC @ WAS</h3>
+            <div class="pick">KC menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>1.52</strong> carreras ·
+              Probabilidad estimada: <strong>98.1%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>KC: KC menos de 5 carreras · 98.1%</span>
+              <span>WAS: WAS 3+ carreras · 87.3%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>98</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#3</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>MIN @ TEX</h3>
+            <div class="pick">MIN menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>1.63</strong> carreras ·
+              Probabilidad estimada: <strong>97.4%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>MIN: MIN menos de 5 carreras · 97.4%</span>
+              <span>TEX: TEX 3+ carreras · 78.1%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>97</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#4</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>TOR @ BOS</h3>
+            <div class="pick">TOR menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>1.85</strong> carreras ·
+              Probabilidad estimada: <strong>96.0%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>TOR: TOR menos de 5 carreras · 96.0%</span>
+              <span>BOS: BOS menos de 5 carreras · 86.8%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>96</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#5</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>MIA @ PHI</h3>
+            <div class="pick">MIA menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>1.92</strong> carreras ·
+              Probabilidad estimada: <strong>95.5%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>MIA: MIA menos de 5 carreras · 95.5%</span>
+              <span>PHI: PHI menos de 5 carreras · 91.0%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>95</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#6</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>DET @ HOU</h3>
+            <div class="pick">DET menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>1.97</strong> carreras ·
+              Probabilidad estimada: <strong>95.0%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>DET: DET menos de 5 carreras · 95.0%</span>
+              <span>HOU: HOU menos de 5 carreras · 90.4%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>95</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#7</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>SD @ STL</h3>
+            <div class="pick">SD menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.03</strong> carreras ·
+              Probabilidad estimada: <strong>94.4%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>SD: SD menos de 5 carreras · 94.4%</span>
+              <span>STL: STL 3+ carreras · 79.8%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>94</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#8</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>CLE @ MIL</h3>
+            <div class="pick">MIL menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.15</strong> carreras ·
+              Probabilidad estimada: <strong>93.3%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>CLE: CLE menos de 5 carreras · 89.6%</span>
+              <span>MIL: MIL menos de 5 carreras · 93.3%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>93</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#9</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>COL @ CHC</h3>
+            <div class="pick">CHC menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.18</strong> carreras ·
+              Probabilidad estimada: <strong>92.9%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>COL: COL menos de 5 carreras · 75.0%</span>
+              <span>CHC: CHC menos de 5 carreras · 92.9%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>93</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#10</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>BAL @ SEA</h3>
+            <div class="pick">BAL menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.23</strong> carreras ·
+              Probabilidad estimada: <strong>92.4%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>BAL: BAL menos de 5 carreras · 92.4%</span>
+              <span>SEA: SEA menos de 5 carreras · 92.0%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>92</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#11</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>NYM @ CIN</h3>
+            <div class="pick">NYM menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.30</strong> carreras ·
+              Probabilidad estimada: <strong>91.6%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>NYM: NYM menos de 5 carreras · 91.6%</span>
+              <span>CIN: CIN 3+ carreras · 78.1%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>92</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#12</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>CHW @ NYY</h3>
+            <div class="pick">NYY menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.33</strong> carreras ·
+              Probabilidad estimada: <strong>91.2%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>CHW: CHW menos de 5 carreras · 85.5%</span>
+              <span>NYY: NYY menos de 5 carreras · 91.2%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>91</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#13</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>TB @ LAD</h3>
+            <div class="pick">TB menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.42</strong> carreras ·
+              Probabilidad estimada: <strong>90.2%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>TB: TB menos de 5 carreras · 90.2%</span>
+              <span>LAD: LAD menos de 5 carreras · 88.2%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>90</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#14</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>SF @ ATL</h3>
+            <div class="pick">SF menos de 5 carreras</div>
+            <p>
+              Proyección: <strong>2.67</strong> carreras ·
+              Probabilidad estimada: <strong>86.8%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>SF: SF menos de 5 carreras · 86.8%</span>
+              <span>ATL: ATL menos de 5 carreras · 81.5%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>87</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        
+        <article class="side-card">
+          <div class="side-rank">#15</div>
+          <div class="side-body">
+            <div class="action-top">
+              <span class="market-tag">SIDE ERL/ERV</span>
+              <span class="confidence conf-very-high">
+                MUY ALTA
+              </span>
+            </div>
+            <h3>PIT @ OAK</h3>
+            <div class="pick">OAK 3+ carreras</div>
+            <p>
+              Proyección: <strong>4.50</strong> carreras ·
+              Probabilidad estimada: <strong>82.6%</strong>
+            </p>
+            <div class="side-comparison">
+              <span>PIT: PIT 3+ carreras · 75.2%</span>
+              <span>OAK: OAK 3+ carreras · 82.6%</span>
+            </div>
+          </div>
+          <div class="score-ring side-ring">
+            <strong>83</strong>
+            <small>PROB.</small>
+          </div>
+        </article>
+        </section>
+
+  <div class="section-title">
+    <div>
+      <span class="eyebrow">RADAR DE TENDENCIAS</span>
+      <h2>Perfectos en tres salidas</h2>
+    </div>
+  </div>
+
+  <section class="two-col">
+    <div class="panel">
+      <div class="panel-head"><h3>🟢 Dejaron el juego ganando 3/3</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Abridor</th><th>Racha</th><th>Dif. medio</th><th>Acumulado</th></tr></thead>
+          <tbody>
+        <tr>
+          <td><strong>GRIFFIN.F</strong><br><span class="sub">WAS</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+3.67</td>
+          <td>16–5</td>
+        </tr>
+        
+        <tr>
+          <td><strong>PALLANTE.A</strong><br><span class="sub">STL</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+2.67</td>
+          <td>15–7</td>
+        </tr>
+        
+        <tr>
+          <td><strong>WROBLESKI.J</strong><br><span class="sub">LAD</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+2.00</td>
+          <td>11–5</td>
+        </tr>
+        
+        <tr>
+          <td><strong>GILBERT.L</strong><br><span class="sub">SEA</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+1.67</td>
+          <td>9–4</td>
+        </tr>
+        
+        <tr>
+          <td><strong>ROCKER.K</strong><br><span class="sub">TEX</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+1.33</td>
+          <td>8–4</td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>🔴 Dejaron el juego perdiendo 3/3</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Abridor</th><th>Racha</th><th>Dif. medio</th><th>Acumulado</th></tr></thead>
+          <tbody>
+        <tr>
+          <td><strong>WACHA.M</strong><br><span class="sub">KC</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-3.33</td>
+          <td>4–14</td>
+        </tr>
+        
+        <tr>
+          <td><strong>KELLY.M</strong><br><span class="sub">ARI</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-3.33</td>
+          <td>1–11</td>
+        </tr>
+        
+        <tr>
+          <td><strong>SENGA.K</strong><br><span class="sub">NYM</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-2.67</td>
+          <td>8–16</td>
+        </tr>
+        
+        <tr>
+          <td><strong>KING.M</strong><br><span class="sub">SD</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-2.00</td>
+          <td>5–11</td>
+        </tr>
+        
+        <tr>
+          <td><strong>GASSER.R</strong><br><span class="sub">MIL</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-1.33</td>
+          <td>7–11</td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-title">
+    <div>
+      <span class="eyebrow">AUDITORÍA COMPLETA</span>
+      <h2>Juego por juego</h2>
+    </div>
+  </div>
+  
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 1</span>
+              <h2>MIA @ PHI</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <strong>PHI F5 0.0</strong>
+              <small>MEDIA</small>
+            </div>
+          </div>
+          <p class="game-reason">Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>MIA menos de 5 carreras</strong>
+              <span>95.5% · Proyección 1.92</span>
+            </div>
+            <div>
+              <small>MIA</small>
+              <strong>MIA menos de 5 carreras</strong>
+              <span>95.5%</span>
+            </div>
+            <div>
+              <small>PHI</small>
+              <strong>PHI menos de 5 carreras</strong>
+              <span>91.0%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>MIA · PHILLIPS.T</h3>
+        </div>
+        <span class="trend neutral">MIXTO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-1-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.00</strong></div>
+        <div><small>CARRERAS</small><strong>3–3</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>MIA vs ARI</td>
+          <td>LOCAL</td>
+          <td class="score">2–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>MIA vs NYM</td>
+          <td>VISITANTE</td>
+          <td class="score">1–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>24 May 2026</td>
+          <td>MIA vs NYM</td>
+          <td>LOCAL</td>
+          <td class="score">0–0</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>PHI · LUZARDO.J</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.33</strong></div>
+        <div><small>CARRERAS</small><strong>12–8</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>PHI vs TOR</td>
+          <td>VISITANTE</td>
+          <td class="score">5–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>PHI vs CHW</td>
+          <td>LOCAL</td>
+          <td class="score">6–5</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>PHI vs LAD</td>
+          <td>VISITANTE</td>
+          <td class="score">1–2</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 2</span>
+              <h2>KC @ WAS</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">CRUCE PERFECTO</span>
+              <strong>WAS F5 ML</strong>
+              <small>MUY ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">GRIFFIN.F dejó 3/3 ganando y WACHA.M dejó 3/3 perdiendo. Diferencial medio al salir: +3.67 vs -3.33.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>KC menos de 5 carreras</strong>
+              <span>98.1% · Proyección 1.52</span>
+            </div>
+            <div>
+              <small>KC</small>
+              <strong>KC menos de 5 carreras</strong>
+              <span>98.1%</span>
+            </div>
+            <div>
+              <small>WAS</small>
+              <strong>WAS 3+ carreras</strong>
+              <span>87.3%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>KC · WACHA.M</h3>
+        </div>
+        <span class="trend negative">0–3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-3-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-3.33</strong></div>
+        <div><small>CARRERAS</small><strong>4–14</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>KC vs TEX</td>
+          <td>LOCAL</td>
+          <td class="score">2–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>KC vs MIN</td>
+          <td>VISITANTE</td>
+          <td class="score">2–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>31 May 2026</td>
+          <td>KC vs TEX</td>
+          <td>VISITANTE</td>
+          <td class="score">0–6</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>WAS · GRIFFIN.F</h3>
+        </div>
+        <span class="trend positive">3–0 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>3-0-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+3.67</strong></div>
+        <div><small>CARRERAS</small><strong>16–5</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>WAS vs SF</td>
+          <td>VISITANTE</td>
+          <td class="score">5–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>WAS vs ARI</td>
+          <td>VISITANTE</td>
+          <td class="score">7–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>WAS vs SD</td>
+          <td>LOCAL</td>
+          <td class="score">4–3</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 3</span>
+              <h2>TOR @ BOS</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <strong>BOS F5 0.0</strong>
+              <small>MEDIA</small>
+            </div>
+          </div>
+          <p class="game-reason">Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>TOR menos de 5 carreras</strong>
+              <span>96.0% · Proyección 1.85</span>
+            </div>
+            <div>
+              <small>TOR</small>
+              <strong>TOR menos de 5 carreras</strong>
+              <span>96.0%</span>
+            </div>
+            <div>
+              <small>BOS</small>
+              <strong>BOS menos de 5 carreras</strong>
+              <span>86.8%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>TOR · CEASE.D</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-2-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-1.00</strong></div>
+        <div><small>CARRERAS</small><strong>5–8</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>TOR vs PHI</td>
+          <td>LOCAL</td>
+          <td class="score">1–1</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        
+        <tr>
+          <td>24 May 2026</td>
+          <td>TOR vs PIT</td>
+          <td>LOCAL</td>
+          <td class="score">1–2</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>19 May 2026</td>
+          <td>TOR vs NYY</td>
+          <td>VISITANTE</td>
+          <td class="score">3–5</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>BOS · TOLLE.P</h3>
+        </div>
+        <span class="trend neutral">MIXTO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-1-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.67</strong></div>
+        <div><small>CARRERAS</small><strong>8–6</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>BOS vs TB</td>
+          <td>VISITANTE</td>
+          <td class="score">3–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>03 Jun 2026</td>
+          <td>BOS vs BAL</td>
+          <td>LOCAL</td>
+          <td class="score">3–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>28 May 2026</td>
+          <td>BOS vs ATL</td>
+          <td>LOCAL</td>
+          <td class="score">2–2</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 4</span>
+              <h2>CHW @ NYY</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">SIN VENTAJA</span>
+              <strong>NO ACCIONABLE</strong>
+              <small>BAJA</small>
+            </div>
+          </div>
+          <p class="game-reason">La capa erl/erv no separa suficientemente a los abridores.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>NYY menos de 5 carreras</strong>
+              <span>91.2% · Proyección 2.33</span>
+            </div>
+            <div>
+              <small>CHW</small>
+              <strong>CHW menos de 5 carreras</strong>
+              <span>85.5%</span>
+            </div>
+            <div>
+              <small>NYY</small>
+              <strong>NYY menos de 5 carreras</strong>
+              <span>91.2%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>CHW · MARTIN.D</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.33</strong></div>
+        <div><small>CARRERAS</small><strong>11–7</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>CHW vs ATL</td>
+          <td>LOCAL</td>
+          <td class="score">2–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>02 Jun 2026</td>
+          <td>CHW vs MIN</td>
+          <td>VISITANTE</td>
+          <td class="score">4–6</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>28 May 2026</td>
+          <td>CHW vs MIN</td>
+          <td>LOCAL</td>
+          <td class="score">5–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>NYY · COLE.G</h3>
+        </div>
+        <span class="trend neutral">MIXTO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-1-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.33</strong></div>
+        <div><small>CARRERAS</small><strong>7–6</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>NYY vs CLE</td>
+          <td>VISITANTE</td>
+          <td class="score">2–2</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        
+        <tr>
+          <td>03 Jun 2026</td>
+          <td>NYY vs CLE</td>
+          <td>LOCAL</td>
+          <td class="score">3–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>27 May 2026</td>
+          <td>NYY vs KC</td>
+          <td>VISITANTE</td>
+          <td class="score">2–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 5</span>
+              <h2>NYM @ CIN</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">FADE 0–3</span>
+              <strong>CIN F5 ML</strong>
+              <small>ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">SENGA.K dejó a NYM perdiendo en sus 3 salidas. Su diferencial medio fue -2.67.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>NYM menos de 5 carreras</strong>
+              <span>91.6% · Proyección 2.30</span>
+            </div>
+            <div>
+              <small>NYM</small>
+              <strong>NYM menos de 5 carreras</strong>
+              <span>91.6%</span>
+            </div>
+            <div>
+              <small>CIN</small>
+              <strong>CIN 3+ carreras</strong>
+              <span>78.1%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>NYM · SENGA.K</h3>
+        </div>
+        <span class="trend negative">0–3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-3-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-2.67</strong></div>
+        <div><small>CARRERAS</small><strong>8–16</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>26 Apr 2026</td>
+          <td>NYM vs COL</td>
+          <td>LOCAL</td>
+          <td class="score">0–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>17 Apr 2026</td>
+          <td>NYM vs CHC</td>
+          <td>VISITANTE</td>
+          <td class="score">3–6</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>11 Apr 2026</td>
+          <td>NYM vs OAK</td>
+          <td>LOCAL</td>
+          <td class="score">5–7</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>CIN · SINGER.B</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.67</strong></div>
+        <div><small>CARRERAS</small><strong>8–6</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>CIN vs SD</td>
+          <td>VISITANTE</td>
+          <td class="score">3–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>CIN vs STL</td>
+          <td>VISITANTE</td>
+          <td class="score">3–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>CIN vs ATL</td>
+          <td>LOCAL</td>
+          <td class="score">2–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 6</span>
+              <h2>SF @ ATL</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <strong>ATL F5 0.0</strong>
+              <small>MEDIA</small>
+            </div>
+          </div>
+          <p class="game-reason">Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>SF menos de 5 carreras</strong>
+              <span>86.8% · Proyección 2.67</span>
+            </div>
+            <div>
+              <small>SF</small>
+              <strong>SF menos de 5 carreras</strong>
+              <span>86.8%</span>
+            </div>
+            <div>
+              <small>ATL</small>
+              <strong>ATL menos de 5 carreras</strong>
+              <span>81.5%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>SF · HOUSER.A</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-2-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-0.33</strong></div>
+        <div><small>CARRERAS</small><strong>8–9</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>SF vs WAS</td>
+          <td>LOCAL</td>
+          <td class="score">2–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>04 Jun 2026</td>
+          <td>SF vs MIL</td>
+          <td>VISITANTE</td>
+          <td class="score">6–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>SF vs COL</td>
+          <td>VISITANTE</td>
+          <td class="score">0–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>ATL · HOLMES.G</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.33</strong></div>
+        <div><small>CARRERAS</small><strong>9–8</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>ATL vs CHW</td>
+          <td>VISITANTE</td>
+          <td class="score">1–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>03 Jun 2026</td>
+          <td>ATL vs TOR</td>
+          <td>LOCAL</td>
+          <td class="score">4–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>29 May 2026</td>
+          <td>ATL vs CIN</td>
+          <td>VISITANTE</td>
+          <td class="score">4–3</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 7</span>
+              <h2>CLE @ MIL</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">FADE 0–3</span>
+              <strong>CLE F5 ML</strong>
+              <small>MEDIA</small>
+            </div>
+          </div>
+          <p class="game-reason">GASSER.R dejó a MIL perdiendo en sus 3 salidas. Su diferencial medio fue -1.33.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>MIL menos de 5 carreras</strong>
+              <span>93.3% · Proyección 2.15</span>
+            </div>
+            <div>
+              <small>CLE</small>
+              <strong>CLE menos de 5 carreras</strong>
+              <span>89.6%</span>
+            </div>
+            <div>
+              <small>MIL</small>
+              <strong>MIL menos de 5 carreras</strong>
+              <span>93.3%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>CLE · CECCONI.S</h3>
+        </div>
+        <span class="trend neutral">MIXTO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-1-2</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-1.00</strong></div>
+        <div><small>CARRERAS</small><strong>3–6</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>CLE vs NYY</td>
+          <td>LOCAL</td>
+          <td class="score">2–2</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        
+        <tr>
+          <td>04 Jun 2026</td>
+          <td>CLE vs NYY</td>
+          <td>VISITANTE</td>
+          <td class="score">1–1</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        
+        <tr>
+          <td>29 May 2026</td>
+          <td>CLE vs BOS</td>
+          <td>LOCAL</td>
+          <td class="score">0–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>MIL · GASSER.R</h3>
+        </div>
+        <span class="trend negative">0–3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-3-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-1.33</strong></div>
+        <div><small>CARRERAS</small><strong>7–11</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>MIL vs OAK</td>
+          <td>VISITANTE</td>
+          <td class="score">5–6</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>03 Jun 2026</td>
+          <td>MIL vs SF</td>
+          <td>LOCAL</td>
+          <td class="score">0–1</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>23 May 2026</td>
+          <td>MIL vs LAD</td>
+          <td>LOCAL</td>
+          <td class="score">2–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 8</span>
+              <h2>SD @ STL</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">CRUCE PERFECTO</span>
+              <strong>STL F5 ML</strong>
+              <small>MUY ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">PALLANTE.A dejó 3/3 ganando y KING.M dejó 3/3 perdiendo. Diferencial medio al salir: +2.67 vs -2.00.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>SD menos de 5 carreras</strong>
+              <span>94.4% · Proyección 2.03</span>
+            </div>
+            <div>
+              <small>SD</small>
+              <strong>SD menos de 5 carreras</strong>
+              <span>94.4%</span>
+            </div>
+            <div>
+              <small>STL</small>
+              <strong>STL 3+ carreras</strong>
+              <span>79.8%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>SD · KING.M</h3>
+        </div>
+        <span class="trend negative">0–3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-3-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-2.00</strong></div>
+        <div><small>CARRERAS</small><strong>5–11</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>SD vs CIN</td>
+          <td>LOCAL</td>
+          <td class="score">2–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>SD vs NYM</td>
+          <td>LOCAL</td>
+          <td class="score">0–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>SD vs WAS</td>
+          <td>VISITANTE</td>
+          <td class="score">3–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>STL · PALLANTE.A</h3>
+        </div>
+        <span class="trend positive">3–0 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>3-0-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+2.67</strong></div>
+        <div><small>CARRERAS</small><strong>15–7</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>STL vs NYM</td>
+          <td>VISITANTE</td>
+          <td class="score">6–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>03 Jun 2026</td>
+          <td>STL vs TEX</td>
+          <td>LOCAL</td>
+          <td class="score">4–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>29 May 2026</td>
+          <td>STL vs CHC</td>
+          <td>LOCAL</td>
+          <td class="score">5–4</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 9</span>
+              <h2>MIN @ TEX</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">IMPULSO 3–0</span>
+              <strong>TEX F5 ML</strong>
+              <small>MEDIA–ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">ROCKER.K dejó a TEX ganando en 3/3; el rival no presenta un 0–3 perfecto.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>MIN menos de 5 carreras</strong>
+              <span>97.4% · Proyección 1.63</span>
+            </div>
+            <div>
+              <small>MIN</small>
+              <strong>MIN menos de 5 carreras</strong>
+              <span>97.4%</span>
+            </div>
+            <div>
+              <small>TEX</small>
+              <strong>TEX 3+ carreras</strong>
+              <span>78.1%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>MIN · MATTHEWS.Z</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-2-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-3.33</strong></div>
+        <div><small>CARRERAS</small><strong>6–16</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>MIN vs DET</td>
+          <td>VISITANTE</td>
+          <td class="score">0–7</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>MIN vs KC</td>
+          <td>LOCAL</td>
+          <td class="score">4–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>31 May 2026</td>
+          <td>MIN vs PIT</td>
+          <td>VISITANTE</td>
+          <td class="score">2–7</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>TEX · ROCKER.K</h3>
+        </div>
+        <span class="trend positive">3–0 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>3-0-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.33</strong></div>
+        <div><small>CARRERAS</small><strong>8–4</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>TEX vs KC</td>
+          <td>VISITANTE</td>
+          <td class="score">4–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>TEX vs CLE</td>
+          <td>LOCAL</td>
+          <td class="score">3–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>TEX vs KC</td>
+          <td>LOCAL</td>
+          <td class="score">1–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 10</span>
+              <h2>COL @ CHC</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <strong>COL F5 0.0</strong>
+              <small>MEDIA</small>
+            </div>
+          </div>
+          <p class="game-reason">Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>CHC menos de 5 carreras</strong>
+              <span>92.9% · Proyección 2.18</span>
+            </div>
+            <div>
+              <small>COL</small>
+              <strong>COL menos de 5 carreras</strong>
+              <span>75.0%</span>
+            </div>
+            <div>
+              <small>CHC</small>
+              <strong>CHC menos de 5 carreras</strong>
+              <span>92.9%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>COL · FELTNER.R</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.67</strong></div>
+        <div><small>CARRERAS</small><strong>9–7</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>COL vs CHC</td>
+          <td>LOCAL</td>
+          <td class="score">2–6</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>COL vs MIL</td>
+          <td>LOCAL</td>
+          <td class="score">3–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>COL vs SF</td>
+          <td>LOCAL</td>
+          <td class="score">4–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>CHC · CABRERA.E</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-2-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-1.67</strong></div>
+        <div><small>CARRERAS</small><strong>6–11</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>CHC vs COL</td>
+          <td>VISITANTE</td>
+          <td class="score">6–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>CHC vs SF</td>
+          <td>LOCAL</td>
+          <td class="score">0–8</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>20 May 2026</td>
+          <td>CHC vs MIL</td>
+          <td>LOCAL</td>
+          <td class="score">0–1</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 11</span>
+              <h2>DET @ HOU</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">VENTAJA MODERADA</span>
+              <strong>HOU F5 0.0</strong>
+              <small>MEDIA</small>
+            </div>
+          </div>
+          <p class="game-reason">Ventaja moderada en la capa erl/erv, pero sin cruce perfecto 3–0 vs 0–3.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>DET menos de 5 carreras</strong>
+              <span>95.0% · Proyección 1.97</span>
+            </div>
+            <div>
+              <small>DET</small>
+              <strong>DET menos de 5 carreras</strong>
+              <span>95.0%</span>
+            </div>
+            <div>
+              <small>HOU</small>
+              <strong>HOU menos de 5 carreras</strong>
+              <span>90.4%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>DET · VALDEZ.F</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-2-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-0.67</strong></div>
+        <div><small>CARRERAS</small><strong>7–9</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>DET vs MIN</td>
+          <td>LOCAL</td>
+          <td class="score">1–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>DET vs SEA</td>
+          <td>LOCAL</td>
+          <td class="score">5–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>DET vs CHW</td>
+          <td>VISITANTE</td>
+          <td class="score">1–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>HOU · BROWN.H</h3>
+        </div>
+        <span class="trend neutral">MIXTO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-1-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+0.00</strong></div>
+        <div><small>CARRERAS</small><strong>5–5</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>31 Mar 2026</td>
+          <td>HOU vs BOS</td>
+          <td>LOCAL</td>
+          <td class="score">5–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>26 Mar 2026</td>
+          <td>HOU vs LAA</td>
+          <td>LOCAL</td>
+          <td class="score">0–0</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        
+        <tr>
+          <td>24 Sep 2025</td>
+          <td>HOU vs OAK</td>
+          <td>VISITANTE</td>
+          <td class="score">0–4</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 12</span>
+              <h2>LAA @ ARI</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">FADE 0–3</span>
+              <strong>LAA F5 ML</strong>
+              <small>ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">KELLY.M dejó a ARI perdiendo en sus 3 salidas. Su diferencial medio fue -3.33.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>ARI menos de 5 carreras</strong>
+              <span>99.8% · Proyección 0.88</span>
+            </div>
+            <div>
+              <small>LAA</small>
+              <strong>LAA menos de 5 carreras</strong>
+              <span>80.4%</span>
+            </div>
+            <div>
+              <small>ARI</small>
+              <strong>ARI menos de 5 carreras</strong>
+              <span>99.8%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>LAA · DETMERS.R</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-0-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.00</strong></div>
+        <div><small>CARRERAS</small><strong>7–4</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>LAA vs HOU</td>
+          <td>LOCAL</td>
+          <td class="score">2–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>LAA vs LAD</td>
+          <td>VISITANTE</td>
+          <td class="score">0–0</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>LAA vs TB</td>
+          <td>VISITANTE</td>
+          <td class="score">5–3</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>ARI · KELLY.M</h3>
+        </div>
+        <span class="trend negative">0–3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-3-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-3.33</strong></div>
+        <div><small>CARRERAS</small><strong>1–11</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>ARI vs MIA</td>
+          <td>VISITANTE</td>
+          <td class="score">0–2</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>ARI vs WAS</td>
+          <td>LOCAL</td>
+          <td class="score">1–7</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>31 May 2026</td>
+          <td>ARI vs SEA</td>
+          <td>VISITANTE</td>
+          <td class="score">0–2</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 13</span>
+              <h2>PIT @ OAK</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">SIN VENTAJA</span>
+              <strong>NO ACCIONABLE</strong>
+              <small>BAJA</small>
+            </div>
+          </div>
+          <p class="game-reason">La capa erl/erv no separa suficientemente a los abridores.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>OAK 3+ carreras</strong>
+              <span>82.6% · Proyección 4.50</span>
+            </div>
+            <div>
+              <small>PIT</small>
+              <strong>PIT 3+ carreras</strong>
+              <span>75.2%</span>
+            </div>
+            <div>
+              <small>OAK</small>
+              <strong>OAK 3+ carreras</strong>
+              <span>82.6%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>PIT · KELLER.M</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>0-2-1</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-1.33</strong></div>
+        <div><small>CARRERAS</small><strong>14–18</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>PIT vs LAD</td>
+          <td>LOCAL</td>
+          <td class="score">4–5</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>PIT vs ATL</td>
+          <td>VISITANTE</td>
+          <td class="score">3–6</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>PIT vs MIN</td>
+          <td>LOCAL</td>
+          <td class="score">7–7</td>
+          <td><span class="result tie">EMPATE</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>OAK · PERKINS.J</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 PERDIENDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>1-2-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>-0.67</strong></div>
+        <div><small>CARRERAS</small><strong>8–10</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>OAK vs MIL</td>
+          <td>LOCAL</td>
+          <td class="score">1–3</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>OAK vs HOU</td>
+          <td>VISITANTE</td>
+          <td class="score">1–5</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>21 Aug 2025</td>
+          <td>OAK vs MIN</td>
+          <td>VISITANTE</td>
+          <td class="score">6–2</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 14</span>
+              <h2>BAL @ SEA</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">IMPULSO 3–0</span>
+              <strong>SEA F5 ML</strong>
+              <small>MEDIA–ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">GILBERT.L dejó a SEA ganando en 3/3; el rival no presenta un 0–3 perfecto.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>BAL menos de 5 carreras</strong>
+              <span>92.4% · Proyección 2.23</span>
+            </div>
+            <div>
+              <small>BAL</small>
+              <strong>BAL menos de 5 carreras</strong>
+              <span>92.4%</span>
+            </div>
+            <div>
+              <small>SEA</small>
+              <strong>SEA menos de 5 carreras</strong>
+              <span>92.0%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>BAL · YOUNG.B</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.67</strong></div>
+        <div><small>CARRERAS</small><strong>10–5</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>BAL vs SEA</td>
+          <td>LOCAL</td>
+          <td class="score">3–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>BAL vs TOR</td>
+          <td>VISITANTE</td>
+          <td class="score">6–3</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>BAL vs TOR</td>
+          <td>LOCAL</td>
+          <td class="score">1–2</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>SEA · GILBERT.L</h3>
+        </div>
+        <span class="trend positive">3–0 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>3-0-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.67</strong></div>
+        <div><small>CARRERAS</small><strong>9–4</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>09 Jun 2026</td>
+          <td>SEA vs BAL</td>
+          <td>VISITANTE</td>
+          <td class="score">3–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>02 Jun 2026</td>
+          <td>SEA vs NYM</td>
+          <td>LOCAL</td>
+          <td class="score">4–3</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>27 May 2026</td>
+          <td>SEA vs OAK</td>
+          <td>VISITANTE</td>
+          <td class="score">2–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+        <article class="game-block">
+          <div class="game-header">
+            <div>
+              <span class="eyebrow">JUEGO 15</span>
+              <h2>TB @ LAD</h2>
+            </div>
+            <div class="game-verdict">
+              <span class="market-tag">IMPULSO 3–0</span>
+              <strong>LAD F5 ML</strong>
+              <small>MEDIA–ALTA</small>
+            </div>
+          </div>
+          <p class="game-reason">WROBLESKI.J dejó a LAD ganando en 3/3; el rival no presenta un 0–3 perfecto.</p>
+          <div class="side-strip">
+            <div>
+              <small>MEJOR SIDE DEL JUEGO</small>
+              <strong>TB menos de 5 carreras</strong>
+              <span>90.2% · Proyección 2.42</span>
+            </div>
+            <div>
+              <small>TB</small>
+              <strong>TB menos de 5 carreras</strong>
+              <span>90.2%</span>
+            </div>
+            <div>
+              <small>LAD</small>
+              <strong>LAD menos de 5 carreras</strong>
+              <span>88.2%</span>
+            </div>
+          </div>
+          <div class="pitcher-grid">
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR VISITANTE</span>
+          <h3>TB · RASMUSSEN.D</h3>
+        </div>
+        <span class="trend neutral">2 DE 3 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>2-1-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+1.67</strong></div>
+        <div><small>CARRERAS</small><strong>10–5</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>10 Jun 2026</td>
+          <td>TB vs BOS</td>
+          <td>LOCAL</td>
+          <td class="score">4–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>05 Jun 2026</td>
+          <td>TB vs MIA</td>
+          <td>VISITANTE</td>
+          <td class="score">3–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>30 May 2026</td>
+          <td>TB vs LAA</td>
+          <td>LOCAL</td>
+          <td class="score">3–5</td>
+          <td><span class="result loss">PERDIENDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+            
+    <section class="pitcher-card">
+      <div class="pitcher-head">
+        <div>
+          <span class="eyebrow">ABRIDOR LOCAL</span>
+          <h3>LAD · WROBLESKI.J</h3>
+        </div>
+        <span class="trend positive">3–0 GANANDO</span>
+      </div>
+
+      <div class="metrics">
+        <div><small>RÉCORD</small><strong>3-0-0</strong></div>
+        <div><small>DIF. MEDIO</small><strong>+2.00</strong></div>
+        <div><small>CARRERAS</small><strong>11–5</strong></div>
+        <div><small>MUESTRA</small><strong>3/3</strong></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Salida</th><th>Rol</th><th>Marcador al salir</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td>11 Jun 2026</td>
+          <td>LAD vs PIT</td>
+          <td>VISITANTE</td>
+          <td class="score">5–4</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>04 Jun 2026</td>
+          <td>LAD vs ARI</td>
+          <td>VISITANTE</td>
+          <td class="score">2–0</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        
+        <tr>
+          <td>29 May 2026</td>
+          <td>LAD vs PHI</td>
+          <td>LOCAL</td>
+          <td class="score">4–1</td>
+          <td><span class="result win">GANANDO</span></td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </section>
+    
+          </div>
+        </article>
+        
+
+  <section class="method">
+    <strong>Regla erl/erv utilizada:</strong><br>
+    Si el abridor fue local, las carreras de su equipo al salir son <b>erv</b> y
+    las del rival son <b>erl</b>. Si fue visitante, las carreras de su equipo
+    son <b>erl</b> y las del rival son <b>erv</b>. Se eliminan duplicados reales
+    antes de ordenar por fecha y tomar las tres salidas más recientes.<br><br>
+    <strong>Side de carreras:</strong> para cada equipo se combina 45% del apoyo
+    ofensivo registrado durante las tres salidas de su abridor y 55% de las
+    carreras concedidas por el abridor rival. Con una distribución Poisson se
+    comparan las probabilidades de 3+ carreras y menos de 5; se elige la mayor.
+    Un side se marca accionable desde 66%.<br><br>
+    <strong>Uso recomendado:</strong> esta capa detecta posición del juego al
+    momento de la salida del abridor. Debe cruzarse con precio, bullpen,
+    lineup confirmado, parque y estado ofensivo antes de ejecutar una apuesta.
+  </section>
+
+  <footer class="footer">F5 v1 · Modelo generado automáticamente · Powered by PRO</footer>
+</div>
+</body>
+</html>
