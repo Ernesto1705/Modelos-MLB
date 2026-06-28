@@ -1,0 +1,1629 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelo Caballo Pitcher MLB</title>
+<style>
+:root {
+  --bg:#070b16; --panel:#0d1424; --panel2:#111a2e; --text:#edf4ff; --muted:#9fb0c9;
+  --gold:#ffd166; --red:#ff4d6d; --green:#06d6a0; --blue:#5dd4ff; --violet:#a78bfa;
+  --border:rgba(255,255,255,.10);
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:Inter,Segoe UI,Arial,sans-serif; color:var(--text); background:
+  radial-gradient(circle at 15% 0%, rgba(93,212,255,.22), transparent 28%),
+  radial-gradient(circle at 82% 12%, rgba(255,209,102,.17), transparent 24%),
+  linear-gradient(180deg,#060914 0%,#090d18 100%); }
+.container { max-width:1480px; margin:0 auto; padding:34px; }
+.header { padding:34px; border:1px solid var(--border); border-radius:28px; background:linear-gradient(135deg,rgba(13,20,36,.92),rgba(17,26,46,.75)); box-shadow:0 30px 80px rgba(0,0,0,.35); position:relative; overflow:hidden; }
+.header:after { content:""; position:absolute; right:-120px; top:-120px; width:340px; height:340px; border-radius:50%; background:rgba(255,209,102,.12); }
+.logo { display:inline-flex; align-items:center; gap:10px; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.08); color:var(--gold); font-weight:800; letter-spacing:.12em; font-size:12px; }
+h1 { margin:18px 0 8px; font-size:44px; line-height:1.05; letter-spacing:-.04em; }
+.subtitle { color:var(--muted); font-size:17px; max-width:940px; line-height:1.55; }
+.kpis { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin:22px 0; }
+.kpi { background:rgba(255,255,255,.055); border:1px solid var(--border); border-radius:18px; padding:16px; }
+.kpi small { color:var(--muted); display:block; margin-bottom:7px; }
+.kpi b { font-size:26px; }
+.hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:22px 0; }
+.hero-card { border:1px solid var(--border); border-radius:24px; padding:22px; display:flex; gap:18px; align-items:flex-start; background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.03)); }
+.hero-card.gold { box-shadow:inset 0 0 0 1px rgba(255,209,102,.28); }
+.hero-card.red { box-shadow:inset 0 0 0 1px rgba(255,77,109,.28); }
+.hero-icon { font-size:34px; width:58px; height:58px; display:grid; place-items:center; border-radius:18px; background:rgba(255,255,255,.08); }
+.overline { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.16em; font-weight:800; }
+h2 { margin:6px 0 6px; font-size:28px; }
+.hero-card p { color:var(--muted); margin:0 0 12px; }
+.mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.mini-grid span { background:rgba(0,0,0,.18); border:1px solid var(--border); padding:9px; border-radius:12px; color:var(--muted); font-size:12px; }
+.mini-grid b { color:var(--text); display:block; margin-top:3px; font-size:14px; }
+.section { margin-top:26px; background:rgba(13,20,36,.72); border:1px solid var(--border); border-radius:24px; padding:22px; box-shadow:0 24px 60px rgba(0,0,0,.22); }
+.section h2 { margin:0 0 12px; }
+.table-wrap { overflow:auto; border-radius:18px; border:1px solid var(--border); }
+table { width:100%; border-collapse:collapse; min-width:1180px; }
+th { position:sticky; top:0; background:#111a2e; color:#cfe0ff; text-align:left; padding:13px 12px; font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
+td { padding:13px 12px; border-top:1px solid var(--border); color:#e7efff; vertical-align:middle; }
+tr:hover td { background:rgba(255,255,255,.035); }
+.muted { color:var(--muted); font-size:12px; }
+.team { font-size:16px; }
+.score-cell { min-width:120px; }
+.bar { height:7px; background:rgba(255,255,255,.1); border-radius:99px; overflow:hidden; margin-top:7px; }
+.bar-fill { height:100%; background:linear-gradient(90deg,var(--blue),var(--green)); border-radius:99px; }
+.danger-fill { background:linear-gradient(90deg,var(--red),var(--gold)); }
+.tag { display:inline-block; padding:7px 9px; border-radius:999px; font-size:11px; font-weight:900; letter-spacing:.04em; white-space:nowrap; }
+.tag-horse { background:rgba(255,209,102,.15); color:var(--gold); border:1px solid rgba(255,209,102,.4); }
+.tag-danger { background:rgba(255,77,109,.15); color:#ff9aae; border:1px solid rgba(255,77,109,.42); }
+.tag-good { background:rgba(6,214,160,.14); color:#7df0cf; border:1px solid rgba(6,214,160,.36); }
+.tag-bad { background:rgba(255,132,0,.14); color:#ffbd7a; border:1px solid rgba(255,132,0,.36); }
+.tag-neutral { background:rgba(255,255,255,.08); color:#c8d3e5; border:1px solid var(--border); }
+.match-card { display:grid; grid-template-columns:52px 1fr 76px; gap:12px; align-items:center; padding:15px; margin:10px 0; border-radius:18px; border:1px solid var(--border); background:rgba(255,255,255,.045); }
+.match-rank { font-size:20px; font-weight:900; color:var(--gold); }
+.match-main h3 { margin:0 0 4px; }
+.match-main p { margin:0 0 8px; color:var(--muted); }
+.diff-line { height:8px; border-radius:99px; overflow:hidden; background:rgba(255,255,255,.08); }
+.diff-line span { display:block; height:100%; background:linear-gradient(90deg,var(--gold),var(--red)); border-radius:99px; }
+.diff-badge { font-size:20px; color:var(--gold); font-weight:900; text-align:right; }
+details { border:1px solid var(--border); border-radius:16px; padding:12px 14px; margin:10px 0; background:rgba(255,255,255,.04); }
+summary { cursor:pointer; font-weight:800; color:#dfeaff; }
+.mini-table { min-width:760px; margin-top:12px; }
+.mini-table th { position:static; }
+.active-row td { background:rgba(255,209,102,.10)!important; }
+.footer { color:var(--muted); text-align:center; padding:26px; font-size:12px; }
+@media(max-width:900px) { .kpis,.hero-grid{grid-template-columns:1fr} h1{font-size:34px} .mini-grid{grid-template-columns:1fr 1fr} .container{padding:16px} }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">POWERED BY PRO · QUANT MODEL</div>
+    <h1>Modelo Caballo vs Peor Pitcher MLB</h1>
+    <p class="subtitle">Modelo corregido: el ranking interno se calcula únicamente con la temporada más reciente detectada en DATA: <b>2026</b> (2026-03-26 a 2026-06-27). Se excluyen registros de temporadas anteriores para evitar que aparezcan pitchers que ya no corresponden al equipo actual.</p>
+    <div class="kpis">
+      <div class="kpi"><small>Equipos hoy</small><b>30</b></div>
+      <div class="kpi"><small>Aperturas temporada 2026</small><b>1180</b></div>
+      <div class="kpi"><small>Pitchers únicos temporada</small><b>205</b></div>
+      <div class="kpi"><small>Caballos hoy</small><b>5</b></div>
+      <div class="kpi"><small>Peores internos hoy</small><b>2</b></div>
+    </div>
+  </div>
+
+  <div class="hero-grid">
+    
+        <div class="hero-card gold">
+            <div class="hero-icon">🐎</div>
+            <div>
+                <div class="overline">Equipo que sale con su caballo</div>
+                <h2>TB — RASMUSSEN.D</h2>
+                <p>ARI @ TB · Rank interno <b>#1</b> de <b>7</b> · Score <b>67.5</b></p>
+                <div class="mini-grid">
+                    <span>ERA <b>2.67</b></span>
+                    <span>QS <b>9/11</b></span>
+                    <span>Bad <b>1/11</b></span>
+                    <span>Última <b>6.0 IP / 2 ER</b></span>
+                </div>
+            </div>
+        </div>
+        
+    
+        <div class="hero-card red">
+            <div class="hero-icon">🚨</div>
+            <div>
+                <div class="overline">Equipo que sale con su peor pitcher</div>
+                <h2>LAA — ALDEGHERI.S</h2>
+                <p>OAK @ LAA · Rank interno <b>#7</b> de <b>7</b> · Score <b>0.0</b></p>
+                <div class="mini-grid">
+                    <span>ERA <b>9.36</b></span>
+                    <span>QS <b>0/8</b></span>
+                    <span>Bad <b>7/8</b></span>
+                    <span>Última <b>4.2 IP / 5 ER</b></span>
+                </div>
+            </div>
+        </div>
+        
+  </div>
+
+  <div class="section">
+    <h2>Tabla completa del slate</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Juego</th><th>Equipo</th><th>Pitcher hoy</th><th>Rank interno</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última salida</th><th>Dictamen</th></tr></thead>
+        <tbody>
+        <tr>
+            <td class="muted">1</td>
+            <td><b>CIN @ PIT</b><br><span class="muted">Visitante vs PIT</span></td>
+            <td class="team"><b>CIN</b></td>
+            <td><b>SINGER.B</b></td>
+            <td>#3 / 8</td>
+            <td class="score-cell"><b>34.1</b><div class="bar"><div class="bar-fill" style="width:34.1%"></div></div></td>
+            <td>4.35</td>
+            <td>6/18<br><span class="muted">33%</span></td>
+            <td>10/18<br><span class="muted">56%</span></td>
+            <td>7.0 IP / 0 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">1</td>
+            <td><b>CIN @ PIT</b><br><span class="muted">Local vs CIN</span></td>
+            <td class="team"><b>PIT</b></td>
+            <td><b>KELLER.M</b></td>
+            <td>#3 / 6</td>
+            <td class="score-cell"><b>45.8</b><div class="bar"><div class="bar-fill" style="width:45.8%"></div></div></td>
+            <td>4.95</td>
+            <td>9/15<br><span class="muted">60%</span></td>
+            <td>6/15<br><span class="muted">40%</span></td>
+            <td>6.0 IP / 3 ER</td>
+            <td><span class="tag tag-neutral">MEDIO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">2</td>
+            <td><b>WAS @ BAL</b><br><span class="muted">Visitante vs BAL</span></td>
+            <td class="team"><b>WAS</b></td>
+            <td><b>LITTELL.Z</b></td>
+            <td>#3 / 5</td>
+            <td class="score-cell"><b>25.2</b><div class="bar"><div class="bar-fill" style="width:25.2%"></div></div></td>
+            <td>3.86</td>
+            <td>2/16<br><span class="muted">12%</span></td>
+            <td>8/16<br><span class="muted">50%</span></td>
+            <td>4.0 IP / 2 ER</td>
+            <td><span class="tag tag-bad">ZONA BAJA / VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">2</td>
+            <td><b>WAS @ BAL</b><br><span class="muted">Local vs WAS</span></td>
+            <td class="team"><b>BAL</b></td>
+            <td><b>BRADISH.K</b></td>
+            <td>#2 / 6</td>
+            <td class="score-cell"><b>73.6</b><div class="bar"><div class="bar-fill" style="width:73.6%"></div></div></td>
+            <td>1.94</td>
+            <td>9/12<br><span class="muted">75%</span></td>
+            <td>2/12<br><span class="muted">17%</span></td>
+            <td>8.0 IP / 0 ER</td>
+            <td><span class="tag tag-good">ZONA ALTA / BRAZO FUERTE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">3</td>
+            <td><b>TEX @ TOR</b><br><span class="muted">Visitante vs TOR</span></td>
+            <td class="team"><b>TEX</b></td>
+            <td><b>ROCKER.K</b></td>
+            <td>#3 / 6</td>
+            <td class="score-cell"><b>37.4</b><div class="bar"><div class="bar-fill" style="width:37.4%"></div></div></td>
+            <td>3.73</td>
+            <td>2/12<br><span class="muted">17%</span></td>
+            <td>4/12<br><span class="muted">33%</span></td>
+            <td>5.0 IP / 2 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">3</td>
+            <td><b>TEX @ TOR</b><br><span class="muted">Local vs TEX</span></td>
+            <td class="team"><b>TOR</b></td>
+            <td><b>BIEBER.S</b></td>
+            <td>#7 / 8</td>
+            <td class="score-cell"><b>0.0</b><div class="bar"><div class="bar-fill" style="width:0.0%"></div></div></td>
+            <td>9.82</td>
+            <td>0/3<br><span class="muted">0%</span></td>
+            <td>3/3<br><span class="muted">100%</span></td>
+            <td>3.2 IP / 4 ER</td>
+            <td><span class="tag tag-bad">ZONA BAJA / VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">4</td>
+            <td><b>SEA @ CLE</b><br><span class="muted">Visitante vs CLE</span></td>
+            <td class="team"><b>SEA</b></td>
+            <td><b>HANCOCK.E</b></td>
+            <td>#4 / 6</td>
+            <td class="score-cell"><b>36.9</b><div class="bar"><div class="bar-fill" style="width:36.9%"></div></div></td>
+            <td>4.07</td>
+            <td>6/13<br><span class="muted">46%</span></td>
+            <td>5/13<br><span class="muted">38%</span></td>
+            <td>5.1 IP / 5 ER</td>
+            <td><span class="tag tag-bad">ZONA BAJA / VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">4</td>
+            <td><b>SEA @ CLE</b><br><span class="muted">Local vs SEA</span></td>
+            <td class="team"><b>CLE</b></td>
+            <td><b>WILLIAMS.G</b></td>
+            <td>#5 / 5</td>
+            <td class="score-cell"><b>36.4</b><div class="bar"><div class="bar-fill" style="width:36.4%"></div></div></td>
+            <td>4.48</td>
+            <td>4/15<br><span class="muted">27%</span></td>
+            <td>3/15<br><span class="muted">20%</span></td>
+            <td>5.0 IP / 2 ER</td>
+            <td><span class="tag tag-danger">PEOR PITCHER DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">5</td>
+            <td><b>HOU @ DET</b><br><span class="muted">Visitante vs DET</span></td>
+            <td class="team"><b>HOU</b></td>
+            <td><b>BROWN.H</b></td>
+            <td>#4 / 7</td>
+            <td class="score-cell"><b>34.5</b><div class="bar"><div class="bar-fill" style="width:34.5%"></div></div></td>
+            <td>1.72</td>
+            <td>1/8<br><span class="muted">12%</span></td>
+            <td>4/8<br><span class="muted">50%</span></td>
+            <td>3.0 IP / 1 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">5</td>
+            <td><b>HOU @ DET</b><br><span class="muted">Local vs HOU</span></td>
+            <td class="team"><b>DET</b></td>
+            <td><b>FLAHERTY.J</b></td>
+            <td>#6 / 7</td>
+            <td class="score-cell"><b>13.7</b><div class="bar"><div class="bar-fill" style="width:13.7%"></div></div></td>
+            <td>5.16</td>
+            <td>0/10<br><span class="muted">0%</span></td>
+            <td>5/10<br><span class="muted">50%</span></td>
+            <td>3.0 IP / 2 ER</td>
+            <td><span class="tag tag-bad">ZONA BAJA / VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">6</td>
+            <td><b>ARI @ TB</b><br><span class="muted">Visitante vs TB</span></td>
+            <td class="team"><b>ARI</b></td>
+            <td><b>KELLY.M</b></td>
+            <td>#3 / 7</td>
+            <td class="score-cell"><b>56.0</b><div class="bar"><div class="bar-fill" style="width:56.0%"></div></div></td>
+            <td>4.22</td>
+            <td>9/12<br><span class="muted">75%</span></td>
+            <td>2/12<br><span class="muted">17%</span></td>
+            <td>6.0 IP / 3 ER</td>
+            <td><span class="tag tag-neutral">MEDIO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">6</td>
+            <td><b>ARI @ TB</b><br><span class="muted">Local vs ARI</span></td>
+            <td class="team"><b>TB</b></td>
+            <td><b>RASMUSSEN.D</b></td>
+            <td>#1 / 7</td>
+            <td class="score-cell"><b>67.5</b><div class="bar"><div class="bar-fill" style="width:67.5%"></div></div></td>
+            <td>2.67</td>
+            <td>9/11<br><span class="muted">82%</span></td>
+            <td>1/11<br><span class="muted">9%</span></td>
+            <td>6.0 IP / 2 ER</td>
+            <td><span class="tag tag-horse">CABALLO DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">7</td>
+            <td><b>PHI @ NYM</b><br><span class="muted">Visitante vs NYM</span></td>
+            <td class="team"><b>PHI</b></td>
+            <td><b>LUZARDO.J</b></td>
+            <td>#3 / 6</td>
+            <td class="score-cell"><b>33.2</b><div class="bar"><div class="bar-fill" style="width:33.2%"></div></div></td>
+            <td>4.78</td>
+            <td>5/14<br><span class="muted">36%</span></td>
+            <td>7/14<br><span class="muted">50%</span></td>
+            <td>6.2 IP / 5 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">7</td>
+            <td><b>PHI @ NYM</b><br><span class="muted">Local vs PHI</span></td>
+            <td class="team"><b>NYM</b></td>
+            <td><b>MYERS.T</b></td>
+            <td>-</td>
+            <td class="score-cell"><b>-</b><div class="bar"><div class="bar-fill" style="width:0.0%"></div></div></td>
+            <td>-</td>
+            <td>0/0<br><span class="muted">0%</span></td>
+            <td>0/0<br><span class="muted">0%</span></td>
+            <td>- IP / - ER</td>
+            <td><span class="tag tag-neutral">SIN MUESTRA INTERNA TEMPORADA</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">8</td>
+            <td><b>KC @ CHW</b><br><span class="muted">Visitante vs CHW</span></td>
+            <td class="team"><b>KC</b></td>
+            <td><b>AVILA.L</b></td>
+            <td>#3 / 7</td>
+            <td class="score-cell"><b>29.9</b><div class="bar"><div class="bar-fill" style="width:29.9%"></div></div></td>
+            <td>4.50</td>
+            <td>0/9<br><span class="muted">0%</span></td>
+            <td>2/9<br><span class="muted">22%</span></td>
+            <td>5.0 IP / 1 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">8</td>
+            <td><b>KC @ CHW</b><br><span class="muted">Local vs KC</span></td>
+            <td class="team"><b>CHW</b></td>
+            <td><b>KAY.A</b></td>
+            <td>#3 / 8</td>
+            <td class="score-cell"><b>55.3</b><div class="bar"><div class="bar-fill" style="width:55.3%"></div></div></td>
+            <td>2.92</td>
+            <td>8/18<br><span class="muted">44%</span></td>
+            <td>4/18<br><span class="muted">22%</span></td>
+            <td>6.0 IP / 0 ER</td>
+            <td><span class="tag tag-neutral">MEDIO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">9</td>
+            <td><b>COL @ MIN</b><br><span class="muted">Visitante vs MIN</span></td>
+            <td class="team"><b>COL</b></td>
+            <td><b>FELTNER.R</b></td>
+            <td>#1 / 8</td>
+            <td class="score-cell"><b>41.8</b><div class="bar"><div class="bar-fill" style="width:41.8%"></div></div></td>
+            <td>4.66</td>
+            <td>5/11<br><span class="muted">45%</span></td>
+            <td>5/11<br><span class="muted">45%</span></td>
+            <td>6.0 IP / 2 ER</td>
+            <td><span class="tag tag-horse">CABALLO DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">9</td>
+            <td><b>COL @ MIN</b><br><span class="muted">Local vs COL</span></td>
+            <td class="team"><b>MIN</b></td>
+            <td><b>PRIELIPP.C</b></td>
+            <td>#4 / 7</td>
+            <td class="score-cell"><b>34.2</b><div class="bar"><div class="bar-fill" style="width:34.2%"></div></div></td>
+            <td>5.22</td>
+            <td>4/11<br><span class="muted">36%</span></td>
+            <td>5/11<br><span class="muted">45%</span></td>
+            <td>6.0 IP / 3 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">10</td>
+            <td><b>CHC @ MIL</b><br><span class="muted">Visitante vs MIL</span></td>
+            <td class="team"><b>CHC</b></td>
+            <td><b>WILSON.B</b></td>
+            <td>-</td>
+            <td class="score-cell"><b>-</b><div class="bar"><div class="bar-fill" style="width:0.0%"></div></div></td>
+            <td>-</td>
+            <td>0/0<br><span class="muted">0%</span></td>
+            <td>0/0<br><span class="muted">0%</span></td>
+            <td>- IP / - ER</td>
+            <td><span class="tag tag-neutral">SIN MUESTRA INTERNA TEMPORADA</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">10</td>
+            <td><b>CHC @ MIL</b><br><span class="muted">Local vs CHC</span></td>
+            <td class="team"><b>MIL</b></td>
+            <td><b>WOODRUFF.B</b></td>
+            <td>#3 / 8</td>
+            <td class="score-cell"><b>67.3</b><div class="bar"><div class="bar-fill" style="width:67.3%"></div></div></td>
+            <td>1.67</td>
+            <td>6/10<br><span class="muted">60%</span></td>
+            <td>1/10<br><span class="muted">10%</span></td>
+            <td>6.0 IP / 0 ER</td>
+            <td><span class="tag tag-good">SÓLIDO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">11</td>
+            <td><b>MIA @ STL</b><br><span class="muted">Visitante vs STL</span></td>
+            <td class="team"><b>MIA</b></td>
+            <td><b>PHILLIPS.T</b></td>
+            <td>#3 / 8</td>
+            <td class="score-cell"><b>39.4</b><div class="bar"><div class="bar-fill" style="width:39.4%"></div></div></td>
+            <td>4.80</td>
+            <td>4/10<br><span class="muted">40%</span></td>
+            <td>3/10<br><span class="muted">30%</span></td>
+            <td>6.0 IP / 2 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">11</td>
+            <td><b>MIA @ STL</b><br><span class="muted">Local vs MIA</span></td>
+            <td class="team"><b>STL</b></td>
+            <td><b>LEAHY.K</b></td>
+            <td>#1 / 5</td>
+            <td class="score-cell"><b>44.3</b><div class="bar"><div class="bar-fill" style="width:44.3%"></div></div></td>
+            <td>3.68</td>
+            <td>7/16<br><span class="muted">44%</span></td>
+            <td>7/16<br><span class="muted">44%</span></td>
+            <td>6.1 IP / 0 ER</td>
+            <td><span class="tag tag-horse">CABALLO DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">12</td>
+            <td><b>OAK @ LAA</b><br><span class="muted">Visitante vs LAA</span></td>
+            <td class="team"><b>OAK</b></td>
+            <td><b>CIVALE.A</b></td>
+            <td>#7 / 8</td>
+            <td class="score-cell"><b>8.8</b><div class="bar"><div class="bar-fill" style="width:8.8%"></div></div></td>
+            <td>6.42</td>
+            <td>1/15<br><span class="muted">7%</span></td>
+            <td>10/15<br><span class="muted">67%</span></td>
+            <td>4.0 IP / 2 ER</td>
+            <td><span class="tag tag-bad">ZONA BAJA / VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">12</td>
+            <td><b>OAK @ LAA</b><br><span class="muted">Local vs OAK</span></td>
+            <td class="team"><b>LAA</b></td>
+            <td><b>ALDEGHERI.S</b></td>
+            <td>#7 / 7</td>
+            <td class="score-cell"><b>0.0</b><div class="bar"><div class="bar-fill" style="width:0.0%"></div></div></td>
+            <td>9.36</td>
+            <td>0/8<br><span class="muted">0%</span></td>
+            <td>7/8<br><span class="muted">88%</span></td>
+            <td>4.2 IP / 5 ER</td>
+            <td><span class="tag tag-danger">PEOR PITCHER DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">13</td>
+            <td><b>ATL @ SF</b><br><span class="muted">Visitante vs SF</span></td>
+            <td class="team"><b>ATL</b></td>
+            <td><b>SALE.C</b></td>
+            <td>#1 / 6</td>
+            <td class="score-cell"><b>63.7</b><div class="bar"><div class="bar-fill" style="width:63.7%"></div></div></td>
+            <td>1.60</td>
+            <td>6/12<br><span class="muted">50%</span></td>
+            <td>0/12<br><span class="muted">0%</span></td>
+            <td>5.2 IP / 0 ER</td>
+            <td><span class="tag tag-horse">CABALLO DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">13</td>
+            <td><b>ATL @ SF</b><br><span class="muted">Local vs ATL</span></td>
+            <td class="team"><b>SF</b></td>
+            <td><b>RAY.R</b></td>
+            <td>#2 / 7</td>
+            <td class="score-cell"><b>62.5</b><div class="bar"><div class="bar-fill" style="width:62.5%"></div></div></td>
+            <td>2.44</td>
+            <td>8/14<br><span class="muted">57%</span></td>
+            <td>5/14<br><span class="muted">36%</span></td>
+            <td>8.0 IP / 0 ER</td>
+            <td><span class="tag tag-good">ZONA ALTA / BRAZO FUERTE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">14</td>
+            <td><b>LAD @ SD</b><br><span class="muted">Visitante vs SD</span></td>
+            <td class="team"><b>LAD</b></td>
+            <td><b>SHEEHAN.E</b></td>
+            <td>#5 / 6</td>
+            <td class="score-cell"><b>10.7</b><div class="bar"><div class="bar-fill" style="width:10.7%"></div></div></td>
+            <td>6.72</td>
+            <td>3/15<br><span class="muted">20%</span></td>
+            <td>10/15<br><span class="muted">67%</span></td>
+            <td>3.1 IP / 6 ER</td>
+            <td><span class="tag tag-bad">ZONA BAJA / VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">14</td>
+            <td><b>LAD @ SD</b><br><span class="muted">Local vs LAD</span></td>
+            <td class="team"><b>SD</b></td>
+            <td><b>KING.M</b></td>
+            <td>#1 / 8</td>
+            <td class="score-cell"><b>64.5</b><div class="bar"><div class="bar-fill" style="width:64.5%"></div></div></td>
+            <td>2.38</td>
+            <td>9/14<br><span class="muted">64%</span></td>
+            <td>4/14<br><span class="muted">29%</span></td>
+            <td>7.0 IP / 0 ER</td>
+            <td><span class="tag tag-horse">CABALLO DEL EQUIPO</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">15</td>
+            <td><b>NYY @ BOS</b><br><span class="muted">Visitante vs BOS</span></td>
+            <td class="team"><b>NYY</b></td>
+            <td><b>RODON.C</b></td>
+            <td>#5 / 8</td>
+            <td class="score-cell"><b>40.4</b><div class="bar"><div class="bar-fill" style="width:40.4%"></div></div></td>
+            <td>4.11</td>
+            <td>3/11<br><span class="muted">27%</span></td>
+            <td>2/11<br><span class="muted">18%</span></td>
+            <td>5.1 IP / 3 ER</td>
+            <td><span class="tag tag-bad">VULNERABLE</span></td>
+        </tr>
+        
+        <tr>
+            <td class="muted">15</td>
+            <td><b>NYY @ BOS</b><br><span class="muted">Local vs NYY</span></td>
+            <td class="team"><b>BOS</b></td>
+            <td><b>GRAY.S</b></td>
+            <td>#3 / 6</td>
+            <td class="score-cell"><b>71.5</b><div class="bar"><div class="bar-fill" style="width:71.5%"></div></div></td>
+            <td>2.45</td>
+            <td>12/15<br><span class="muted">80%</span></td>
+            <td>1/15<br><span class="muted">7%</span></td>
+            <td>7.0 IP / 1 ER</td>
+            <td><span class="tag tag-good">SÓLIDO</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Cruces con mayor ventaja por abridor</h2>
+    <p class="subtitle">Diferencial entre el score de los abridores de cada juego. Mientras mayor sea la brecha, más claro es el edge de pitching por este ángulo.</p>
+    
+        <div class="match-card">
+            <div class="match-rank">#1</div>
+            <div class="match-main">
+                <h3>LAD @ SD</h3>
+                <p><b>Ventaja abridor:</b> SD con KING.M (64.5) vs LAD con SHEEHAN.E (10.7)</p>
+                <div class="diff-line"><span style="width:53.8%"></span></div>
+            </div>
+            <div class="diff-badge">+53.8</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#2</div>
+            <div class="match-main">
+                <h3>WAS @ BAL</h3>
+                <p><b>Ventaja abridor:</b> BAL con BRADISH.K (73.6) vs WAS con LITTELL.Z (25.2)</p>
+                <div class="diff-line"><span style="width:48.4%"></span></div>
+            </div>
+            <div class="diff-badge">+48.4</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#3</div>
+            <div class="match-main">
+                <h3>TEX @ TOR</h3>
+                <p><b>Ventaja abridor:</b> TEX con ROCKER.K (37.4) vs TOR con BIEBER.S (0.0)</p>
+                <div class="diff-line"><span style="width:37.4%"></span></div>
+            </div>
+            <div class="diff-badge">+37.4</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#4</div>
+            <div class="match-main">
+                <h3>NYY @ BOS</h3>
+                <p><b>Ventaja abridor:</b> BOS con GRAY.S (71.5) vs NYY con RODON.C (40.4)</p>
+                <div class="diff-line"><span style="width:31.1%"></span></div>
+            </div>
+            <div class="diff-badge">+31.1</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#5</div>
+            <div class="match-main">
+                <h3>KC @ CHW</h3>
+                <p><b>Ventaja abridor:</b> CHW con KAY.A (55.3) vs KC con AVILA.L (29.9)</p>
+                <div class="diff-line"><span style="width:25.4%"></span></div>
+            </div>
+            <div class="diff-badge">+25.4</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#6</div>
+            <div class="match-main">
+                <h3>HOU @ DET</h3>
+                <p><b>Ventaja abridor:</b> HOU con BROWN.H (34.5) vs DET con FLAHERTY.J (13.7)</p>
+                <div class="diff-line"><span style="width:20.8%"></span></div>
+            </div>
+            <div class="diff-badge">+20.8</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#7</div>
+            <div class="match-main">
+                <h3>CIN @ PIT</h3>
+                <p><b>Ventaja abridor:</b> PIT con KELLER.M (45.8) vs CIN con SINGER.B (34.1)</p>
+                <div class="diff-line"><span style="width:11.7%"></span></div>
+            </div>
+            <div class="diff-badge">+11.7</div>
+        </div>
+        
+        <div class="match-card">
+            <div class="match-rank">#8</div>
+            <div class="match-main">
+                <h3>ARI @ TB</h3>
+                <p><b>Ventaja abridor:</b> TB con RASMUSSEN.D (67.5) vs ARI con KELLY.M (56.0)</p>
+                <div class="diff-line"><span style="width:11.5%"></span></div>
+            </div>
+            <div class="diff-badge">+11.5</div>
+        </div>
+        
+  </div>
+
+  <div class="section">
+    <h2>Ranking interno por equipo</h2>
+    <p class="subtitle">La fila resaltada marca el pitcher que abre hoy para ese equipo. Este ranking ya está filtrado solo a temporada 2026; registros históricos eliminados: 126 de 716 filas originales.</p>
+    
+        <details>
+            <summary>ARI — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>RODRIGUEZ.E</b></td><td>80.6</td><td>1.36</td><td>6/7</td><td>1/7</td><td>6.2 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>NELSON.R</b></td><td>65.9</td><td>3.86</td><td>1/1</td><td>0/1</td><td>7.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>KELLY.M</b></td><td>56.0</td><td>4.22</td><td>9/12</td><td>2/12</td><td>6.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>BRATT.M</b></td><td>16.4</td><td>3.00</td><td>0/2</td><td>2/2</td><td>3.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>CABRERA.J</b></td><td>16.1</td><td>4.32</td><td>0/5</td><td>3/5</td><td>5.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>GALLEN.Z</b></td><td>0.0</td><td>8.78</td><td>1/7</td><td>6/7</td><td>6.2 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>SOROKA.M</b></td><td>0.0</td><td>12.00</td><td>0/4</td><td>4/4</td><td>1.0 IP / 0 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>ATL — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class=" active-row">
+                <td>#1</td><td><b>SALE.C</b></td><td>63.7</td><td>1.60</td><td>6/12</td><td>0/12</td><td>5.2 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>PEREZ.M</b></td><td>34.5</td><td>3.90</td><td>2/6</td><td>2/6</td><td>4.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>LOPEZ.R</b></td><td>16.4</td><td>3.00</td><td>0/3</td><td>3/3</td><td>3.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>HOLMES.G</b></td><td>0.8</td><td>5.40</td><td>0/6</td><td>6/6</td><td>4.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>RITCHIE.J</b></td><td>0.0</td><td>8.28</td><td>0/5</td><td>5/5</td><td>5.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>ELDER.B</b></td><td>0.0</td><td>11.62</td><td>0/5</td><td>5/5</td><td>4.0 IP / 5 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>BAL — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>ROGERS.T</b></td><td>89.9</td><td>0.82</td><td>5/5</td><td>0/5</td><td>6.1 IP / 1 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#2</td><td><b>BRADISH.K</b></td><td>73.6</td><td>1.94</td><td>9/12</td><td>2/12</td><td>8.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>YOUNG.B</b></td><td>37.8</td><td>2.94</td><td>0/7</td><td>1/7</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>BAZ.S</b></td><td>30.9</td><td>5.44</td><td>5/8</td><td>3/8</td><td>5.0 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>GIBSON.T</b></td><td>10.7</td><td>5.16</td><td>0/5</td><td>3/5</td><td>4.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>BASSITT.C</b></td><td>2.3</td><td>6.75</td><td>0/2</td><td>2/2</td><td>4.1 IP / 3 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>BOS — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>BENNETT.J</b></td><td>73.2</td><td>1.50</td><td>6/7</td><td>1/7</td><td>6.1 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>EARLY.C</b></td><td>72.3</td><td>2.61</td><td>6/7</td><td>0/7</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>GRAY.S</b></td><td>71.5</td><td>2.45</td><td>12/15</td><td>1/15</td><td>7.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>TOLLE.P</b></td><td>70.8</td><td>2.17</td><td>7/8</td><td>1/8</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>SUAREZ.R</b></td><td>68.6</td><td>1.51</td><td>5/7</td><td>1/7</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>BELLO.B</b></td><td>0.0</td><td>9.00</td><td>0/2</td><td>2/2</td><td>3.1 IP / 3 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>CHC — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>BROWN.B</b></td><td>58.8</td><td>2.25</td><td>3/6</td><td>2/6</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>REA.C</b></td><td>46.7</td><td>1.16</td><td>0/6</td><td>0/6</td><td>5.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>PETERSON.D</b></td><td>45.6</td><td>3.18</td><td>0/3</td><td>0/3</td><td>5.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>ASSAD.J</b></td><td>39.1</td><td>4.22</td><td>0/4</td><td>0/4</td><td>5.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>BOYD.M</b></td><td>37.0</td><td>0.00</td><td>0/2</td><td>2/2</td><td>4.2 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>CABRERA.E</b></td><td>13.4</td><td>6.84</td><td>0/6</td><td>3/6</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>IMANAGA.S</b></td><td>0.0</td><td>9.60</td><td>0/3</td><td>3/3</td><td>5.1 IP / 4 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>CHW — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>SANDLIN.D</b></td><td>83.0</td><td>1.50</td><td>4/4</td><td>0/4</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>MARTIN.D</b></td><td>57.3</td><td>1.97</td><td>4/8</td><td>1/8</td><td>5.1 IP / 0 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>KAY.A</b></td><td>55.3</td><td>2.92</td><td>8/18</td><td>4/18</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>BURKE.S</b></td><td>54.3</td><td>3.41</td><td>3/5</td><td>2/5</td><td>6.1 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>TAYLOR.G</b></td><td>21.0</td><td>0.00</td><td>0/1</td><td>1/1</td><td>2.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>NEWCOMB.S</b></td><td>19.0</td><td>0.00</td><td>0/2</td><td>2/2</td><td>3.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>FEDDE.E</b></td><td>17.8</td><td>3.37</td><td>0/8</td><td>6/8</td><td>4.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>SCHULTZ.N</b></td><td>0.0</td><td>9.72</td><td>0/2</td><td>2/2</td><td>4.0 IP / 6 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>CIN — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>BURNS.C</b></td><td>38.4</td><td>3.52</td><td>2/8</td><td>3/8</td><td>6.0 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>ABBOTT.A</b></td><td>35.0</td><td>4.26</td><td>0/6</td><td>1/6</td><td>5.1 IP / 3 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>SINGER.B</b></td><td>34.1</td><td>4.35</td><td>6/18</td><td>10/18</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>LODOLO.N</b></td><td>5.0</td><td>4.97</td><td>0/3</td><td>3/3</td><td>4.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>PETTY.C</b></td><td>4.8</td><td>7.20</td><td>0/1</td><td>1/1</td><td>5.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>LOWDER.R</b></td><td>1.0</td><td>8.49</td><td>0/5</td><td>3/5</td><td>5.2 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>WILLIAMSON.B</b></td><td>0.0</td><td>11.57</td><td>0/1</td><td>1/1</td><td>4.2 IP / 6 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>RICHARDSON.L</b></td><td>0.0</td><td>36.00</td><td>0/1</td><td>1/1</td><td>1.0 IP / 4 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>CLE — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>CANTILLO.J</b></td><td>73.4</td><td>1.67</td><td>5/6</td><td>1/6</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>CECCONI.S</b></td><td>57.0</td><td>3.43</td><td>6/8</td><td>2/8</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>MESSICK.P</b></td><td>51.8</td><td>3.48</td><td>4/9</td><td>2/9</td><td>7.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>BIBEE.T</b></td><td>47.8</td><td>4.30</td><td>3/7</td><td>1/7</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#5</td><td><b>WILLIAMS.G</b></td><td>36.4</td><td>4.48</td><td>4/15</td><td>3/15</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>COL — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class=" active-row">
+                <td>#1</td><td><b>FELTNER.R</b></td><td>41.8</td><td>4.66</td><td>5/11</td><td>5/11</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>LORENZEN.M</b></td><td>29.3</td><td>4.55</td><td>0/5</td><td>2/5</td><td>5.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>FREELAND.K</b></td><td>21.3</td><td>6.82</td><td>2/5</td><td>3/5</td><td>6.0 IP / 6 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>DOLLANDER.C</b></td><td>16.9</td><td>6.55</td><td>0/2</td><td>1/2</td><td>5.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>QUINTANA.J</b></td><td>14.4</td><td>4.50</td><td>0/1</td><td>1/1</td><td>4.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>SUGANO.T</b></td><td>12.7</td><td>7.67</td><td>2/5</td><td>3/5</td><td>5.0 IP / 7 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>GORDON.T</b></td><td>0.0</td><td>7.53</td><td>0/3</td><td>2/3</td><td>3.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>SULLIVAN.S</b></td><td>0.0</td><td>9.78</td><td>0/5</td><td>2/5</td><td>5.0 IP / 3 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>DET — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>MONTERO.K</b></td><td>87.8</td><td>1.54</td><td>5/5</td><td>0/5</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>MELTON.T</b></td><td>78.2</td><td>1.50</td><td>5/5</td><td>0/5</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>VALDEZ.F</b></td><td>43.2</td><td>2.96</td><td>5/9</td><td>4/9</td><td>6.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>SKUBAL.T</b></td><td>18.6</td><td>5.40</td><td>0/4</td><td>2/4</td><td>6.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>ANDERSON.D</b></td><td>13.8</td><td>3.38</td><td>0/1</td><td>1/1</td><td>2.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#6</td><td><b>FLAHERTY.J</b></td><td>13.7</td><td>5.16</td><td>0/10</td><td>5/10</td><td>3.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>MIZE.C</b></td><td>2.3</td><td>6.23</td><td>0/4</td><td>4/4</td><td>5.2 IP / 4 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>HOU — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>BURROWS.M</b></td><td>83.0</td><td>1.50</td><td>2/2</td><td>0/2</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>IMAI.T</b></td><td>68.1</td><td>2.70</td><td>6/7</td><td>1/7</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>LAMBERT.P</b></td><td>34.8</td><td>3.00</td><td>1/4</td><td>3/4</td><td>4.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#4</td><td><b>BROWN.H</b></td><td>34.5</td><td>1.72</td><td>1/8</td><td>4/8</td><td>3.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>TENG.K</b></td><td>17.5</td><td>6.49</td><td>2/6</td><td>4/6</td><td>3.2 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>BOLTON.C</b></td><td>8.9</td><td>4.15</td><td>0/1</td><td>1/1</td><td>4.1 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>ARRIGHETTI.S</b></td><td>0.0</td><td>15.43</td><td>0/5</td><td>5/5</td><td>3.0 IP / 8 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>KC — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>WACHA.M</b></td><td>81.3</td><td>1.53</td><td>7/8</td><td>1/8</td><td>7.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>LUGO.S</b></td><td>40.4</td><td>4.37</td><td>7/10</td><td>3/10</td><td>5.0 IP / 7 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>AVILA.L</b></td><td>29.9</td><td>4.50</td><td>0/9</td><td>2/9</td><td>5.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>CAMERON.N</b></td><td>22.0</td><td>5.79</td><td>2/7</td><td>3/7</td><td>5.0 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>BUBIC.K</b></td><td>15.2</td><td>6.00</td><td>1/5</td><td>3/5</td><td>4.0 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>KOLEK.S</b></td><td>0.0</td><td>16.71</td><td>1/4</td><td>3/4</td><td>1.2 IP / 9 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>SPENCE.M</b></td><td>0.0</td><td>67.50</td><td>0/3</td><td>3/3</td><td>1.1 IP / 10 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>LAA — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>KOCHANOWICZ.J</b></td><td>58.8</td><td>4.50</td><td>3/3</td><td>0/3</td><td>6.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>RODRIGUEZ.G</b></td><td>49.4</td><td>1.80</td><td>0/1</td><td>0/1</td><td>5.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>JOHNSON.R</b></td><td>36.0</td><td>5.00</td><td>2/5</td><td>3/5</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>DETMERS.R</b></td><td>29.6</td><td>5.47</td><td>1/9</td><td>4/9</td><td>5.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>SORIANO.J</b></td><td>13.7</td><td>6.35</td><td>2/8</td><td>6/8</td><td>3.0 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>URENA.W</b></td><td>9.3</td><td>6.75</td><td>0/6</td><td>3/6</td><td>4.1 IP / 7 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#7</td><td><b>ALDEGHERI.S</b></td><td>0.0</td><td>9.36</td><td>0/8</td><td>7/8</td><td>4.2 IP / 5 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>LAD — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>LAUER.E</b></td><td>91.0</td><td>0.00</td><td>2/2</td><td>0/2</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>YAMAMOTO.Y</b></td><td>73.4</td><td>2.65</td><td>8/8</td><td>0/8</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>WROBLESKI.J</b></td><td>67.0</td><td>2.92</td><td>3/4</td><td>1/4</td><td>7.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>OHTANI.S</b></td><td>66.5</td><td>2.40</td><td>3/5</td><td>1/5</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#5</td><td><b>SHEEHAN.E</b></td><td>10.7</td><td>6.72</td><td>3/15</td><td>10/15</td><td>3.1 IP / 6 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>SASAKI.R</b></td><td>8.8</td><td>6.27</td><td>0/7</td><td>4/7</td><td>4.0 IP / 3 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>MIA — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>MEYER.M</b></td><td>72.3</td><td>1.49</td><td>3/6</td><td>0/6</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>ALCANTARA.S</b></td><td>70.0</td><td>2.59</td><td>3/4</td><td>0/4</td><td>6.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>PHILLIPS.T</b></td><td>39.4</td><td>4.80</td><td>4/10</td><td>3/10</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>JUNK.J</b></td><td>20.3</td><td>5.14</td><td>0/4</td><td>2/4</td><td>5.0 IP / 8 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>GUSTO.R</b></td><td>20.0</td><td>2.18</td><td>0/6</td><td>6/6</td><td>3.1 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>PEREZ.E</b></td><td>14.7</td><td>4.40</td><td>0/3</td><td>3/3</td><td>4.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>BACHAR.L</b></td><td>0.0</td><td>6.75</td><td>0/2</td><td>2/2</td><td>1.1 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>PADDACK.C</b></td><td>0.0</td><td>9.64</td><td>0/1</td><td>1/1</td><td>4.2 IP / 5 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>MIL — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>MISIOROWSKI.J</b></td><td>80.4</td><td>1.47</td><td>7/7</td><td>0/7</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>GASSER.R</b></td><td>74.9</td><td>3.00</td><td>2/2</td><td>0/2</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>WOODRUFF.B</b></td><td>67.3</td><td>1.67</td><td>6/10</td><td>1/10</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>HARRISON.K</b></td><td>55.0</td><td>2.63</td><td>4/7</td><td>0/7</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>SPROAT.B</b></td><td>49.6</td><td>3.55</td><td>2/5</td><td>2/5</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>HENDERSON.L</b></td><td>45.2</td><td>2.70</td><td>0/2</td><td>0/2</td><td>5.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>DROHAN.S</b></td><td>35.6</td><td>0.96</td><td>0/4</td><td>2/4</td><td>4.1 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>PATRICK.C</b></td><td>18.7</td><td>4.32</td><td>0/2</td><td>1/2</td><td>3.1 IP / 4 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>MIN — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>MATTHEWS.Z</b></td><td>68.6</td><td>3.24</td><td>4/4</td><td>0/4</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>BRADLEY.T</b></td><td>67.5</td><td>2.90</td><td>3/5</td><td>0/5</td><td>7.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>RYAN.J</b></td><td>36.7</td><td>3.72</td><td>2/5</td><td>2/5</td><td>6.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#4</td><td><b>PRIELIPP.C</b></td><td>34.2</td><td>5.22</td><td>4/11</td><td>5/11</td><td>6.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>PAREDES.M</b></td><td>32.5</td><td>4.50</td><td>0/5</td><td>0/5</td><td>5.1 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>ROJAS.K</b></td><td>6.6</td><td>3.68</td><td>0/3</td><td>3/3</td><td>2.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>OBER.B</b></td><td>0.0</td><td>10.24</td><td>0/2</td><td>2/2</td><td>4.2 IP / 7 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>NYM — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>THORNTON.Z</b></td><td>57.1</td><td>2.82</td><td>3/4</td><td>1/4</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>HOLMES.C</b></td><td>37.6</td><td>3.18</td><td>0/1</td><td>0/1</td><td>5.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>SCOTT.C</b></td><td>33.9</td><td>2.15</td><td>0/6</td><td>3/6</td><td>4.1 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>MANAEA.S</b></td><td>22.0</td><td>4.33</td><td>0/6</td><td>2/6</td><td>3.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>MCLEAN.N</b></td><td>22.0</td><td>5.68</td><td>1/3</td><td>2/3</td><td>6.0 IP / 6 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>PETERSON.D</b></td><td>0.0</td><td>7.88</td><td>0/4</td><td>4/4</td><td>4.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>PERALTA.F</b></td><td>0.0</td><td>11.37</td><td>1/6</td><td>3/6</td><td>5.2 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>SENGA.K</b></td><td>0.0</td><td>14.29</td><td>0/3</td><td>3/3</td><td>3.2 IP / 7 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>NYY — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>GIL.L</b></td><td>93.0</td><td>0.00</td><td>1/1</td><td>0/1</td><td>6.1 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>SCHLITTLER.C</b></td><td>66.5</td><td>0.44</td><td>3/7</td><td>0/7</td><td>5.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>WEATHERS.R</b></td><td>51.6</td><td>3.74</td><td>4/7</td><td>3/7</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>FRIED.M</b></td><td>43.6</td><td>2.45</td><td>1/2</td><td>1/2</td><td>3.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#5</td><td><b>RODON.C</b></td><td>40.4</td><td>4.11</td><td>3/11</td><td>2/11</td><td>5.1 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>WARREN.W</b></td><td>10.6</td><td>5.79</td><td>0/6</td><td>4/6</td><td>5.2 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>RODRIGUEZ.ELM</b></td><td>0.0</td><td>6.75</td><td>0/2</td><td>2/2</td><td>4.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>COLE.G</b></td><td>0.0</td><td>7.80</td><td>0/6</td><td>6/6</td><td>5.1 IP / 4 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>OAK — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>JUMP.G</b></td><td>63.3</td><td>1.00</td><td>3/6</td><td>1/6</td><td>5.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>GINN.J</b></td><td>38.3</td><td>5.56</td><td>3/6</td><td>3/6</td><td>6.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>SEVERINO.L</b></td><td>37.7</td><td>2.25</td><td>1/2</td><td>1/2</td><td>1.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>MEDINA.L</b></td><td>28.2</td><td>1.93</td><td>0/1</td><td>1/1</td><td>4.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>PERKINS.J</b></td><td>18.3</td><td>5.40</td><td>0/7</td><td>3/7</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>LOPEZ.J</b></td><td>16.3</td><td>6.00</td><td>0/2</td><td>1/2</td><td>3.2 IP / 4 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#7</td><td><b>CIVALE.A</b></td><td>8.8</td><td>6.42</td><td>1/15</td><td>10/15</td><td>4.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>SPRINGS.J</b></td><td>2.3</td><td>9.97</td><td>0/5</td><td>3/5</td><td>5.1 IP / 3 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>PHI — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>WHEELER.Z</b></td><td>70.1</td><td>2.13</td><td>3/6</td><td>0/6</td><td>7.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>SANCHEZ.C</b></td><td>50.2</td><td>3.25</td><td>4/6</td><td>2/6</td><td>5.0 IP / 5 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>LUZARDO.J</b></td><td>33.2</td><td>4.78</td><td>5/14</td><td>7/14</td><td>6.2 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>NOLA.A</b></td><td>27.1</td><td>4.85</td><td>0/6</td><td>1/6</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>RANGEL.A</b></td><td>7.9</td><td>5.73</td><td>0/5</td><td>3/5</td><td>4.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>PAINTER.A</b></td><td>0.0</td><td>9.00</td><td>0/2</td><td>1/2</td><td>2.0 IP / 6 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>PIT — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>ASHCRAFT.B</b></td><td>83.4</td><td>1.43</td><td>6/6</td><td>0/6</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>CHANDLER.B</b></td><td>53.2</td><td>2.00</td><td>2/5</td><td>1/5</td><td>5.1 IP / 1 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>KELLER.M</b></td><td>45.8</td><td>4.95</td><td>9/15</td><td>6/15</td><td>6.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>MLODZINSKI.C</b></td><td>39.6</td><td>5.40</td><td>1/2</td><td>1/2</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>SKENES.P</b></td><td>34.1</td><td>3.92</td><td>3/7</td><td>3/7</td><td>5.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>JONES.J</b></td><td>7.7</td><td>4.95</td><td>0/5</td><td>5/5</td><td>4.2 IP / 3 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>SD — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class=" active-row">
+                <td>#1</td><td><b>KING.M</b></td><td>64.5</td><td>2.38</td><td>9/14</td><td>4/14</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>BUEHLER.W</b></td><td>54.6</td><td>1.93</td><td>1/6</td><td>0/6</td><td>5.1 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>SEARS.J</b></td><td>45.6</td><td>3.18</td><td>0/2</td><td>0/2</td><td>5.2 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>CANNING.G</b></td><td>14.8</td><td>5.71</td><td>1/10</td><td>5/10</td><td>0.2 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>MARQUEZ.G</b></td><td>4.8</td><td>7.20</td><td>0/1</td><td>1/1</td><td>5.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>GIOLITO.L</b></td><td>0.0</td><td>9.00</td><td>0/2</td><td>2/2</td><td>4.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>VASQUEZ.R</b></td><td>0.0</td><td>10.00</td><td>1/7</td><td>6/7</td><td>3.1 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>WALDRON.M</b></td><td>0.0</td><td>10.80</td><td>0/1</td><td>1/1</td><td>5.0 IP / 6 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>SEA — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>KIRBY.G</b></td><td>78.9</td><td>2.00</td><td>6/6</td><td>0/6</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>CASTILLO.L</b></td><td>57.1</td><td>2.27</td><td>3/6</td><td>2/6</td><td>6.0 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>MILLER.B</b></td><td>48.0</td><td>2.25</td><td>1/7</td><td>0/7</td><td>5.2 IP / 3 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#4</td><td><b>HANCOCK.E</b></td><td>36.9</td><td>4.07</td><td>6/13</td><td>5/13</td><td>5.1 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>GILBERT.L</b></td><td>30.7</td><td>4.19</td><td>2/7</td><td>4/7</td><td>7.0 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>WOO.B</b></td><td>28.4</td><td>5.18</td><td>3/6</td><td>3/6</td><td>4.0 IP / 5 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>SF — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>WEBB.L</b></td><td>90.1</td><td>0.97</td><td>5/5</td><td>0/5</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#2</td><td><b>RAY.R</b></td><td>62.5</td><td>2.44</td><td>8/14</td><td>5/14</td><td>8.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>ROUPP.L</b></td><td>52.6</td><td>3.67</td><td>4/6</td><td>1/6</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>WHISENHUNT.C</b></td><td>40.9</td><td>3.60</td><td>0/3</td><td>0/3</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>MAHLE.T</b></td><td>26.0</td><td>4.64</td><td>0/4</td><td>2/4</td><td>5.2 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>MCDONALD.T</b></td><td>13.9</td><td>6.14</td><td>0/5</td><td>2/5</td><td>5.1 IP / 3 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>HOUSER.A</b></td><td>0.0</td><td>9.82</td><td>0/1</td><td>1/1</td><td>3.2 IP / 4 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>STL — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class=" active-row">
+                <td>#1</td><td><b>LEAHY.K</b></td><td>44.3</td><td>3.68</td><td>7/16</td><td>7/16</td><td>6.1 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>MCGREEVY.M</b></td><td>43.5</td><td>3.74</td><td>3/6</td><td>3/6</td><td>6.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>PALLANTE.A</b></td><td>42.2</td><td>4.00</td><td>4/7</td><td>3/7</td><td>6.2 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>LIBERTATORE.M</b></td><td>0.0</td><td>8.57</td><td>1/8</td><td>6/8</td><td>5.1 IP / 6 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>MAY.D</b></td><td>0.0</td><td>12.54</td><td>0/3</td><td>2/3</td><td>2.0 IP / 6 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>TB — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class=" active-row">
+                <td>#1</td><td><b>RASMUSSEN.D</b></td><td>67.5</td><td>2.67</td><td>9/11</td><td>1/11</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>SEYMOUR.I</b></td><td>62.8</td><td>2.31</td><td>2/4</td><td>0/4</td><td>6.2 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>MARTINEZ.N</b></td><td>57.0</td><td>2.79</td><td>2/5</td><td>0/5</td><td>5.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>JAX.G</b></td><td>49.4</td><td>1.80</td><td>0/5</td><td>0/5</td><td>5.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>MCCLANAHAN.S</b></td><td>42.0</td><td>3.53</td><td>3/7</td><td>3/7</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>GROVE.M</b></td><td>27.0</td><td>0.00</td><td>0/3</td><td>3/3</td><td>3.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#7</td><td><b>MATZ.S</b></td><td>0.0</td><td>27.00</td><td>0/1</td><td>1/1</td><td>1.2 IP / 5 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>TEX — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>EOVALDI.N</b></td><td>85.2</td><td>1.64</td><td>5/5</td><td>0/5</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>GORE.M</b></td><td>64.3</td><td>3.44</td><td>5/6</td><td>1/6</td><td>7.0 IP / 3 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>ROCKER.K</b></td><td>37.4</td><td>3.73</td><td>2/12</td><td>4/12</td><td>5.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>DEGROM.J</b></td><td>36.8</td><td>6.00</td><td>2/4</td><td>2/4</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>QUANTRILL.C</b></td><td>20.9</td><td>1.12</td><td>0/5</td><td>5/5</td><td>4.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>LETIER.J</b></td><td>0.0</td><td>11.00</td><td>0/2</td><td>2/2</td><td>4.0 IP / 6 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>TOR — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>YESAVAGE.T</b></td><td>58.3</td><td>2.77</td><td>2/4</td><td>0/4</td><td>5.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>CEASE.D</b></td><td>22.7</td><td>4.85</td><td>1/8</td><td>4/8</td><td>4.2 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#3</td><td><b>DALLAS.C</b></td><td>21.3</td><td>2.45</td><td>0/1</td><td>1/1</td><td>3.2 IP / 1 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>MILES.S</b></td><td>4.5</td><td>6.17</td><td>0/3</td><td>3/3</td><td>4.1 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>CORBIN.P</b></td><td>0.0</td><td>9.30</td><td>0/5</td><td>5/5</td><td>4.1 IP / 5 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#6</td><td><b>GAUSMAN.K</b></td><td>0.0</td><td>9.31</td><td>2/8</td><td>6/8</td><td>6.0 IP / 6 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#7</td><td><b>BIEBER.S</b></td><td>0.0</td><td>9.82</td><td>0/3</td><td>3/3</td><td>3.2 IP / 4 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#8</td><td><b>SCHERZER.M</b></td><td>0.0</td><td>13.50</td><td>0/1</td><td>1/1</td><td>3.1 IP / 5 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+        <details>
+            <summary>WAS — ranking interno de abridores</summary>
+            <table class="mini-table"><thead><tr><th>Rank</th><th>Pitcher</th><th>Score</th><th>ERA</th><th>QS</th><th>Bad</th><th>Última</th></tr></thead><tbody>
+            <tr class="">
+                <td>#1</td><td><b>GRIFFIN.F</b></td><td>80.4</td><td>1.22</td><td>6/8</td><td>0/8</td><td>7.0 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#2</td><td><b>CAVALLI.C</b></td><td>46.6</td><td>4.18</td><td>3/5</td><td>2/5</td><td>6.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class=" active-row">
+                <td>#3</td><td><b>LITTELL.Z</b></td><td>25.2</td><td>3.86</td><td>2/16</td><td>8/16</td><td>4.0 IP / 2 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#4</td><td><b>MIKOLAS.M</b></td><td>20.0</td><td>3.52</td><td>1/8</td><td>7/8</td><td>3.1 IP / 0 ER</td>
+            </tr>
+            
+            <tr class="">
+                <td>#5</td><td><b>ALVAREZ.A</b></td><td>11.6</td><td>3.43</td><td>0/5</td><td>5/5</td><td>4.1 IP / 2 ER</td>
+            </tr>
+            </tbody></table>
+        </details>
+        
+  </div>
+
+  <div class="section">
+    <h2>Metodología</h2>
+    <p class="subtitle"><b>Score</b> pondera: salidas de calidad, % de victorias del equipo con ese abridor, IP promedio, ER promedio, ERA, salidas malas y forma de la última apertura. Una salida de calidad se define como 6.0+ IP y 3 ER o menos. Una salida mala se marca con 4+ ER o menos de 5 IP. <b>Filtro V2:</b> antes de calcular cualquier métrica se filtra DATA al año máximo de fecha disponible; en este archivo: temporada 2026, 590 filas usadas, 126 filas históricas excluidas.</p>
+  </div>
+
+  <div class="footer">Archivo fuente: Analisis_MLB_IA2.xlsx · Temporada analizada: 2026 (2026-03-26 a 2026-06-27) · Generado: 2026-06-28 03:30 · Salida: Modelo_Caballo_Pitcher_MLB.html</div>
+</div>
+</body>
+</html>
