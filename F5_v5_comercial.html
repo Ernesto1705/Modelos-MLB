@@ -60,6 +60,25 @@ h1 { font-size:clamp(38px,6vw,82px); margin:12px 0 8px; line-height:.96; letter-
 .section-title h2 { margin:0; font-size:30px; letter-spacing:-.03em; }
 .section-title p { color:var(--muted); margin:0; }
 .action-list { display:grid; gap:14px; }
+.f5-note {
+  margin:18px 0 18px;
+  padding:16px 18px;
+  border-radius:18px;
+  background:rgba(49,215,255,.055);
+  border:1px solid rgba(49,215,255,.14);
+  color:#bfd0e2;
+  line-height:1.55;
+  font-size:13px;
+}
+.f5-note strong { color:#eef6ff; }
+.f5-note .note-title {
+  display:block;
+  margin-bottom:7px;
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.11em;
+}
 .side-list { display:grid; gap:14px; }
 .side-card {
   display:grid; grid-template-columns:64px 1fr 90px; gap:18px; align-items:center;
@@ -89,6 +108,32 @@ h1 { font-size:clamp(38px,6vw,82px); margin:12px 0 8px; line-height:.96; letter-
 }
 .side-strip strong { display:block; margin:6px 0 4px; }
 .side-strip span { color:#a9c5bc; font-size:12px; }
+.side-notes {
+  margin:22px 0 18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.side-note {
+  padding:16px 18px;
+  border-radius:18px;
+  background:rgba(49,215,255,.055);
+  border:1px solid rgba(49,215,255,.14);
+  color:#bfd0e2;
+  line-height:1.55;
+  font-size:13px;
+}
+.side-note strong {
+  color:#eef6ff;
+}
+.side-note .note-title {
+  display:block;
+  margin-bottom:7px;
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.11em;
+}
 .action-card {
   display:grid; grid-template-columns:64px 1fr 90px; gap:18px; align-items:center;
   background:linear-gradient(110deg,rgba(17,36,58,.98),rgba(9,24,41,.98));
@@ -177,7 +222,7 @@ tr:last-child td { border-bottom:0; }
 .empty { padding:24px; color:var(--muted); border:1px solid var(--line); border-radius:18px; }
 @media(max-width:1000px) {
   .stats { grid-template-columns:repeat(2,1fr); }
-  .two-col,.pitcher-grid,.side-strip { grid-template-columns:1fr; }
+  .two-col,.pitcher-grid,.side-strip,.side-notes { grid-template-columns:1fr; }
   .hero-row { align-items:flex-start; flex-direction:column; }
   .source { width:100%; }
 }
@@ -210,7 +255,7 @@ tr:last-child td { border-bottom:0; }
       <div class="source">
         ARCHIVO ANALIZADO
         <strong>Analisis_MLB_IA2.xlsx</strong>
-        <span>Generado: 26/06/2026 08:10</span>
+        <span>Generado: 04/07/2026 03:34</span>
       </div>
     </div>
 
@@ -230,6 +275,14 @@ tr:last-child td { border-bottom:0; }
     </div>
     <p>Ranking comercial con score PRO.</p>
   </div>
+
+  <section class="f5-note">
+    <span class="note-title">NOTA LECTURAS F5</span>
+    <strong>F5 ML</strong> aparece cuando el modelo ve ventaja suficiente para buscar que el equipo vaya ganando al cierre de la quinta entrada.
+    <strong>F5 0.0</strong> indica preferencia con protección ante empate.
+    Cuando la señal protegida pertenece a un <strong>underdog</strong> —detectado por ML si existe o por spread del juego— y el mercado está disponible, el reporte puede mostrar <strong>F5 +0.5</strong> para convertir el empate en verde.
+  </section>
+
   <section class="action-list">
         <article class="action-card">
           <div class="rank">#1</div>
@@ -238,13 +291,13 @@ tr:last-child td { border-bottom:0; }
               <span class="market-tag">LECTURA F5</span>
               <span class="confidence conf-medium">MEDIA</span>
             </div>
-            <h3>HOU @ DET</h3>
-            <div class="pick">DET F5 0.0</div>
+            <h3>MIL @ ARI</h3>
+            <div class="pick">MIL F5 ML</div>
             <p>Lectura interna validada por PRO.</p>
-            <div class="secondary"><strong>Score PRO:</strong> 72</div>
+            <div class="secondary"><strong>Score PRO:</strong> 94</div>
           </div>
           <div class="score-ring">
-            <strong>72</strong>
+            <strong>94</strong>
             <small>APUESTA</small>
           </div>
         </article>
@@ -256,8 +309,8 @@ tr:last-child td { border-bottom:0; }
               <span class="market-tag">LECTURA F5</span>
               <span class="confidence conf-medium">MEDIA</span>
             </div>
-            <h3>WAS @ BAL</h3>
-            <div class="pick">WAS F5 0.0</div>
+            <h3>PIT @ WAS</h3>
+            <div class="pick">PIT F5 0.0</div>
             <p>Lectura interna validada por PRO.</p>
             <div class="secondary"><strong>Score PRO:</strong> 72</div>
           </div>
@@ -274,8 +327,8 @@ tr:last-child td { border-bottom:0; }
               <span class="market-tag">LECTURA F5</span>
               <span class="confidence conf-medium">MEDIA</span>
             </div>
-            <h3>NYY @ BOS</h3>
-            <div class="pick">NYY F5 0.0</div>
+            <h3>CHW @ CLE</h3>
+            <div class="pick">CHW F5 +0.5</div>
             <p>Lectura interna validada por PRO.</p>
             <div class="secondary"><strong>Score PRO:</strong> 72</div>
           </div>
@@ -292,8 +345,8 @@ tr:last-child td { border-bottom:0; }
               <span class="market-tag">LECTURA F5</span>
               <span class="confidence conf-medium">MEDIA</span>
             </div>
-            <h3>ARI @ TB</h3>
-            <div class="pick">TB F5 0.0</div>
+            <h3>SF @ COL</h3>
+            <div class="pick">SF F5 0.0</div>
             <p>Lectura interna validada por PRO.</p>
             <div class="secondary"><strong>Score PRO:</strong> 72</div>
           </div>
@@ -310,7 +363,7 @@ tr:last-child td { border-bottom:0; }
               <span class="market-tag">LECTURA F5</span>
               <span class="confidence conf-medium">MEDIA</span>
             </div>
-            <h3>MIA @ STL</h3>
+            <h3>MIA @ OAK</h3>
             <div class="pick">MIA F5 0.0</div>
             <p>Lectura interna validada por PRO.</p>
             <div class="secondary"><strong>Score PRO:</strong> 72</div>
@@ -324,11 +377,88 @@ tr:last-child td { border-bottom:0; }
 
   <div class="section-title">
     <div>
+      <span class="eyebrow">RADAR DE TENDENCIAS</span>
+      <h2>Perfectos en tres salidas</h2>
+    </div>
+    <p>Lectura resumida de abridores que dejaron a su equipo ganando o perdiendo 3/3.</p>
+  </div>
+
+  <section class="two-col">
+    <div class="panel">
+      <div class="panel-head"><h3>🟢 Dejaron el juego ganando 3/3</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Abridor</th><th>Racha</th><th>Dif. medio</th><th>Acumulado</th></tr></thead>
+          <tbody>
+        <tr>
+          <td><strong>ASHCRAFT.B</strong><br><span class="sub">PIT</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+3.67</td>
+          <td>18–7</td>
+        </tr>
+        
+        <tr>
+          <td><strong>RAY.R</strong><br><span class="sub">SF</span></td>
+          <td><span class="pill green">3–0</span></td>
+          <td>+2.00</td>
+          <td>6–0</td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>🔴 Dejaron el juego perdiendo 3/3</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Abridor</th><th>Racha</th><th>Dif. medio</th><th>Acumulado</th></tr></thead>
+          <tbody>
+        <tr>
+          <td><strong>KELLY.M</strong><br><span class="sub">ARI</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-4.33</td>
+          <td>1–14</td>
+        </tr>
+        
+        <tr>
+          <td><strong>CIVALE.A</strong><br><span class="sub">OAK</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-3.33</td>
+          <td>2–12</td>
+        </tr>
+        
+        <tr>
+          <td><strong>MESSICK.P</strong><br><span class="sub">CLE</span></td>
+          <td><span class="pill red">0–3</span></td>
+          <td>-1.33</td>
+          <td>4–8</td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-title">
+    <div>
       <span class="eyebrow">SIDES DE CARRERAS</span>
       <h2>3+ o menos de 5</h2>
     </div>
     <p>Solo aparecen las lecturas premium validadas internamente.</p>
   </div>
+
+  <section class="side-notes">
+    <div class="side-note">
+      <span class="note-title">NOTA 3+ CARRERAS</span>
+      <strong>3+ carreras</strong> representa expectativa de producción ofensiva: el equipo debe anotar <strong>3 o más carreras</strong>. Si existe mercado equivalente, puede tomarse; si no está disponible, úsese como apoyo para side, F5, run line u over del juego.
+    </div>
+    <div class="side-note">
+      <span class="note-title">NOTA MENOS DE 5 CARRERAS</span>
+      <strong>Menos de 5 carreras</strong> significa que el equipo proyecta quedarse en <strong>0, 1, 2, 3 o 4 carreras</strong>. Buscar como <strong>Team Total Under 5</strong> si está disponible.
+    </div>
+  </section>
+
   <section class="side-list">
         <article class="side-card">
           <div class="side-rank">#1</div>
@@ -339,8 +469,8 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>CIN @ PIT</h3>
-            <div class="pick">PIT menos de 5 carreras</div>
+            <h3>TOR @ SEA</h3>
+            <div class="pick">TOR menos de 5 carreras</div>
             <p>
               Confianza estimada: <strong>88.0%</strong>
             </p>
@@ -361,15 +491,15 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>WAS @ BAL</h3>
-            <div class="pick">BAL menos de 5 carreras</div>
+            <h3>DET @ TEX</h3>
+            <div class="pick">DET menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>88.0%</strong>
+              Confianza estimada: <strong>86.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>88</strong>
+            <strong>86</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -383,15 +513,15 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>PHI @ NYM</h3>
-            <div class="pick">NYM menos de 5 carreras</div>
+            <h3>CHW @ CLE</h3>
+            <div class="pick">CHW menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>88.0%</strong>
+              Confianza estimada: <strong>86.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>88</strong>
+            <strong>86</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -405,15 +535,15 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>CHC @ MIL</h3>
-            <div class="pick">CHC menos de 5 carreras</div>
+            <h3>TB @ HOU</h3>
+            <div class="pick">HOU menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>88.0%</strong>
+              Confianza estimada: <strong>86.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>88</strong>
+            <strong>86</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -427,15 +557,15 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>MIA @ STL</h3>
-            <div class="pick">STL menos de 5 carreras</div>
+            <h3>BAL @ CIN</h3>
+            <div class="pick">CIN menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>88.0%</strong>
+              Confianza estimada: <strong>86.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>88</strong>
+            <strong>86</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -449,15 +579,15 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>LAD @ SD</h3>
-            <div class="pick">LAD menos de 5 carreras</div>
+            <h3>NYM @ ATL</h3>
+            <div class="pick">ATL menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>88.0%</strong>
+              Confianza estimada: <strong>86.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>88</strong>
+            <strong>86</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -471,8 +601,8 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>HOU @ DET</h3>
-            <div class="pick">HOU menos de 5 carreras</div>
+            <h3>STL @ CHC</h3>
+            <div class="pick">CHC menos de 5 carreras</div>
             <p>
               Confianza estimada: <strong>86.0%</strong>
             </p>
@@ -493,8 +623,8 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>TEX @ TOR</h3>
-            <div class="pick">TOR menos de 5 carreras</div>
+            <h3>BOS @ LAA</h3>
+            <div class="pick">LAA menos de 5 carreras</div>
             <p>
               Confianza estimada: <strong>86.0%</strong>
             </p>
@@ -515,8 +645,8 @@ tr:last-child td { border-bottom:0; }
                 MUY ALTA
               </span>
             </div>
-            <h3>NYY @ BOS</h3>
-            <div class="pick">BOS menos de 5 carreras</div>
+            <h3>MIL @ ARI</h3>
+            <div class="pick">ARI menos de 5 carreras</div>
             <p>
               Confianza estimada: <strong>86.0%</strong>
             </p>
@@ -533,19 +663,19 @@ tr:last-child td { border-bottom:0; }
           <div class="side-body">
             <div class="action-top">
               <span class="market-tag">PICK PREMIUM</span>
-              <span class="confidence conf-very-high">
-                MUY ALTA
+              <span class="confidence conf-high">
+                ALTA
               </span>
             </div>
-            <h3>ARI @ TB</h3>
-            <div class="pick">ARI menos de 5 carreras</div>
+            <h3>PHI @ KC</h3>
+            <div class="pick">PHI menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>86.0%</strong>
+              Confianza estimada: <strong>84.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>86</strong>
+            <strong>84</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -559,15 +689,15 @@ tr:last-child td { border-bottom:0; }
                 ALTA
               </span>
             </div>
-            <h3>ATL @ SF</h3>
-            <div class="pick">ATL menos de 5 carreras</div>
+            <h3>SD @ LAD</h3>
+            <div class="pick">SD menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>82.1%</strong>
+              Confianza estimada: <strong>84.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>82</strong>
+            <strong>84</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -577,19 +707,19 @@ tr:last-child td { border-bottom:0; }
           <div class="side-body">
             <div class="action-top">
               <span class="market-tag">PICK PREMIUM</span>
-              <span class="confidence conf-medium">
-                MEDIA–ALTA
+              <span class="confidence conf-high">
+                ALTA
               </span>
             </div>
-            <h3>KC @ CHW</h3>
-            <div class="pick">CHW 3+ carreras</div>
+            <h3>MIN @ NYY</h3>
+            <div class="pick">MIN menos de 5 carreras</div>
             <p>
-              Confianza estimada: <strong>77.4%</strong>
+              Confianza estimada: <strong>78.0%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>
           <div class="score-ring side-ring">
-            <strong>77</strong>
+            <strong>78</strong>
             <small>PROB.</small>
           </div>
         </article>
@@ -603,10 +733,10 @@ tr:last-child td { border-bottom:0; }
                 MEDIA–ALTA
               </span>
             </div>
-            <h3>OAK @ LAA</h3>
-            <div class="pick">LAA menos de 5 carreras</div>
+            <h3>MIA @ OAK</h3>
+            <div class="pick">MIA 3+ carreras</div>
             <p>
-              Confianza estimada: <strong>76.3%</strong>
+              Confianza estimada: <strong>76.2%</strong>
             </p>
             <p class="sub">Lectura interna validada por PRO.</p>
           </div>

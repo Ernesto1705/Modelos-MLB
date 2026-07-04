@@ -54,120 +54,26 @@
     <div class="sub">Dashboard generado automáticamente. Cada juego intenta usar primero la hora oficial MLB y luego proyecta el clima para la ventana aproximada de 3 horas.</div>
     <div class="alert">weather_input_template.csv fue actualizado automáticamente con start_time_local por juego.</div>
     <div class="summary">
-      <div class="box"><h2>Overs con mejor soporte climático</h2><ul><li><strong>WAS @ BAL</strong> · 7:00 PM · Over fuerte · ajuste +0.80</li><li><strong>CIN @ PIT</strong> · 6:00 PM · Over moderado-fuerte · ajuste +0.50</li><li><strong>NYY @ BOS</strong> · 7:00 PM · Over moderado-fuerte · ajuste +0.50</li><li><strong>ARI @ TB</strong> · 7:00 PM · Over moderado-fuerte · ajuste +0.50</li></ul></div>
-      <div class="box"><h2>Unders con mejor soporte climático</h2><ul><li><strong>KC @ CHW</strong> · 6:00 PM · Under moderado-fuerte · ajuste -0.50</li><li><strong>MIA @ STL</strong> · 7:00 PM · Under moderado-fuerte · ajuste -0.50</li></ul></div>
+      <div class="box"><h2>Overs con mejor soporte climático</h2><ul><li><strong>MIN @ NYY</strong> · 1:00 PM · Over fuerte · ajuste +1.10</li><li><strong>MIA @ OAK</strong> · 6:00 PM · Over fuerte · ajuste +1.10</li><li><strong>PIT @ WAS</strong> · 11:00 AM · Over fuerte · ajuste +0.80</li><li><strong>BAL @ CIN</strong> · 7:00 PM · Over fuerte · ajuste +0.80</li></ul></div>
+      <div class="box"><h2>Unders con mejor soporte climático</h2><ul><li><strong>STL @ CHC</strong> · 7:00 PM · Under moderado-fuerte · ajuste -0.50</li><li><strong>PHI @ KC</strong> · 7:00 PM · Under moderado · ajuste -0.25</li></ul></div>
       <div class="box">
         <h2>Lectura rápida</h2>
         <ul>
           <li>Prioridad de hora: MLB schedule → TIME_INPUT → fallback.</li>
           <li>Estado de techo manual opcional: hoja ROOF_INPUT por juego.</li>
           <li>El clima solo se aplica cuando el parque está abierto o el techo retráctil está abierto.</li>
+          <li>Nueva capa visual: parque Batter/Pitcher/Neutral friendly + nota de interacción clima/parque.</li>
         </ul>
       </div>
     </div>
     <div class="dashboard">
-    <div class="card over">
-      <div class="header">
-        <div>
-          <div class="game">HOU @ DET</div>
-          <div class="meta">Comerica Park · Inicio 6:00 PM · OU 9.0</div>
-          <div class="meta2">ARRIGHETTI.S vs MONTERO.K</div>
-        </div>
-        <div class="pill">Medium Over</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="In desde RF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↙</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↙ In desde RF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 8 mph · H2 7 mph · H3 7 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>75° / 75° / 74°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>52%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.25</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>9.25</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 6:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card over">
-      <div class="header">
-        <div>
-          <div class="game">CIN @ PIT</div>
-          <div class="meta">PNC Park · Inicio 6:00 PM · OU 7.5</div>
-          <div class="meta2">ABBOTT.A vs SKENES.P</div>
-        </div>
-        <div class="pill">High Over</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia CF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↑</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↑ Out hacia CF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 7 mph · H2 4 mph · H3 3 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>80° / 75° / 74°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>59%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>8.0</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 6:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
     <div class="card over-strong">
       <div class="header">
         <div>
-          <div class="game">WAS @ BAL</div>
-          <div class="meta">Oriole Park at Camden Yards · Inicio 7:00 PM · OU 9.0</div>
-          <div class="meta2">ALVAREZ.A vs ROGERS.T</div>
+          <div class="game">PIT @ WAS</div>
+          <div class="meta">Nationals Park · Inicio 11:00 AM · OU 10.0</div>
+          <div class="meta2">ASHCRAFT.B vs LITTELL.Z</div>
+          <div class="meta2">Parque: Neutral</div>
         </div>
         <div class="pill">Very High Over</div>
       </div>
@@ -175,7 +81,7 @@
       <div class="wind-panel">
         <div class="diamond-wrap">
           
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia RF">
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia LF">
       <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
       <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
       <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
@@ -188,42 +94,358 @@
       <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
       <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
       <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↗</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↖</text>
     </svg>
     
         </div>
         <div class="wind-copy">
-          <div class="wind-big">↗ Out hacia RF</div>
+          <div class="wind-big">↖ Out hacia LF</div>
           <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 6 mph · H2 6 mph · H3 1 mph</div>
+          <div class="speeds">H1 3 mph · H2 4 mph · H3 4 mph</div>
         </div>
       </div>
 
       <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>87° / 84° / 82°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>57%</strong></div>
+        <div class="mini"><span>Temp H1-H3</span><strong>96° / 99° / 101°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>34%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.80</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>10.8</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Neutral</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Parque neutral + clima favorable al bateo: el Over depende principalmente de viento/temperatura/humedad.</p>
+      <p>Nationals Park: parque medio; clima y viento pesan más que sesgo estructural.</p>
+      <p>Proyección H1-H3 anclada a 11:00 AM. Fuente de hora: MLB schedule.</p>
+    </div>
+    
+    <div class="card over-strong">
+      <div class="header">
+        <div>
+          <div class="game">MIN @ NYY</div>
+          <div class="meta">Yankee Stadium · Inicio 1:00 PM · OU 10.0</div>
+          <div class="meta2">MATTHEWS.Z vs BECK.B</div>
+          <div class="meta2">Parque: Batter friendly</div>
+        </div>
+        <div class="pill">Extreme Over</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia LF">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↖</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">↖ Out hacia LF</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 11 mph · H2 10 mph · H3 10 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>97° / 98° / 99°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>38%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+1.10</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>11.1</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Batter friendly</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Batter friendly + clima favorable: aumenta la posibilidad del Over y fortalece lectura de carreras.</p>
+      <p>Yankee Stadium: RF corto favorece poder zurdo; viento out/calor aumenta soporte al Over.</p>
+      <p>Proyección H1-H3 anclada a 1:00 PM. Fuente de hora: MLB schedule.</p>
+    </div>
+    
+    <div class="card neutral">
+      <div class="header">
+        <div>
+          <div class="game">DET @ TEX</div>
+          <div class="meta">Globe Life Field · Inicio 3:00 PM · OU 8.0</div>
+          <div class="meta2">FLAHERTY.J vs ROCKER.K</div>
+          <div class="meta2">Parque: Neutral</div>
+        </div>
+        <div class="pill">Sin clima exterior</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Techo retráctil cerrado">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">⌂</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">⌂ Techo retráctil cerrado</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 0 mph · H2 0 mph · H3 0 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>0° / 0° / 0°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>0%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>8.0</strong></div>
+        <div class="mini"><span>Confianza</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Neutral</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Neutral: Globe Life Field: techo retráctil; con techo cerrado el clima exterior no aplica. Abierto puede favorecer más bateo con calor. Techo cerrado: clima exterior neutralizado.</p>
+      <p>Globe Life Field: techo retráctil; con techo cerrado el clima exterior no aplica. Abierto puede favorecer más bateo con calor.</p>
+      <p>Techo retráctil cerrado: el clima exterior no afecta el modelo para este juego. Hora de inicio tomada de MLB schedule.</p>
+    </div>
+    
+    <div class="card neutral">
+      <div class="header">
+        <div>
+          <div class="game">TOR @ SEA</div>
+          <div class="meta">T-Mobile Park · Inicio 1:00 PM · OU 7.5</div>
+          <div class="meta2">BIEBER.S vs GILBERT.L</div>
+          <div class="meta2">Parque: Pitcher friendly</div>
+        </div>
+        <div class="pill">Sin clima exterior</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Techo retráctil cerrado">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">⌂</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">⌂ Techo retráctil cerrado</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 0 mph · H2 0 mph · H3 0 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>0° / 0° / 0°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>0%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>7.5</strong></div>
+        <div class="mini"><span>Confianza</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Pitcher friendly</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Pitcher friendly: T-Mobile Park: techo retráctil y aire pesado; con techo cerrado el clima exterior no aplica, abierto suele contener carry. Techo cerrado: clima exterior neutralizado.</p>
+      <p>T-Mobile Park: techo retráctil y aire pesado; con techo cerrado el clima exterior no aplica, abierto suele contener carry.</p>
+      <p>Techo retráctil cerrado: el clima exterior no afecta el modelo para este juego. Hora de inicio tomada de MLB schedule.</p>
+    </div>
+    
+    <div class="card over">
+      <div class="header">
+        <div>
+          <div class="game">CHW @ CLE</div>
+          <div class="meta">Progressive Field · Inicio 7:00 PM · OU 7.5</div>
+          <div class="meta2">BURKE.S vs MESSICK.P</div>
+          <div class="meta2">Parque: Pitcher friendly</div>
+        </div>
+        <div class="pill">Medium Over</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="In desde LF">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↘</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">↘ In desde LF</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 6 mph · H2 4 mph · H3 3 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>81° / 80° / 79°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>70%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.25</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>7.75</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over moderado</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Pitcher friendly</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Pitcher friendly, pero clima favorable al bateo: el clima empuja Over, aunque el parque puede contener parte del daño.</p>
+      <p>Progressive Field: tiende a controlar más el poder; condiciones frías, humedad alta o viento entrando refuerzan Under.</p>
+      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
+    </div>
+    
+    <div class="card neutral">
+      <div class="header">
+        <div>
+          <div class="game">TB @ HOU</div>
+          <div class="meta">Daikin Park · Inicio 6:00 PM · OU 7.5</div>
+          <div class="meta2">RASMUSSEN.D vs BROWN.H</div>
+          <div class="meta2">Parque: Batter friendly</div>
+        </div>
+        <div class="pill">Sin clima exterior</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Techo retráctil cerrado">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">⌂</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">⌂ Techo retráctil cerrado</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 0 mph · H2 0 mph · H3 0 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>0° / 0° / 0°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>0%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>7.5</strong></div>
+        <div class="mini"><span>Confianza</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Batter friendly</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Batter friendly: Daikin Park: con techo abierto puede favorecer batazos; con techo cerrado el clima exterior no aplica. Techo cerrado: clima exterior neutralizado.</p>
+      <p>Daikin Park: con techo abierto puede favorecer batazos; con techo cerrado el clima exterior no aplica.</p>
+      <p>Techo retráctil cerrado: el clima exterior no afecta el modelo para este juego. Hora de inicio tomada de MLB schedule.</p>
+    </div>
+    
+    <div class="card over-strong">
+      <div class="header">
+        <div>
+          <div class="game">BAL @ CIN</div>
+          <div class="meta">Great American Ball Park · Inicio 7:00 PM · OU 9.0</div>
+          <div class="meta2">YOUNG.B vs GREENE.H</div>
+          <div class="meta2">Parque: Batter friendly</div>
+        </div>
+        <div class="pill">Very High Over</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia CF">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↑</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">↑ Out hacia CF</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 6 mph · H2 7 mph · H3 5 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>94° / 92° / 88°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>41%</strong></div>
         <div class="mini"><span>Ajuste clima</span><strong>+0.80</strong></div>
         <div class="mini"><span>Total ajustado</span><strong>9.8</strong></div>
         <div class="mini"><span>Confianza</span><strong>Media</strong></div>
         <div class="mini"><span>Sesgo</span><strong>Over fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Batter friendly</strong></div>
       </div>
+      <p><strong>Nota parque/clima:</strong> Batter friendly + clima favorable: aumenta la posibilidad del Over y fortalece lectura de carreras.</p>
+      <p>Great American Ball Park: dimensiones cortas y buen carry; condiciones cálidas/out favorecen Over.</p>
       <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
     </div>
     
-    <div class="card neutral">
+    <div class="card over-strong">
       <div class="header">
         <div>
-          <div class="game">TEX @ TOR</div>
-          <div class="meta">Rogers Centre · Inicio 7:00 PM · OU 8.5</div>
-          <div class="meta2">EOVALDI.N vs CORBIN.P</div>
+          <div class="game">NYM @ ATL</div>
+          <div class="meta">Truist Park · Inicio 8:00 PM · OU 8.0</div>
+          <div class="meta2">MANAEA.S vs SALE.C</div>
+          <div class="meta2">Parque: Batter friendly</div>
         </div>
-        <div class="pill">Sin clima exterior</div>
+        <div class="pill">Very High Over</div>
       </div>
 
       <div class="wind-panel">
         <div class="diamond-wrap">
           
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Techo retráctil cerrado">
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Cross hacia LF">
       <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
       <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
       <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
@@ -236,36 +458,40 @@
       <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
       <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
       <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">⌂</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">←</text>
     </svg>
     
         </div>
         <div class="wind-copy">
-          <div class="wind-big">⌂ Techo retráctil cerrado</div>
+          <div class="wind-big">← Cross hacia LF</div>
           <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 0 mph · H2 0 mph · H3 0 mph</div>
+          <div class="speeds">H1 6 mph · H2 5 mph · H3 5 mph</div>
         </div>
       </div>
 
       <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>0° / 0° / 0°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>0%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>8.5</strong></div>
-        <div class="mini"><span>Confianza</span><strong>No aplica</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Temp H1-H3</span><strong>91° / 87° / 84°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>42%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.80</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>8.8</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Batter friendly</strong></div>
       </div>
-      <p>Techo retráctil cerrado: el clima exterior no afecta el modelo para este juego. Hora de inicio tomada de MLB schedule.</p>
+      <p><strong>Nota parque/clima:</strong> Batter friendly + clima favorable: aumenta la posibilidad del Over y fortalece lectura de carreras.</p>
+      <p>Truist Park: favorece carry cuando hay calor/humedad media y viento saliendo; clima favorable refuerza Over.</p>
+      <p>Proyección H1-H3 anclada a 8:00 PM. Fuente de hora: MLB schedule.</p>
     </div>
     
-    <div class="card over">
+    <div class="card under-strong">
       <div class="header">
         <div>
-          <div class="game">NYY @ BOS</div>
-          <div class="meta">Fenway Park · Inicio 7:00 PM · OU 8.5</div>
-          <div class="meta2">WARREN.W vs TOLLE.P</div>
+          <div class="game">STL @ CHC</div>
+          <div class="meta">Wrigley Field · Inicio 7:00 PM · OU 8.5</div>
+          <div class="meta2">LEAHY.K vs IMANAGA.S</div>
+          <div class="meta2">Parque: Batter friendly</div>
         </div>
-        <div class="pill">High Over</div>
+        <div class="pill">High Under</div>
       </div>
 
       <div class="wind-panel">
@@ -291,219 +517,187 @@
         <div class="wind-copy">
           <div class="wind-big">↑ Out hacia CF</div>
           <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 7 mph · H2 8 mph · H3 7 mph</div>
+          <div class="speeds">H1 4 mph · H2 0 mph · H3 8 mph</div>
         </div>
       </div>
 
       <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>81° / 77° / 74°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>67%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>9.0</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card neutral">
-      <div class="header">
-        <div>
-          <div class="game">SEA @ CLE</div>
-          <div class="meta">Progressive Field · Inicio 7:00 PM · OU 7.5</div>
-          <div class="meta2">CASTILLO.L vs CANTILLO.J</div>
-        </div>
-        <div class="pill">Neutral</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="In desde CF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↓</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↓ In desde CF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 5 mph · H2 4 mph · H3 3 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>71° / 71° / 70°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>54%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>7.5</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Neutral</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card over">
-      <div class="header">
-        <div>
-          <div class="game">ARI @ TB</div>
-          <div class="meta">George M. Steinbrenner Field · Inicio 7:00 PM · OU 8.5</div>
-          <div class="meta2">GALLEN.Z vs MARTINEZ.N</div>
-        </div>
-        <div class="pill">High Over</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia RF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↗</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↗ Out hacia RF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 5 mph · H2 7 mph · H3 6 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>88° / 87° / 86°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>62%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>9.0</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card over">
-      <div class="header">
-        <div>
-          <div class="game">PHI @ NYM</div>
-          <div class="meta">Citi Field · Inicio 7:00 PM · OU 8.0</div>
-          <div class="meta2">WHEELER.Z vs THORNTON.Z</div>
-        </div>
-        <div class="pill">High Over</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia RF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↗</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↗ Out hacia RF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 12 mph · H2 10 mph · H3 8 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>78° / 76° / 74°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>76%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>8.5</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card under-strong">
-      <div class="header">
-        <div>
-          <div class="game">KC @ CHW</div>
-          <div class="meta">Rate Field · Inicio 6:00 PM · OU 8.5</div>
-          <div class="meta2">KOLEK.S vs SANDLIN.D</div>
-        </div>
-        <div class="pill">High Under</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="In desde CF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↓</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↓ In desde CF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 8 mph · H2 6 mph · H3 7 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>66° / 66° / 65°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>82%</strong></div>
+        <div class="mini"><span>Temp H1-H3</span><strong>71° / 72° / 68°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>99%</strong></div>
         <div class="mini"><span>Ajuste clima</span><strong>-0.50</strong></div>
         <div class="mini"><span>Total ajustado</span><strong>8.0</strong></div>
         <div class="mini"><span>Confianza</span><strong>Media</strong></div>
         <div class="mini"><span>Sesgo</span><strong>Under moderado-fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Batter friendly</strong></div>
       </div>
+      <p><strong>Nota parque/clima:</strong> Batter friendly, pero clima en contra: el parque ayuda al bateo, aunque viento/temperatura/humedad moderan el Over.</p>
+      <p>Wrigley Field: extremadamente sensible al viento; viento saliendo convierte el parque en muy Over, viento entrando lo vuelve Under.</p>
+      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
+    </div>
+    
+    <div class="card under">
+      <div class="header">
+        <div>
+          <div class="game">PHI @ KC</div>
+          <div class="meta">Kauffman Stadium · Inicio 7:00 PM · OU 9.0</div>
+          <div class="meta2">LUZARDO.J vs WACHA.M</div>
+          <div class="meta2">Parque: Pitcher friendly</div>
+        </div>
+        <div class="pill">Medium Under</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="In desde CF">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↓</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">↓ In desde CF</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 10 mph · H2 3 mph · H3 5 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>83° / 72° / 72°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>73%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>-0.25</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>8.75</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Media</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Under moderado</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Pitcher friendly</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Pitcher friendly + clima favorable al pitcher: aumenta soporte al Under y reduce carry de la pelota.</p>
+      <p>Kauffman Stadium: gaps amplios y menos HR fáciles; clima Under refuerza contención, clima Over puede generar hits/extrabases más que HR.</p>
+      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
+    </div>
+    
+    <div class="card over-strong">
+      <div class="header">
+        <div>
+          <div class="game">SF @ COL</div>
+          <div class="meta">Coors Field · Inicio 6:00 PM · OU 11.5</div>
+          <div class="meta2">RAY.R vs SUGANO.T</div>
+          <div class="meta2">Parque: Batter friendly</div>
+        </div>
+        <div class="pill">Very High Over</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Cross hacia RF">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">→</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">→ Cross hacia RF</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 8 mph · H2 10 mph · H3 9 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>89° / 84° / 81°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>16%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.80</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>12.3</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Batter friendly</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Batter friendly + clima favorable: aumenta la posibilidad del Over y fortalece lectura de carreras.</p>
+      <p>Coors Field: altura extrema y menor resistencia del aire; cualquier clima favorable potencia mucho el Over.</p>
+      <p>Proyección H1-H3 anclada a 6:00 PM. Fuente de hora: MLB schedule.</p>
+    </div>
+    
+    <div class="card over">
+      <div class="header">
+        <div>
+          <div class="game">BOS @ LAA</div>
+          <div class="meta">Angel Stadium · Inicio 6:00 PM · OU 8.5</div>
+          <div class="meta2">GRAY.S vs ALDEGHERI.S</div>
+          <div class="meta2">Parque: Neutral</div>
+        </div>
+        <div class="pill">High Over</div>
+      </div>
+
+      <div class="wind-panel">
+        <div class="diamond-wrap">
+          
+    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia CF">
+      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
+      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
+      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
+      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
+      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
+      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
+      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
+      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
+      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↑</text>
+    </svg>
+    
+        </div>
+        <div class="wind-copy">
+          <div class="wind-big">↑ Out hacia CF</div>
+          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
+          <div class="speeds">H1 8 mph · H2 7 mph · H3 6 mph</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="mini"><span>Temp H1-H3</span><strong>75° / 72° / 69°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>65%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>9.0</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Neutral</strong></div>
+      </div>
+      <p><strong>Nota parque/clima:</strong> Parque neutral + clima favorable al bateo: el Over depende principalmente de viento/temperatura/humedad.</p>
+      <p>Angel Stadium: parque balanceado; el clima define más que las dimensiones.</p>
       <p>Proyección H1-H3 anclada a 6:00 PM. Fuente de hora: MLB schedule.</p>
     </div>
     
     <div class="card neutral">
       <div class="header">
         <div>
-          <div class="game">CHC @ MIL</div>
-          <div class="meta">American Family Field · Inicio 6:00 PM · OU 7.0</div>
-          <div class="meta2">REA.C vs MISIOROWSKI.J</div>
+          <div class="game">MIL @ ARI</div>
+          <div class="meta">Chase Field · Inicio 6:00 PM · OU 9.0</div>
+          <div class="meta2">WOODRUFF.B vs KELLY.M</div>
+          <div class="meta2">Parque: Neutral</div>
         </div>
         <div class="pill">Sin clima exterior</div>
       </div>
@@ -539,117 +733,25 @@
         <div class="mini"><span>Temp H1-H3</span><strong>0° / 0° / 0°</strong></div>
         <div class="mini"><span>Humedad</span><strong>0%</strong></div>
         <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>7.0</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>9.0</strong></div>
         <div class="mini"><span>Confianza</span><strong>No aplica</strong></div>
         <div class="mini"><span>Sesgo</span><strong>No aplica</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Neutral</strong></div>
       </div>
+      <p><strong>Nota parque/clima:</strong> Neutral: Chase Field: techo retráctil; con techo cerrado el clima exterior no aplica. Con techo abierto puede jugar más vivo por calor seco. Techo cerrado: clima exterior neutralizado.</p>
+      <p>Chase Field: techo retráctil; con techo cerrado el clima exterior no aplica. Con techo abierto puede jugar más vivo por calor seco.</p>
       <p>Techo retráctil cerrado: el clima exterior no afecta el modelo para este juego. Hora de inicio tomada de MLB schedule.</p>
     </div>
     
-    <div class="card over">
+    <div class="card over-strong">
       <div class="header">
         <div>
-          <div class="game">COL @ MIN</div>
-          <div class="meta">Target Field · Inicio 7:00 PM · OU 9.0</div>
-          <div class="meta2">SUGANO.T vs BRADLEY.T</div>
+          <div class="game">MIA @ OAK</div>
+          <div class="meta">Sutter Health Park · Inicio 6:00 PM · OU 11.0</div>
+          <div class="meta2">ALCANTARA.S vs CIVALE.A</div>
+          <div class="meta2">Parque: Neutral</div>
         </div>
-        <div class="pill">High Over</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia RF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↗</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↗ Out hacia RF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 7 mph · H2 6 mph · H3 4 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>79° / 76° / 73°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>47%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>9.5</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card under-strong">
-      <div class="header">
-        <div>
-          <div class="game">MIA @ STL</div>
-          <div class="meta">Busch Stadium · Inicio 7:00 PM · OU 8.0</div>
-          <div class="meta2">MEYER.M vs MCGREEVY.M</div>
-        </div>
-        <div class="pill">High Under</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="In desde CF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↓</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↓ In desde CF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 2 mph · H2 3 mph · H3 5 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>75° / 74° / 73°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>95%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>-0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>7.5</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Baja</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Under moderado-fuerte</strong></div>
-      </div>
-      <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card over">
-      <div class="header">
-        <div>
-          <div class="game">OAK @ LAA</div>
-          <div class="meta">Angel Stadium · Inicio 6:00 PM · OU 8.5</div>
-          <div class="meta2">GINN.J vs URENA.W</div>
-        </div>
-        <div class="pill">High Over</div>
+        <div class="pill">Extreme Over</div>
       </div>
 
       <div class="wind-panel">
@@ -675,27 +777,31 @@
         <div class="wind-copy">
           <div class="wind-big">↑ Out hacia CF</div>
           <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 9 mph · H2 8 mph · H3 7 mph</div>
+          <div class="speeds">H1 12 mph · H2 11 mph · H3 11 mph</div>
         </div>
       </div>
 
       <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>70° / 68° / 65°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>71%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.50</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>9.0</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Over moderado-fuerte</strong></div>
+        <div class="mini"><span>Temp H1-H3</span><strong>89° / 85° / 80°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>31%</strong></div>
+        <div class="mini"><span>Ajuste clima</span><strong>+1.10</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>12.1</strong></div>
+        <div class="mini"><span>Confianza</span><strong>Alta</strong></div>
+        <div class="mini"><span>Sesgo</span><strong>Over fuerte</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Neutral</strong></div>
       </div>
+      <p><strong>Nota parque/clima:</strong> Parque neutral + clima favorable al bateo: el Over depende principalmente de viento/temperatura/humedad.</p>
+      <p>Sutter Health Park: clasificación neutral por muestra MLB reciente limitada; usar clima como capa principal.</p>
       <p>Proyección H1-H3 anclada a 6:00 PM. Fuente de hora: MLB schedule.</p>
     </div>
     
     <div class="card over">
       <div class="header">
         <div>
-          <div class="game">LAD @ SD</div>
-          <div class="meta">Petco Park · Inicio 6:00 PM · OU 7.5</div>
-          <div class="meta2">SASAKI.R vs BUEHLER.W</div>
+          <div class="game">SD @ LAD</div>
+          <div class="meta">Dodger Stadium · Inicio 7:00 PM · OU 8.5</div>
+          <div class="meta2">CANNING.G vs YAMAMOTO.Y</div>
+          <div class="meta2">Parque: Pitcher friendly</div>
         </div>
         <div class="pill">Medium Over</div>
       </div>
@@ -723,70 +829,25 @@
         <div class="wind-copy">
           <div class="wind-big">↖ Out hacia LF</div>
           <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 7 mph · H2 5 mph · H3 4 mph</div>
+          <div class="speeds">H1 7 mph · H2 6 mph · H3 5 mph</div>
         </div>
       </div>
 
       <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>68° / 65° / 64°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>81%</strong></div>
+        <div class="mini"><span>Temp H1-H3</span><strong>69° / 66° / 64°</strong></div>
+        <div class="mini"><span>Humedad</span><strong>79%</strong></div>
         <div class="mini"><span>Ajuste clima</span><strong>+0.25</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>7.75</strong></div>
+        <div class="mini"><span>Total ajustado</span><strong>8.75</strong></div>
         <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
         <div class="mini"><span>Sesgo</span><strong>Over moderado</strong></div>
+        <div class="mini"><span>Tipo de parque</span><strong>Pitcher friendly</strong></div>
       </div>
-      <p>Proyección H1-H3 anclada a 6:00 PM. Fuente de hora: MLB schedule.</p>
-    </div>
-    
-    <div class="card neutral">
-      <div class="header">
-        <div>
-          <div class="game">ATL @ SF</div>
-          <div class="meta">Oracle Park · Inicio 7:00 PM · OU 7.5</div>
-          <div class="meta2">LOPEZ.R vs MCDONALD.T</div>
-        </div>
-        <div class="pill">Neutral</div>
-      </div>
-
-      <div class="wind-panel">
-        <div class="diamond-wrap">
-          
-    <svg class="diamond-svg" viewBox="0 0 180 160" aria-label="Out hacia LF">
-      <rect x="0" y="0" width="180" height="160" rx="16" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/>
-      <path d="M90 28 L132 70 L90 112 L48 70 Z" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
-      <circle cx="90" cy="70" r="7" fill="rgba(255,255,255,0.75)"/>
-      <rect x="86" y="24" width="8" height="8" transform="rotate(45 90 28)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="128" y="66" width="8" height="8" transform="rotate(45 132 70)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="86" y="108" width="8" height="8" transform="rotate(45 90 112)" fill="rgba(255,255,255,0.85)"/>
-      <rect x="44" y="66" width="8" height="8" transform="rotate(45 48 70)" fill="rgba(255,255,255,0.85)"/>
-      <path d="M32 134 Q90 18 148 134" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="3"/>
-      <text x="90" y="148" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">Home</text>
-      <text x="90" y="18" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.75)">CF</text>
-      <text x="26" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">LF</text>
-      <text x="154" y="84" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.65)">RF</text>
-      <text x="90" y="72" text-anchor="middle" dominant-baseline="middle" font-size="36" fill="currentColor">↖</text>
-    </svg>
-    
-        </div>
-        <div class="wind-copy">
-          <div class="wind-big">↖ Out hacia LF</div>
-          <div class="wind-small">Ventana del juego anclada a la hora real/local de inicio.</div>
-          <div class="speeds">H1 9 mph · H2 9 mph · H3 9 mph</div>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="mini"><span>Temp H1-H3</span><strong>59° / 59° / 58°</strong></div>
-        <div class="mini"><span>Humedad</span><strong>100%</strong></div>
-        <div class="mini"><span>Ajuste clima</span><strong>+0.00</strong></div>
-        <div class="mini"><span>Total ajustado</span><strong>7.5</strong></div>
-        <div class="mini"><span>Confianza</span><strong>Media-Alta</strong></div>
-        <div class="mini"><span>Sesgo</span><strong>Neutral</strong></div>
-      </div>
+      <p><strong>Nota parque/clima:</strong> Pitcher friendly, pero clima favorable al bateo: el clima empuja Over, aunque el parque puede contener parte del daño.</p>
+      <p>Dodger Stadium: suele jugar más contenido, especialmente de noche; clima Under refuerza baja de carreras.</p>
       <p>Proyección H1-H3 anclada a 7:00 PM. Fuente de hora: MLB schedule.</p>
     </div>
     </div>
-    <div class="footer">Capa climática automática V3 corregida.</div>
+    <div class="footer">Capa climática automática V4 · park friendly sin alterar lógica de cálculo.</div>
   </div>
 </body>
 </html>
