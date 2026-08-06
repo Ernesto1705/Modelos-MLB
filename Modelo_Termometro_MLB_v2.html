@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modelo Termómetro MLB v2 · 6 de agosto de 2026</title>
+<style>
+:root{--bg:#07111f;--bg2:#0d1b2e;--card:rgba(255,255,255,.075);--line:rgba(255,255,255,.12);--text:#f4f8ff;--muted:#b8c4d9;--gold:#ffd166;--cyan:#74f3ff;--green:#79f2a3;--red:#ff6b6b;--violet:#b997ff;--shadow:0 24px 80px rgba(0,0,0,.32)}
+[data-theme="light"]{--bg:#eef4fb;--bg2:#f7fbff;--card:rgba(255,255,255,.82);--line:rgba(18,38,77,.10);--text:#132238;--muted:#62738c;--gold:#d69200;--cyan:#1aa7c9;--green:#0a9a5f;--red:#d64b4b;--violet:#7f56d9;--shadow:0 24px 80px rgba(23,43,77,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 0 0,rgba(116,243,255,.10),transparent 28%),radial-gradient(circle at 100% 0,rgba(185,151,255,.14),transparent 24%),linear-gradient(180deg,var(--bg),var(--bg2));min-height:100vh}.wrap{max-width:1760px;margin:auto;padding:28px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}button{border:1px solid var(--line);background:var(--card);color:var(--text);padding:11px 15px;border-radius:999px;font-weight:800;cursor:pointer}.hero,.panel{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}.hero{padding:28px;margin-bottom:22px}.title{display:flex;align-items:center;gap:15px}h1{font-size:42px;margin:0;letter-spacing:-.035em}.subtitle{color:var(--muted);font-size:16px;line-height:1.65;max-width:1180px;margin-top:8px}.nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);background:rgba(255,255,255,.06);padding:9px 12px;border-radius:999px;font-size:13px;font-weight:800}.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:22px}.kpi{padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.05)}.kpi span{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}.kpi strong{font-size:24px}.kpi small{display:block;color:var(--muted);margin-top:5px;line-height:1.45}.panel{margin-bottom:22px;overflow:hidden}.panel-head{padding:22px 24px 14px}.panel-head h2{margin:0;font-size:27px}.panel-head p{margin:6px 0 0;color:var(--muted);line-height:1.6}.table-tools{padding:0 24px 14px}.table-tools input{width:min(420px,100%);padding:11px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);outline:none}.table-wrap{overflow:auto;max-height:820px;border-top:1px solid var(--line)}table{width:100%;border-collapse:separate;border-spacing:0;min-width:1380px}th{position:sticky;top:0;z-index:5;background:#111d30;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.075em;padding:13px 11px;text-align:left;border-bottom:1px solid var(--line)}[data-theme="light"] th{background:#eef4fb}td{padding:12px 11px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}tr:hover td{background:rgba(255,255,255,.035)}td small{display:block;color:var(--muted);font-size:11px;margin-top:3px;line-height:1.35}.rank{font-weight:900;color:var(--gold)}.entity{display:flex;align-items:center;gap:10px;min-width:165px}.team-badge{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;position:relative;width:30px;height:30px}.team-badge img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.24));z-index:2}.logo-fallback{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--s));color:#fff;font-size:8px;font-weight:900;letter-spacing:-.02em}.damage-main{font-size:17px;font-weight:900;color:var(--cyan)}.positive{color:var(--green);font-weight:900}.negative{color:var(--red);font-weight:900}.temp-line{display:grid;grid-template-columns:auto auto 1fr;gap:6px;align-items:center;min-width:145px}.temp-line strong{font-size:16px}.temp-line small{margin:0}.meter{height:7px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;margin-top:7px}.meter span{display:block;height:100%;background:linear-gradient(90deg,#5470ff,#74f3ff,#79f2a3)}.diag{display:inline-block;padding:7px 9px;border-radius:10px;border:1px solid var(--line);font-weight:800;max-width:280px;line-height:1.35}.aligned-good{background:rgba(121,242,163,.12);color:#dfffea}.starter-better{background:rgba(116,243,255,.12);color:#defbff}.team-better{background:rgba(185,151,255,.13);color:#f0e8ff}.aligned-bad{background:rgba(255,107,107,.13);color:#ffdede}.mixed{background:rgba(255,209,102,.12);color:#fff0bd}.relation{margin-top:6px!important;max-width:280px}.win-badge{display:inline-block;padding:8px 10px;border-radius:999px;border:1px solid var(--line);font-weight:900;white-space:nowrap}.win-very-high{background:rgba(121,242,163,.18);color:#dfffea}.win-high{background:rgba(116,243,255,.16);color:#defbff}.win-light{background:rgba(255,209,102,.14);color:#fff0bd}.win-even{background:rgba(185,151,255,.12);color:#f0e8ff}.win-low{background:rgba(255,151,91,.13);color:#ffe6d5}.win-very-low{background:rgba(255,107,107,.15);color:#ffdede}.warn{color:#ffd166!important}.cool{color:#b997ff!important}.neutral{color:var(--muted)!important}.score-pair{display:grid;gap:5px;min-width:115px}.score-pair span{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:3px}.method{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 24px 24px}.method-card{border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:18px;padding:16px}.method-card h3{margin:0 0 7px;color:var(--gold)}.method-card p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}.footer{text-align:center;color:var(--muted);font-size:12px;padding:16px 0 4px;line-height:1.6}@media(max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.method{grid-template-columns:1fr}}@media(max-width:650px){.wrap{padding:16px}h1{font-size:32px}.kpis{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="wrap">
+<div class="topbar"><span style="color:var(--muted);font-weight:800">Powered by PRO</span><button id="theme">🌙 Cambiar tema</button></div>
+<section class="hero"><div class="title"><div style="font-size:44px">🌡️</div><div><h1>Modelo Termómetro MLB v2</h1><div class="subtitle">Tablero de <strong>P.E.A.</strong> y <strong>E.E.A.</strong> con muestra completa disponible. Ordena a todos los abridores y equipos, compara el daño del pitcher contra el daño del equipo y, en la matriz final, coloca arriba al lado con mayor <strong>probabilidad Termómetro de ganar</strong> frente a su rival.</div></div></div>
+<div class="nav"><a href="#pea">Todos los pitchers P.E.A.</a><a href="#eea">Todos los equipos E.E.A.</a><a href="#cruce">Matriz de daño P.E.A. × E.E.A.</a><a href="#metodo">Metodología</a></div>
+<div class="kpis"><div class="kpi"><span>Abridores evaluados</span><strong>22</strong><small>Todos los pitchers programados.</small></div><div class="kpi"><span>Equipos evaluados</span><strong>22</strong><small>Todos los equipos de la jornada.</small></div><div class="kpi"><span>Daño promedio pitcher</span><strong>2.51</strong><small>ER por apertura en P.E.A.</small></div><div class="kpi"><span>Daño promedio equipo</span><strong>4.11</strong><small>RA por juego en E.E.A.</small></div><div class="kpi"><span>Daño fuera del abridor</span><strong>2.20</strong><small>Final con abridor menos ER del pitcher.</small></div><div class="kpi"><span>Relación de capas</span><strong>19/0/3</strong><small>Pitcher mejor / equipo mejor / alineados.</small></div></div></section>
+<section class="panel" id="pea"><div class="panel-head"><h2>🔥 P.E.A. completo · 22 abridores</h2><p>Ranking de todos los pitchers programados. La columna principal es <strong>ER del abridor por apertura</strong>; después se muestra cuánto terminó recibiendo el equipo en esas mismas aperturas y cuánto daño apareció fuera de la actuación del pitcher.</p></div><div class="table-tools"><input class="filter" data-table="pea-table" placeholder="Buscar pitcher, equipo o juego..."></div><div class="table-wrap"><table id="pea-table"><thead><tr><th>#</th><th>Pitcher / equipo</th><th>n</th><th>ERA</th><th>IP prom.</th><th>ER pitcher</th><th>Total equipo con pitcher</th><th>Fuera del abridor</th><th>% daño del pitcher</th><th>QS%</th><th>≤2 ER</th><th>5+ ER</th><th>Temperatura P.E.A.</th></tr></thead><tbody><tr>
+<td class="rank">1</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#134A8E;--s:#1D2D5C"><span class="logo-fallback">TOR</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/141.svg" alt="TOR logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CEASE.D</strong><small>TOR · TOR @ CHC</small></div></div></td>
+<td>10</td><td><strong>1.89</strong></td><td>6.20</td>
+<td class="damage-main">1.30</td><td>2.40</td><td>1.10</td><td>54.2%</td>
+<td>60.0%</td><td>80.0%</td><td>0.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥🔥</span><strong>84.7</strong><small>Muy caliente</small></div><div class="meter t5"><span style="width:84.7%"></span></div></td>
+</tr><tr>
+<td class="rank">2</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#002D72;--s:#FF5910"><span class="logo-fallback">NYM</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/121.svg" alt="NYM logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MCLEAN.N</strong><small>NYM · NYM @ CLE</small></div></div></td>
+<td>10</td><td><strong>2.28</strong></td><td>5.93</td>
+<td class="damage-main">1.50</td><td>4.10</td><td>2.60</td><td>36.6%</td>
+<td>80.0%</td><td>90.0%</td><td>10.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥🔥</span><strong>83.5</strong><small>Muy caliente</small></div><div class="meter t5"><span style="width:83.5%"></span></div></td>
+</tr><tr>
+<td class="rank">3</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#E31937;--s:#002B5C"><span class="logo-fallback">CLE</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/114.svg" alt="CLE logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>GRIFFIN.F</strong><small>CLE · NYM @ CLE</small></div></div></td>
+<td>10</td><td><strong>2.31</strong></td><td>6.23</td>
+<td class="damage-main">1.60</td><td>3.80</td><td>2.20</td><td>42.1%</td>
+<td>70.0%</td><td>80.0%</td><td>10.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥🔥</span><strong>83.1</strong><small>Muy caliente</small></div><div class="meter t5"><span style="width:83.1%"></span></div></td>
+</tr><tr>
+<td class="rank">4</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0C2C56;--s:#005C5C"><span class="logo-fallback">SEA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/136.svg" alt="SEA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MILLER.B</strong><small>SEA · DET @ SEA</small></div></div></td>
+<td>10</td><td><strong>2.95</strong></td><td>5.80</td>
+<td class="damage-main">1.90</td><td>4.00</td><td>2.10</td><td>47.5%</td>
+<td>30.0%</td><td>70.0%</td><td>10.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥</span><strong>68.8</strong><small>Caliente</small></div><div class="meter t4"><span style="width:68.8%"></span></div></td>
+</tr><tr>
+<td class="rank">5</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#DF4601;--s:#000000"><span class="logo-fallback">BAL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/110.svg" alt="BAL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>YOUNG.B</strong><small>BAL · LAA @ BAL</small></div></div></td>
+<td>10</td><td><strong>3.28</strong></td><td>6.03</td>
+<td class="damage-main">2.20</td><td>2.90</td><td>0.70</td><td>75.9%</td>
+<td>60.0%</td><td>50.0%</td><td>0.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥</span><strong>68.0</strong><small>Caliente</small></div><div class="meter t4"><span style="width:68.0%"></span></div></td>
+</tr><tr>
+<td class="rank">6</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#004687;--s:#BD9B60"><span class="logo-fallback">KC</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/118.svg" alt="KC logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>WACHA.M</strong><small>KC · MIN @ KC</small></div></div></td>
+<td>10</td><td><strong>3.86</strong></td><td>6.30</td>
+<td class="damage-main">2.70</td><td>3.90</td><td>1.20</td><td>69.2%</td>
+<td>60.0%</td><td>50.0%</td><td>10.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>61.1</strong><small>Templado</small></div><div class="meter t3"><span style="width:61.1%"></span></div></td>
+</tr><tr>
+<td class="rank">7</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#C6011F;--s:#000000"><span class="logo-fallback">CIN</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/113.svg" alt="CIN logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>ABBOTT.A</strong><small>CIN · OAK @ CIN</small></div></div></td>
+<td>10</td><td><strong>3.71</strong></td><td>5.33</td>
+<td class="damage-main">2.20</td><td>4.80</td><td>2.60</td><td>45.8%</td>
+<td>40.0%</td><td>50.0%</td><td>0.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>56.4</strong><small>Templado</small></div><div class="meter t3"><span style="width:56.4%"></span></div></td>
+</tr><tr>
+<td class="rank">8</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#BD3039;--s:#0C2340"><span class="logo-fallback">BOS</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/111.svg" alt="BOS logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>SUAREZ.R</strong><small>BOS · CHW @ BOS</small></div></div></td>
+<td>10</td><td><strong>3.86</strong></td><td>5.13</td>
+<td class="damage-main">2.20</td><td>4.30</td><td>2.10</td><td>51.2%</td>
+<td>40.0%</td><td>50.0%</td><td>10.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>53.5</strong><small>Frío</small></div><div class="meter t2"><span style="width:53.5%"></span></div></td>
+</tr><tr>
+<td class="rank">9</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#CE1141;--s:#13274F"><span class="logo-fallback">ATL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/144.svg" alt="ATL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>PEREZ.M</strong><small>ATL · MIA @ ATL</small></div></div></td>
+<td>10</td><td><strong>3.73</strong></td><td>5.07</td>
+<td class="damage-main">2.10</td><td>5.10</td><td>3.00</td><td>41.2%</td>
+<td>20.0%</td><td>50.0%</td><td>0.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>52.4</strong><small>Frío</small></div><div class="meter t2"><span style="width:52.4%"></span></div></td>
+</tr><tr>
+<td class="rank">10</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#E81828;--s:#002D72"><span class="logo-fallback">PHI</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/143.svg" alt="PHI logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>SANCHEZ.C</strong><small>PHI · WAS @ PHI</small></div></div></td>
+<td>10</td><td><strong>4.47</strong></td><td>5.83</td>
+<td class="damage-main">2.90</td><td>4.20</td><td>1.30</td><td>69.0%</td>
+<td>60.0%</td><td>50.0%</td><td>20.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>50.4</strong><small>Frío</small></div><div class="meter t2"><span style="width:50.4%"></span></div></td>
+</tr><tr>
+<td class="rank">11</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#111111;--s:#C4CED4"><span class="logo-fallback">CHW</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/145.svg" alt="CHW logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CASTILLO.L</strong><small>CHW · CHW @ BOS</small></div></div></td>
+<td>10</td><td><strong>4.17</strong></td><td>5.40</td>
+<td class="damage-main">2.50</td><td>4.40</td><td>1.90</td><td>56.8%</td>
+<td>30.0%</td><td>50.0%</td><td>10.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>49.4</strong><small>Frío</small></div><div class="meter t2"><span style="width:49.4%"></span></div></td>
+</tr><tr>
+<td class="rank">12</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#12284B;--s:#FFC52F"><span class="logo-fallback">MIL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/158.svg" alt="MIL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MAY.D</strong><small>MIL · PIT @ MIL</small></div></div></td>
+<td>10</td><td><strong>4.12</strong></td><td>4.80</td>
+<td class="damage-main">2.20</td><td>4.10</td><td>1.90</td><td>53.7%</td>
+<td>30.0%</td><td>60.0%</td><td>30.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>48.1</strong><small>Frío</small></div><div class="meter t2"><span style="width:48.1%"></span></div></td>
+</tr><tr>
+<td class="rank">13</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0C2340;--s:#FA4616"><span class="logo-fallback">DET</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/116.svg" alt="DET logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>VALDEZ.F</strong><small>DET · DET @ SEA</small></div></div></td>
+<td>10</td><td><strong>4.44</strong></td><td>5.27</td>
+<td class="damage-main">2.60</td><td>5.70</td><td>3.10</td><td>45.6%</td>
+<td>40.0%</td><td>60.0%</td><td>20.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>47.2</strong><small>Frío</small></div><div class="meter t2"><span style="width:47.2%"></span></div></td>
+</tr><tr>
+<td class="rank">14</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#002B5C;--s:#D31145"><span class="logo-fallback">MIN</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/142.svg" alt="MIN logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>OBER.B</strong><small>MIN · MIN @ KC</small></div></div></td>
+<td>10</td><td><strong>4.75</strong></td><td>5.50</td>
+<td class="damage-main">2.90</td><td>5.10</td><td>2.20</td><td>56.9%</td>
+<td>30.0%</td><td>50.0%</td><td>20.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>42.1</strong><small>Frío</small></div><div class="meter t2"><span style="width:42.1%"></span></div></td>
+</tr><tr>
+<td class="rank">15</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#AB0003;--s:#14225A"><span class="logo-fallback">WAS</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/120.svg" alt="WAS logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIKOLAS.M</strong><small>WAS · WAS @ PHI</small></div></div></td>
+<td>10</td><td><strong>4.88</strong></td><td>5.17</td>
+<td class="damage-main">2.80</td><td>5.80</td><td>3.00</td><td>48.3%</td>
+<td>10.0%</td><td>40.0%</td><td>30.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>36.3</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:36.3%"></span></div></td>
+</tr><tr>
+<td class="rank">16</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#00A3E0;--s:#EF3340"><span class="logo-fallback">MIA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/146.svg" alt="MIA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>JUNK.J</strong><small>MIA · MIA @ ATL</small></div></div></td>
+<td>10</td><td><strong>5.05</strong></td><td>5.17</td>
+<td class="damage-main">2.90</td><td>4.60</td><td>1.70</td><td>63.0%</td>
+<td>10.0%</td><td>60.0%</td><td>30.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>35.9</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:35.9%"></span></div></td>
+</tr><tr>
+<td class="rank">17</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#A71930;--s:#E3D4AD"><span class="logo-fallback">ARI</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/109.svg" alt="ARI logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>DRAKE.K</strong><small>ARI · SD @ ARI</small></div></div></td>
+<td>3</td><td><strong>4.85</strong></td><td>4.33</td>
+<td class="damage-main">2.33</td><td>7.67</td><td>5.33</td><td>30.4%</td>
+<td>0.0%</td><td>66.7%</td><td>0.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>34.6</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:34.6%"></span></div></td>
+</tr><tr>
+<td class="rank">18</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#FDB827;--s:#27251F"><span class="logo-fallback">PIT</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/134.svg" alt="PIT logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>ASHCRAFT.B</strong><small>PIT · PIT @ MIL</small></div></div></td>
+<td>10</td><td><strong>5.64</strong></td><td>5.27</td>
+<td class="damage-main">3.30</td><td>4.90</td><td>1.60</td><td>67.3%</td>
+<td>20.0%</td><td>50.0%</td><td>40.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>30.8</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:30.8%"></span></div></td>
+</tr><tr>
+<td class="rank">19</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#2F241D;--s:#FFC425"><span class="logo-fallback">SD</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/135.svg" alt="SD logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>BUEHLER.W</strong><small>SD · SD @ ARI</small></div></div></td>
+<td>10</td><td><strong>5.98</strong></td><td>4.67</td>
+<td class="damage-main">3.10</td><td>5.80</td><td>2.70</td><td>53.4%</td>
+<td>0.0%</td><td>60.0%</td><td>20.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>25.1</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:25.1%"></span></div></td>
+</tr><tr>
+<td class="rank">20</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0E3386;--s:#CC3433"><span class="logo-fallback">CHC</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/112.svg" alt="CHC logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>PETERSON.D</strong><small>CHC · TOR @ CHC</small></div></div></td>
+<td>10</td><td><strong>6.47</strong></td><td>4.87</td>
+<td class="damage-main">3.50</td><td>6.30</td><td>2.80</td><td>55.6%</td>
+<td>20.0%</td><td>50.0%</td><td>30.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>23.9</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:23.9%"></span></div></td>
+</tr><tr>
+<td class="rank">21</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#BA0021;--s:#003263"><span class="logo-fallback">LAA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/108.svg" alt="LAA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>JOHNSON.R</strong><small>LAA · LAA @ BAL</small></div></div></td>
+<td>9</td><td><strong>6.80</strong></td><td>4.56</td>
+<td class="damage-main">3.44</td><td>5.33</td><td>1.89</td><td>64.6%</td>
+<td>11.1%</td><td>44.4%</td><td>44.4%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>19.9</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:19.9%"></span></div></td>
+</tr><tr>
+<td class="rank">22</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#003831;--s:#EFB21E"><span class="logo-fallback">OAK</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/133.svg" alt="OAK logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>BARNETT.M</strong><small>OAK · OAK @ CIN</small></div></div></td>
+<td>7</td><td><strong>6.46</strong></td><td>4.38</td>
+<td class="damage-main">3.14</td><td>4.57</td><td>1.43</td><td>68.8%</td>
+<td>0.0%</td><td>28.6%</td><td>14.3%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>18.9</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:18.9%"></span></div></td>
+</tr></tbody></table></div></section>
+<section class="panel" id="eea"><div class="panel-head"><h2>🏟️ E.E.A. completo · 22 equipos</h2><p>Ranking de todos los equipos. Aquí el daño defensivo principal es <strong>RA promedio por juego</strong>, sin atribuirlo exclusivamente al abridor.</p></div><div class="table-tools"><input class="filter" data-table="eea-table" placeholder="Buscar equipo..."></div><div class="table-wrap"><table id="eea-table"><thead><tr><th>#</th><th>Equipo</th><th>n</th><th>Récord</th><th>RF prom.</th><th>RA prom.</th><th>Diferencial</th><th>Anota 4+</th><th>Se queda &lt;5</th><th>Permite 4+</th><th>Permite &lt;5</th><th>Temperatura E.E.A.</th></tr></thead><tbody><tr>
+<td class="rank">1</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#BD3039;--s:#0C2340"><span class="logo-fallback">BOS</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/111.svg" alt="BOS logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>BOS</strong><small>Boston Red Sox</small></div></div></td>
+<td>10</td><td>9-1</td><td>6.00</td><td class="damage-main">2.50</td>
+<td class="positive">+3.50</td><td>80.0%</td><td>50.0%</td>
+<td>40.0%</td><td>100.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥🔥</span><strong>94.3</strong><small>Muy caliente</small></div><div class="meter t5"><span style="width:94.3%"></span></div></td>
+</tr><tr>
+<td class="rank">2</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0E3386;--s:#CC3433"><span class="logo-fallback">CHC</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/112.svg" alt="CHC logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CHC</strong><small>Chicago Cubs</small></div></div></td>
+<td>10</td><td>7-3</td><td>5.10</td><td class="damage-main">2.80</td>
+<td class="positive">+2.30</td><td>70.0%</td><td>40.0%</td>
+<td>20.0%</td><td>80.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥🔥</span><strong>84.6</strong><small>Muy caliente</small></div><div class="meter t5"><span style="width:84.6%"></span></div></td>
+</tr><tr>
+<td class="rank">3</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0C2340;--s:#FA4616"><span class="logo-fallback">DET</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/116.svg" alt="DET logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>DET</strong><small>Detroit Tigers</small></div></div></td>
+<td>10</td><td>5-5</td><td>7.60</td><td class="damage-main">3.70</td>
+<td class="positive">+3.90</td><td>80.0%</td><td>30.0%</td>
+<td>50.0%</td><td>60.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥🔥</span><strong>83.0</strong><small>Muy caliente</small></div><div class="meter t5"><span style="width:83.0%"></span></div></td>
+</tr><tr>
+<td class="rank">4</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#002D72;--s:#FF5910"><span class="logo-fallback">NYM</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/121.svg" alt="NYM logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>NYM</strong><small>New York Mets</small></div></div></td>
+<td>10</td><td>6-4</td><td>4.50</td><td class="damage-main">3.10</td>
+<td class="positive">+1.40</td><td>50.0%</td><td>60.0%</td>
+<td>30.0%</td><td>70.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥</span><strong>73.7</strong><small>Caliente</small></div><div class="meter t4"><span style="width:73.7%"></span></div></td>
+</tr><tr>
+<td class="rank">5</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#E81828;--s:#002D72"><span class="logo-fallback">PHI</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/143.svg" alt="PHI logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>PHI</strong><small>Philadelphia Phillies</small></div></div></td>
+<td>10</td><td>5-5</td><td>5.60</td><td class="damage-main">4.00</td>
+<td class="positive">+1.60</td><td>90.0%</td><td>30.0%</td>
+<td>50.0%</td><td>60.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥🔥</span><strong>73.4</strong><small>Caliente</small></div><div class="meter t4"><span style="width:73.4%"></span></div></td>
+</tr><tr>
+<td class="rank">6</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#CE1141;--s:#13274F"><span class="logo-fallback">ATL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/144.svg" alt="ATL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>ATL</strong><small>Atlanta Braves</small></div></div></td>
+<td>10</td><td>8-2</td><td>4.00</td><td class="damage-main">3.30</td>
+<td class="positive">+0.70</td><td>60.0%</td><td>70.0%</td>
+<td>20.0%</td><td>90.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>66.7</strong><small>Templado</small></div><div class="meter t3"><span style="width:66.7%"></span></div></td>
+</tr><tr>
+<td class="rank">7</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#C6011F;--s:#000000"><span class="logo-fallback">CIN</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/113.svg" alt="CIN logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CIN</strong><small>Cincinnati Reds</small></div></div></td>
+<td>10</td><td>7-3</td><td>4.30</td><td class="damage-main">3.60</td>
+<td class="positive">+0.70</td><td>50.0%</td><td>50.0%</td>
+<td>50.0%</td><td>70.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>65.7</strong><small>Templado</small></div><div class="meter t3"><span style="width:65.7%"></span></div></td>
+</tr><tr>
+<td class="rank">8</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#2F241D;--s:#FFC425"><span class="logo-fallback">SD</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/135.svg" alt="SD logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>SD</strong><small>San Diego Padres</small></div></div></td>
+<td>10</td><td>7-3</td><td>4.90</td><td class="damage-main">4.30</td>
+<td class="positive">+0.60</td><td>70.0%</td><td>40.0%</td>
+<td>70.0%</td><td>60.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>62.5</strong><small>Templado</small></div><div class="meter t3"><span style="width:62.5%"></span></div></td>
+</tr><tr>
+<td class="rank">9</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#12284B;--s:#FFC52F"><span class="logo-fallback">MIL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/158.svg" alt="MIL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIL</strong><small>Milwaukee Brewers</small></div></div></td>
+<td>10</td><td>6-4</td><td>4.20</td><td class="damage-main">3.70</td>
+<td class="positive">+0.50</td><td>50.0%</td><td>70.0%</td>
+<td>20.0%</td><td>90.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>60.8</strong><small>Templado</small></div><div class="meter t3"><span style="width:60.8%"></span></div></td>
+</tr><tr>
+<td class="rank">10</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#A71930;--s:#E3D4AD"><span class="logo-fallback">ARI</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/109.svg" alt="ARI logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>ARI</strong><small>Arizona Diamondbacks</small></div></div></td>
+<td>10</td><td>6-4</td><td>5.50</td><td class="damage-main">4.80</td>
+<td class="positive">+0.70</td><td>70.0%</td><td>50.0%</td>
+<td>60.0%</td><td>50.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>59.3</strong><small>Templado</small></div><div class="meter t3"><span style="width:59.3%"></span></div></td>
+</tr><tr>
+<td class="rank">11</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#00A3E0;--s:#EF3340"><span class="logo-fallback">MIA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/146.svg" alt="MIA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIA</strong><small>Miami Marlins</small></div></div></td>
+<td>10</td><td>6-4</td><td>3.80</td><td class="damage-main">3.40</td>
+<td class="positive">+0.40</td><td>40.0%</td><td>60.0%</td>
+<td>60.0%</td><td>70.0%</td>
+<td><div class="temp-line"><span>🔥🔥🔥</span><strong>59.1</strong><small>Templado</small></div><div class="meter t3"><span style="width:59.1%"></span></div></td>
+</tr><tr>
+<td class="rank">12</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#111111;--s:#C4CED4"><span class="logo-fallback">CHW</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/145.svg" alt="CHW logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CHW</strong><small>Chicago White Sox</small></div></div></td>
+<td>10</td><td>5-5</td><td>4.40</td><td class="damage-main">4.20</td>
+<td class="positive">+0.20</td><td>50.0%</td><td>50.0%</td>
+<td>40.0%</td><td>70.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>53.1</strong><small>Frío</small></div><div class="meter t2"><span style="width:53.1%"></span></div></td>
+</tr><tr>
+<td class="rank">13</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#134A8E;--s:#1D2D5C"><span class="logo-fallback">TOR</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/141.svg" alt="TOR logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>TOR</strong><small>Toronto Blue Jays</small></div></div></td>
+<td>10</td><td>6-4</td><td>3.40</td><td class="damage-main">3.70</td>
+<td class="negative">-0.30</td><td>40.0%</td><td>60.0%</td>
+<td>50.0%</td><td>60.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>48.4</strong><small>Frío</small></div><div class="meter t2"><span style="width:48.4%"></span></div></td>
+</tr><tr>
+<td class="rank">14</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#004687;--s:#BD9B60"><span class="logo-fallback">KC</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/118.svg" alt="KC logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>KC</strong><small>Kansas City Royals</small></div></div></td>
+<td>10</td><td>5-5</td><td>3.50</td><td class="damage-main">3.90</td>
+<td class="negative">-0.40</td><td>40.0%</td><td>70.0%</td>
+<td>40.0%</td><td>80.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>44.6</strong><small>Frío</small></div><div class="meter t2"><span style="width:44.6%"></span></div></td>
+</tr><tr>
+<td class="rank">15</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#002B5C;--s:#D31145"><span class="logo-fallback">MIN</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/142.svg" alt="MIN logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIN</strong><small>Minnesota Twins</small></div></div></td>
+<td>10</td><td>5-5</td><td>3.70</td><td class="damage-main">4.10</td>
+<td class="negative">-0.40</td><td>40.0%</td><td>70.0%</td>
+<td>50.0%</td><td>70.0%</td>
+<td><div class="temp-line"><span>🧊🧊</span><strong>43.6</strong><small>Frío</small></div><div class="meter t2"><span style="width:43.6%"></span></div></td>
+</tr><tr>
+<td class="rank">16</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#E31937;--s:#002B5C"><span class="logo-fallback">CLE</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/114.svg" alt="CLE logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CLE</strong><small>Cleveland Guardians</small></div></div></td>
+<td>10</td><td>3-7</td><td>3.30</td><td class="damage-main">4.00</td>
+<td class="negative">-0.70</td><td>50.0%</td><td>50.0%</td>
+<td>50.0%</td><td>60.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>37.4</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:37.4%"></span></div></td>
+</tr><tr>
+<td class="rank">17</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0C2C56;--s:#005C5C"><span class="logo-fallback">SEA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/136.svg" alt="SEA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>SEA</strong><small>Seattle Mariners</small></div></div></td>
+<td>10</td><td>5-5</td><td>3.80</td><td class="damage-main">5.10</td>
+<td class="negative">-1.30</td><td>50.0%</td><td>70.0%</td>
+<td>80.0%</td><td>40.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>27.1</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:27.1%"></span></div></td>
+</tr><tr>
+<td class="rank">18</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#FDB827;--s:#27251F"><span class="logo-fallback">PIT</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/134.svg" alt="PIT logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>PIT</strong><small>Pittsburgh Pirates</small></div></div></td>
+<td>10</td><td>3-7</td><td>3.30</td><td class="damage-main">4.60</td>
+<td class="negative">-1.30</td><td>40.0%</td><td>80.0%</td>
+<td>50.0%</td><td>70.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>26.7</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:26.7%"></span></div></td>
+</tr><tr>
+<td class="rank">19</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#DF4601;--s:#000000"><span class="logo-fallback">BAL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/110.svg" alt="BAL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>BAL</strong><small>Baltimore Orioles</small></div></div></td>
+<td>10</td><td>6-4</td><td>3.70</td><td class="damage-main">5.30</td>
+<td class="negative">-1.60</td><td>40.0%</td><td>60.0%</td>
+<td>60.0%</td><td>50.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>25.0</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:25.0%"></span></div></td>
+</tr><tr>
+<td class="rank">20</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#BA0021;--s:#003263"><span class="logo-fallback">LAA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/108.svg" alt="LAA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>LAA</strong><small>Los Angeles Angels</small></div></div></td>
+<td>10</td><td>2-8</td><td>2.50</td><td class="damage-main">4.50</td>
+<td class="negative">-2.00</td><td>30.0%</td><td>100.0%</td>
+<td>50.0%</td><td>50.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>22.2</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:22.2%"></span></div></td>
+</tr><tr>
+<td class="rank">21</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#AB0003;--s:#14225A"><span class="logo-fallback">WAS</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/120.svg" alt="WAS logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>WAS</strong><small>Washington Nationals</small></div></div></td>
+<td>10</td><td>2-8</td><td>3.60</td><td class="damage-main">5.20</td>
+<td class="negative">-1.60</td><td>30.0%</td><td>80.0%</td>
+<td>90.0%</td><td>30.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>19.2</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:19.2%"></span></div></td>
+</tr><tr>
+<td class="rank">22</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#003831;--s:#EFB21E"><span class="logo-fallback">OAK</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/133.svg" alt="OAK logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>OAK</strong><small>Athletics</small></div></div></td>
+<td>10</td><td>1-9</td><td>3.30</td><td class="damage-main">6.70</td>
+<td class="negative">-3.40</td><td>50.0%</td><td>80.0%</td>
+<td>80.0%</td><td>40.0%</td>
+<td><div class="temp-line"><span>🧊🧊🧊</span><strong>6.9</strong><small>Muy frío</small></div><div class="meter t1"><span style="width:6.9%"></span></div></td>
+</tr></tbody></table></div></section>
+<section class="panel" id="cruce"><div class="panel-head"><h2>🧬 Matriz completa de daño · P.E.A. × E.E.A.</h2><p>Ordenada desde el equipo con <strong>mayor probabilidad Termómetro de ganar</strong> hasta el de menor probabilidad. Cada fila se compara únicamente contra el rival de ese día: el índice propio combina <strong>55% P.E.A. y 45% E.E.A.</strong>, y la diferencia contra el índice rival se transforma en una probabilidad simétrica; los dos lados de cada juego suman 100%. No utiliza cuotas, P.V.E. ni H2H. <strong>ER del abridor</strong> mide responsabilidad directa; <strong>RA E.E.A.</strong> representa el daño recibido por el equipo completo.</p></div><div class="table-tools"><input class="filter" data-table="cross-table" placeholder="Buscar equipo, rival o pitcher..."></div><div class="table-wrap"><table id="cross-table"><thead><tr><th>#</th><th>Equipo / pitcher</th><th>Prob. Termómetro</th><th>Índice propio</th><th>Índice rival</th><th>Daño pitcher</th><th>Total con abridor</th><th>Fuera del abridor</th><th>% del daño</th><th>Daño equipo E.E.A.</th><th>Diferencia daño</th><th>Diagnóstico estructural</th><th>Scores separados</th></tr></thead><tbody><tr>
+<td class="rank">1</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#C6011F;--s:#000000"><span class="logo-fallback">CIN</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/113.svg" alt="CIN logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CIN</strong><small>ABBOTT.A</small></div></div></td>
+<td><span class="win-badge win-very-high">91.3% · Muy alta</span><small>vs OAK · diferencia +47.1</small></td>
+<td><strong>60.6</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>13.5<small>índice del rival</small></td>
+<td class="damage-main">2.20<small>ER del abridor</small></td>
+<td>4.80<small>final con este abridor</small></td>
+<td>2.60<small>fuera del abridor</small></td>
+<td>45.8%<small>del daño final</small></td>
+<td class="damage-main">3.60<small>RA E.E.A.</small></td>
+<td class="positive">+1.40<small>E.E.A. − pitcher</small></td>
+<td><span class="diag aligned-good">Daño contenido en ambas capas</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>56.4</strong></span><span>E.E.A. <strong>65.7</strong></span></div></td>
+</tr><tr>
+<td class="rank">2</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#E81828;--s:#002D72"><span class="logo-fallback">PHI</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/143.svg" alt="PHI logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>PHI</strong><small>SANCHEZ.C</small></div></div></td>
+<td><span class="win-badge win-very-high">83.3% · Muy alta</span><small>vs WAS · diferencia +32.2</small></td>
+<td><strong>60.8</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>28.6<small>índice del rival</small></td>
+<td class="damage-main">2.90<small>ER del abridor</small></td>
+<td>4.20<small>final con este abridor</small></td>
+<td>1.30<small>fuera del abridor</small></td>
+<td>69.0%<small>del daño final</small></td>
+<td class="damage-main">4.00<small>RA E.E.A.</small></td>
+<td class="positive">+1.10<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>50.4</strong></span><span>E.E.A. <strong>73.4</strong></span></div></td>
+</tr><tr>
+<td class="rank">3</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#DF4601;--s:#000000"><span class="logo-fallback">BAL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/110.svg" alt="BAL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>BAL</strong><small>YOUNG.B</small></div></div></td>
+<td><span class="win-badge win-very-high">80.0% · Muy alta</span><small>vs LAA · diferencia +27.7</small></td>
+<td><strong>48.7</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>20.9<small>índice del rival</small></td>
+<td class="damage-main">2.20<small>ER del abridor</small></td>
+<td>2.90<small>final con este abridor</small></td>
+<td>0.70<small>fuera del abridor</small></td>
+<td>75.9%<small>del daño final</small></td>
+<td class="damage-main">5.30<small>RA E.E.A.</small></td>
+<td class="positive">+3.10<small>E.E.A. − pitcher</small></td>
+<td><span class="diag starter-better">Abridor contiene; el daño crece fuera de su actuación</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>68.0</strong></span><span>E.E.A. <strong>25.0</strong></span></div></td>
+</tr><tr>
+<td class="rank">4</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#12284B;--s:#FFC52F"><span class="logo-fallback">MIL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/158.svg" alt="MIL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIL</strong><small>MAY.D</small></div></div></td>
+<td><span class="win-badge win-very-high">77.6% · Muy alta</span><small>vs PIT · diferencia +24.8</small></td>
+<td><strong>53.8</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>29.0<small>índice del rival</small></td>
+<td class="damage-main">2.20<small>ER del abridor</small></td>
+<td>4.10<small>final con este abridor</small></td>
+<td>1.90<small>fuera del abridor</small></td>
+<td>53.7%<small>del daño final</small></td>
+<td class="damage-main">3.70<small>RA E.E.A.</small></td>
+<td class="positive">+1.50<small>E.E.A. − pitcher</small></td>
+<td><span class="diag aligned-good">Daño contenido en ambas capas</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>48.1</strong></span><span>E.E.A. <strong>60.8</strong></span></div></td>
+</tr><tr>
+<td class="rank">5</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#BD3039;--s:#0C2340"><span class="logo-fallback">BOS</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/111.svg" alt="BOS logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>BOS</strong><small>SUAREZ.R</small></div></div></td>
+<td><span class="win-badge win-very-high">73.9% · Muy alta</span><small>vs CHW · diferencia +20.8</small></td>
+<td><strong>71.9</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>51.0<small>índice del rival</small></td>
+<td class="damage-main">2.20<small>ER del abridor</small></td>
+<td>4.30<small>final con este abridor</small></td>
+<td>2.10<small>fuera del abridor</small></td>
+<td>51.2%<small>del daño final</small></td>
+<td class="damage-main">2.50<small>RA E.E.A.</small></td>
+<td class="positive">+0.30<small>E.E.A. − pitcher</small></td>
+<td><span class="diag aligned-good">Daño contenido en ambas capas</span><small class="relation neutral">Daño similar entre abridor y equipo</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>53.5</strong></span><span>E.E.A. <strong>94.3</strong></span></div></td>
+</tr><tr>
+<td class="rank">6</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#134A8E;--s:#1D2D5C"><span class="logo-fallback">TOR</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/141.svg" alt="TOR logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>TOR</strong><small>CEASE.D</small></div></div></td>
+<td><span class="win-badge win-very-high">70.2% · Muy alta</span><small>vs CHC · diferencia +17.2</small></td>
+<td><strong>68.4</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>51.2<small>índice del rival</small></td>
+<td class="damage-main">1.30<small>ER del abridor</small></td>
+<td>2.40<small>final con este abridor</small></td>
+<td>1.10<small>fuera del abridor</small></td>
+<td>54.2%<small>del daño final</small></td>
+<td class="damage-main">3.70<small>RA E.E.A.</small></td>
+<td class="positive">+2.40<small>E.E.A. − pitcher</small></td>
+<td><span class="diag aligned-good">Daño contenido en ambas capas</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>84.7</strong></span><span>E.E.A. <strong>48.4</strong></span></div></td>
+</tr><tr>
+<td class="rank">7</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#002D72;--s:#FF5910"><span class="logo-fallback">NYM</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/121.svg" alt="NYM logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>NYM</strong><small>MCLEAN.N</small></div></div></td>
+<td><span class="win-badge win-high">69.6% · Alta</span><small>vs CLE · diferencia +16.5</small></td>
+<td><strong>79.1</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>62.6<small>índice del rival</small></td>
+<td class="damage-main">1.50<small>ER del abridor</small></td>
+<td>4.10<small>final con este abridor</small></td>
+<td>2.60<small>fuera del abridor</small></td>
+<td>36.6%<small>del daño final</small></td>
+<td class="damage-main">3.10<small>RA E.E.A.</small></td>
+<td class="positive">+1.60<small>E.E.A. − pitcher</small></td>
+<td><span class="diag aligned-good">Daño contenido en ambas capas</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>83.5</strong></span><span>E.E.A. <strong>73.7</strong></span></div></td>
+</tr><tr>
+<td class="rank">8</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0C2340;--s:#FA4616"><span class="logo-fallback">DET</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/116.svg" alt="DET logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>DET</strong><small>VALDEZ.F</small></div></div></td>
+<td><span class="win-badge win-high">66.0% · Alta</span><small>vs SEA · diferencia +13.3</small></td>
+<td><strong>63.3</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>50.0<small>índice del rival</small></td>
+<td class="damage-main">2.60<small>ER del abridor</small></td>
+<td>5.70<small>final con este abridor</small></td>
+<td>3.10<small>fuera del abridor</small></td>
+<td>45.6%<small>del daño final</small></td>
+<td class="damage-main">3.70<small>RA E.E.A.</small></td>
+<td class="positive">+1.10<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>47.2</strong></span><span>E.E.A. <strong>83.0</strong></span></div></td>
+</tr><tr>
+<td class="rank">9</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#CE1141;--s:#13274F"><span class="logo-fallback">ATL</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/144.svg" alt="ATL logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>ATL</strong><small>PEREZ.M</small></div></div></td>
+<td><span class="win-badge win-high">65.1% · Alta</span><small>vs MIA · diferencia +12.5</small></td>
+<td><strong>58.9</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>46.4<small>índice del rival</small></td>
+<td class="damage-main">2.10<small>ER del abridor</small></td>
+<td>5.10<small>final con este abridor</small></td>
+<td>3.00<small>fuera del abridor</small></td>
+<td>41.2%<small>del daño final</small></td>
+<td class="damage-main">3.30<small>RA E.E.A.</small></td>
+<td class="positive">+1.20<small>E.E.A. − pitcher</small></td>
+<td><span class="diag aligned-good">Daño contenido en ambas capas</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>52.4</strong></span><span>E.E.A. <strong>66.7</strong></span></div></td>
+</tr><tr>
+<td class="rank">10</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#004687;--s:#BD9B60"><span class="logo-fallback">KC</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/118.svg" alt="KC logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>KC</strong><small>WACHA.M</small></div></div></td>
+<td><span class="win-badge win-high">63.3% · Alta</span><small>vs MIN · diferencia +10.9</small></td>
+<td><strong>53.7</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>42.8<small>índice del rival</small></td>
+<td class="damage-main">2.70<small>ER del abridor</small></td>
+<td>3.90<small>final con este abridor</small></td>
+<td>1.20<small>fuera del abridor</small></td>
+<td>69.2%<small>del daño final</small></td>
+<td class="damage-main">3.90<small>RA E.E.A.</small></td>
+<td class="positive">+1.20<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>61.1</strong></span><span>E.E.A. <strong>44.6</strong></span></div></td>
+</tr><tr>
+<td class="rank">11</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#A71930;--s:#E3D4AD"><span class="logo-fallback">ARI</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/109.svg" alt="ARI logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>ARI</strong><small>DRAKE.K</small></div></div></td>
+<td><span class="win-badge win-light">54.7% · Ligera</span><small>vs SD · diferencia +3.8</small></td>
+<td><strong>45.7</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>41.9<small>índice del rival</small></td>
+<td class="damage-main">2.33<small>ER del abridor</small></td>
+<td>7.67<small>final con este abridor</small></td>
+<td>5.33<small>fuera del abridor</small></td>
+<td>30.4%<small>del daño final</small></td>
+<td class="damage-main">4.80<small>RA E.E.A.</small></td>
+<td class="positive">+2.47<small>E.E.A. − pitcher</small></td>
+<td><span class="diag starter-better">Abridor contiene; el daño crece fuera de su actuación</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>34.6</strong></span><span>E.E.A. <strong>59.3</strong></span></div></td>
+</tr><tr>
+<td class="rank">12</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#2F241D;--s:#FFC425"><span class="logo-fallback">SD</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/135.svg" alt="SD logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>SD</strong><small>BUEHLER.W</small></div></div></td>
+<td><span class="win-badge win-low">45.3% · Baja</span><small>vs ARI · diferencia -3.8</small></td>
+<td><strong>41.9</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>45.7<small>índice del rival</small></td>
+<td class="damage-main">3.10<small>ER del abridor</small></td>
+<td>5.80<small>final con este abridor</small></td>
+<td>2.70<small>fuera del abridor</small></td>
+<td>53.4%<small>del daño final</small></td>
+<td class="damage-main">4.30<small>RA E.E.A.</small></td>
+<td class="positive">+1.20<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>25.1</strong></span><span>E.E.A. <strong>62.5</strong></span></div></td>
+</tr><tr>
+<td class="rank">13</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#002B5C;--s:#D31145"><span class="logo-fallback">MIN</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/142.svg" alt="MIN logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIN</strong><small>OBER.B</small></div></div></td>
+<td><span class="win-badge win-very-low">36.7% · Muy baja</span><small>vs KC · diferencia -10.9</small></td>
+<td><strong>42.8</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>53.7<small>índice del rival</small></td>
+<td class="damage-main">2.90<small>ER del abridor</small></td>
+<td>5.10<small>final con este abridor</small></td>
+<td>2.20<small>fuera del abridor</small></td>
+<td>56.9%<small>del daño final</small></td>
+<td class="damage-main">4.10<small>RA E.E.A.</small></td>
+<td class="positive">+1.20<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>42.1</strong></span><span>E.E.A. <strong>43.6</strong></span></div></td>
+</tr><tr>
+<td class="rank">14</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#00A3E0;--s:#EF3340"><span class="logo-fallback">MIA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/146.svg" alt="MIA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>MIA</strong><small>JUNK.J</small></div></div></td>
+<td><span class="win-badge win-very-low">34.9% · Muy baja</span><small>vs ATL · diferencia -12.5</small></td>
+<td><strong>46.4</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>58.9<small>índice del rival</small></td>
+<td class="damage-main">2.90<small>ER del abridor</small></td>
+<td>4.60<small>final con este abridor</small></td>
+<td>1.70<small>fuera del abridor</small></td>
+<td>63.0%<small>del daño final</small></td>
+<td class="damage-main">3.40<small>RA E.E.A.</small></td>
+<td class="positive">+0.50<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation neutral">Daño similar entre abridor y equipo</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>35.9</strong></span><span>E.E.A. <strong>59.1</strong></span></div></td>
+</tr><tr>
+<td class="rank">15</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0C2C56;--s:#005C5C"><span class="logo-fallback">SEA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/136.svg" alt="SEA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>SEA</strong><small>MILLER.B</small></div></div></td>
+<td><span class="win-badge win-very-low">34.0% · Muy baja</span><small>vs DET · diferencia -13.3</small></td>
+<td><strong>50.0</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>63.3<small>índice del rival</small></td>
+<td class="damage-main">1.90<small>ER del abridor</small></td>
+<td>4.00<small>final con este abridor</small></td>
+<td>2.10<small>fuera del abridor</small></td>
+<td>47.5%<small>del daño final</small></td>
+<td class="damage-main">5.10<small>RA E.E.A.</small></td>
+<td class="positive">+3.20<small>E.E.A. − pitcher</small></td>
+<td><span class="diag starter-better">Abridor contiene; el daño crece fuera de su actuación</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>68.8</strong></span><span>E.E.A. <strong>27.1</strong></span></div></td>
+</tr><tr>
+<td class="rank">16</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#E31937;--s:#002B5C"><span class="logo-fallback">CLE</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/114.svg" alt="CLE logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CLE</strong><small>GRIFFIN.F</small></div></div></td>
+<td><span class="win-badge win-very-low">30.4% · Muy baja</span><small>vs NYM · diferencia -16.5</small></td>
+<td><strong>62.6</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>79.1<small>índice del rival</small></td>
+<td class="damage-main">1.60<small>ER del abridor</small></td>
+<td>3.80<small>final con este abridor</small></td>
+<td>2.20<small>fuera del abridor</small></td>
+<td>42.1%<small>del daño final</small></td>
+<td class="damage-main">4.00<small>RA E.E.A.</small></td>
+<td class="positive">+2.40<small>E.E.A. − pitcher</small></td>
+<td><span class="diag starter-better">Abridor contiene; el daño crece fuera de su actuación</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>83.1</strong></span><span>E.E.A. <strong>37.4</strong></span></div></td>
+</tr><tr>
+<td class="rank">17</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#0E3386;--s:#CC3433"><span class="logo-fallback">CHC</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/112.svg" alt="CHC logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CHC</strong><small>PETERSON.D</small></div></div></td>
+<td><span class="win-badge win-very-low">29.8% · Muy baja</span><small>vs TOR · diferencia -17.2</small></td>
+<td><strong>51.2</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>68.4<small>índice del rival</small></td>
+<td class="damage-main">3.50<small>ER del abridor</small></td>
+<td>6.30<small>final con este abridor</small></td>
+<td>2.80<small>fuera del abridor</small></td>
+<td>55.6%<small>del daño final</small></td>
+<td class="damage-main">2.80<small>RA E.E.A.</small></td>
+<td class="negative">-0.70<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation neutral">Daño similar entre abridor y equipo</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>23.9</strong></span><span>E.E.A. <strong>84.6</strong></span></div></td>
+</tr><tr>
+<td class="rank">18</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#111111;--s:#C4CED4"><span class="logo-fallback">CHW</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/145.svg" alt="CHW logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>CHW</strong><small>CASTILLO.L</small></div></div></td>
+<td><span class="win-badge win-very-low">26.1% · Muy baja</span><small>vs BOS · diferencia -20.8</small></td>
+<td><strong>51.0</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>71.9<small>índice del rival</small></td>
+<td class="damage-main">2.50<small>ER del abridor</small></td>
+<td>4.40<small>final con este abridor</small></td>
+<td>1.90<small>fuera del abridor</small></td>
+<td>56.8%<small>del daño final</small></td>
+<td class="damage-main">4.20<small>RA E.E.A.</small></td>
+<td class="positive">+1.70<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>49.4</strong></span><span>E.E.A. <strong>53.1</strong></span></div></td>
+</tr><tr>
+<td class="rank">19</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#FDB827;--s:#27251F"><span class="logo-fallback">PIT</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/134.svg" alt="PIT logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>PIT</strong><small>ASHCRAFT.B</small></div></div></td>
+<td><span class="win-badge win-very-low">22.4% · Muy baja</span><small>vs MIL · diferencia -24.8</small></td>
+<td><strong>29.0</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>53.8<small>índice del rival</small></td>
+<td class="damage-main">3.30<small>ER del abridor</small></td>
+<td>4.90<small>final con este abridor</small></td>
+<td>1.60<small>fuera del abridor</small></td>
+<td>67.3%<small>del daño final</small></td>
+<td class="damage-main">4.60<small>RA E.E.A.</small></td>
+<td class="positive">+1.30<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>30.8</strong></span><span>E.E.A. <strong>26.7</strong></span></div></td>
+</tr><tr>
+<td class="rank">20</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#BA0021;--s:#003263"><span class="logo-fallback">LAA</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/108.svg" alt="LAA logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>LAA</strong><small>JOHNSON.R</small></div></div></td>
+<td><span class="win-badge win-very-low">20.0% · Muy baja</span><small>vs BAL · diferencia -27.7</small></td>
+<td><strong>20.9</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>48.7<small>índice del rival</small></td>
+<td class="damage-main">3.44<small>ER del abridor</small></td>
+<td>5.33<small>final con este abridor</small></td>
+<td>1.89<small>fuera del abridor</small></td>
+<td>64.6%<small>del daño final</small></td>
+<td class="damage-main">4.50<small>RA E.E.A.</small></td>
+<td class="positive">+1.06<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>19.9</strong></span><span>E.E.A. <strong>22.2</strong></span></div></td>
+</tr><tr>
+<td class="rank">21</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#AB0003;--s:#14225A"><span class="logo-fallback">WAS</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/120.svg" alt="WAS logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>WAS</strong><small>MIKOLAS.M</small></div></div></td>
+<td><span class="win-badge win-very-low">16.7% · Muy baja</span><small>vs PHI · diferencia -32.2</small></td>
+<td><strong>28.6</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>60.8<small>índice del rival</small></td>
+<td class="damage-main">2.80<small>ER del abridor</small></td>
+<td>5.80<small>final con este abridor</small></td>
+<td>3.00<small>fuera del abridor</small></td>
+<td>48.3%<small>del daño final</small></td>
+<td class="damage-main">5.20<small>RA E.E.A.</small></td>
+<td class="positive">+2.40<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>36.3</strong></span><span>E.E.A. <strong>19.2</strong></span></div></td>
+</tr><tr>
+<td class="rank">22</td>
+<td><div class="entity"><span class="team-badge sm" style="--p:#003831;--s:#EFB21E"><span class="logo-fallback">OAK</span><img src="https://www.mlbstatic.com/team-logos/team-cap-on-dark/133.svg" alt="OAK logo" loading="lazy" onerror="this.style.display='none'"></span><div><strong>OAK</strong><small>BARNETT.M</small></div></div></td>
+<td><span class="win-badge win-very-low">8.7% · Muy baja</span><small>vs CIN · diferencia -47.1</small></td>
+<td><strong>13.5</strong><small>55% P.E.A. + 45% E.E.A.</small></td>
+<td>60.6<small>índice del rival</small></td>
+<td class="damage-main">3.14<small>ER del abridor</small></td>
+<td>4.57<small>final con este abridor</small></td>
+<td>1.43<small>fuera del abridor</small></td>
+<td>68.8%<small>del daño final</small></td>
+<td class="damage-main">6.70<small>RA E.E.A.</small></td>
+<td class="positive">+3.56<small>E.E.A. − pitcher</small></td>
+<td><span class="diag mixed">Daño mixto / intermedio</span><small class="relation warn">El equipo recibe bastante más daño que el abridor</small></td>
+<td><div class="score-pair"><span>P.E.A. <strong>18.9</strong></span><span>E.E.A. <strong>6.9</strong></span></div></td>
+</tr></tbody></table></div></section>
+<section class="panel" id="metodo"><div class="panel-head"><h2>Metodología y lectura</h2><p>Las capas permanecen separadas; la matriz final únicamente explica la relación entre ellas.</p></div><div class="method"><div class="method-card"><h3>P.E.A.</h3><p>Usa toda la muestra disponible del pitcher en el archivo, después de deduplicar partidos. Evalúa ERA, ER por apertura, innings promedio, salidas de calidad y distribución de daño. El cambio de equipo no reinicia al pitcher.</p></div><div class="method-card"><h3>E.E.A.</h3><p>Usa toda la muestra disponible del bloque EQUIPO, después de deduplicar partidos. Evalúa carreras anotadas, carreras recibidas, diferencial, resultados y frecuencias de 4+ / menos de 5.</p></div><div class="method-card"><h3>Cruce de daño</h3><p><strong>Daño fuera del abridor = carreras finales recibidas con ese pitcher − ER del abridor.</strong> Incluye relevo, defensa, carreras no limpias y daño posterior. No debe interpretarse como bullpen puro.</p></div><div class="method-card"><h3>Probabilidad Termómetro</h3><p>Primero calcula un índice propio con 55% P.E.A. y 45% E.E.A. Luego lo compara con el índice del rival del día mediante una curva logística de escala 20. Es una probabilidad interna del modelo; cada pareja suma 100% y no incorpora cuotas, P.V.E. ni H2H.</p></div></div></section>
+<div class="footer">Modelo Termómetro MLB v2 · motor 2.0 · 6 de agosto de 2026 · Archivo fuente: Analisis_MLB_IA2.xlsx · Muestra completa disponible · Ranking de probabilidad P.E.A. × E.E.A. · Powered by PRO</div></div>
+<script>
+const b=document.getElementById('theme');
+b.onclick=()=>{const h=document.documentElement;const light=h.getAttribute('data-theme')==='light';if(light)h.removeAttribute('data-theme');else h.setAttribute('data-theme','light');b.textContent=light?'🌙 Cambiar tema':'☀️ Cambiar tema';};
+document.querySelectorAll('.filter').forEach(input=>{input.addEventListener('input',()=>{const q=input.value.toLowerCase().trim();const table=document.getElementById(input.dataset.table);table.querySelectorAll('tbody tr').forEach(row=>{row.style.display=row.innerText.toLowerCase().includes(q)?'':'none';});});});
+</script></body></html>
