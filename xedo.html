@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Modelos MLB</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 44px;
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      font-size: 18px;
+      margin-bottom: 35px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 22px;
+      margin: 18px 0;
+      border-radius: 16px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.25);
+      border: 1px solid #334155;
+    }
+
+    .card h2 {
+      margin: 0 0 8px 0;
+      color: #f8fafc;
+      font-size: 24px;
+    }
+
+    .card p {
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    a {
+      display: inline-block;
+      background: #22c55e;
+      color: #052e16;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      background: #86efac;
+    }
+
+    .note {
+      margin-top: 35px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+
+    .social-footer {
+      margin-top: 28px;
+      padding: 20px 22px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.22);
+    }
+
+    .social-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .x-logo {
+      width: 48px;
+      height: 48px;
+      padding: 11px;
+      border-radius: 14px;
+      background: #020617;
+      color: #ffffff;
+      flex: 0 0 auto;
+      box-sizing: border-box;
+    }
+
+    .social-label {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .social-handle {
+      color: #f8fafc;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .social-link {
+      background: #f8fafc;
+      color: #020617;
+      white-space: nowrap;
+    }
+
+    .social-link:hover {
+      background: #cbd5e1;
+    }
+
+    @media (max-width: 620px) {
+      body { padding: 22px; }
+      .social-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Modelos MLB</h1>
+    <p class="subtitle">Dashboards y modelos HTML de análisis avanzado para MLB.</p>
+
+    <div class="card">
+      <h2>Dashboard MLB</h2>
+      <p>Vista general del análisis MLB con métricas principales y resumen del modelo.</p>
+      <a href="mlb_dashboard.html">Abrir modelo</a>
+    </div>
+
+    <div class="card">
+      <h2>Escalera Teaser</h2>
+      <p>Modelo de escalera para líneas alternativas, probabilidades y puntos óptimos.</p>
+      <a href="Escalera_teaser.HTML">Abrir modelo</a>
+    </div>
+
+    <div class="card">
+      <h2>Modelo Integrado MLB</h2>
+      <p>Modelo completo con integración de capas, abridores, equipos y señales de mercado.</p>
+      <a href="modelo_integrado_mlb.html">Abrir modelo</a>
+    </div>
+
+    <div class="card">
+      <h2>Modelo Termómetro MLB</h2>
+      <p>Modelo diagnóstico que separa P.E.A. y E.E.A. con muestra completa, compara el daño recibido por el abridor contra el daño total del equipo y ordena los cruces del día según su fortaleza competitiva.</p>
+      <a href="Modelo_Termometro_MLB_v2.html">Abrir modelo</a>
+    </div>
+
+    <div class="card">
+      <h2>Modelo F5 · Ventaja al Salir</h2>
+      <p>Modelo especializado en primeras cinco entradas que analiza cómo dejaron el juego los abridores en sus tres aperturas más recientes. Identifica cruces 3–0 vs 0–3, ventajas F5, diferenciales al salir y sides de carreras por equipo.</p>
+      <a href="F5_v5_comercial.html">Abrir modelo</a>
+    </div>
+   <div class="card">
+      <h2>Modelo Climático · Clima al momento de los juegos</h2>
+      <p>Modelo especializado en leer los datos del clima al momento del juego y determinar como podria afectar en los totales de carreras esperados, sugiere ajustes OU.</p>
+      <a href="mlb_climate_dashboard.html">Abrir modelo</a>
+    </div>
+
+    <div class="card">
+      <h2>Modelo Caballo Pitcher · Ranking interno de temporada</h2>
+      <p>Modelo especializado en comparar al abridor del día contra la rotación interna de su propio equipo usando únicamente la temporada más reciente del dataset. Detecta cuándo un equipo sale con su caballo real, cuándo expone su peor brazo disponible y qué cruces tienen mayor diferencial de abridor para mercados F5, ML, Run Line, team totals y alertas de riesgo.</p>
+      <a href="Modelo_Caballo_Pitcher_MLB.html">Abrir modelo</a>
+    </div>
+
+    <div class="card">
+      <h2>Roster Report · Alineaciones del día</h2>
+      <p>Reporte de validación de roster, lineups y ausencias relevantes para MLB, enfocado en detectar impactos de jugadores disponibles/no disponibles antes de tomar una postura de mercado..</p>
+      <a href="mlb_roster_report.html">Abrir modelo</a>
+    </div>
+
+    
+
+    <p class="note">Repositorio: Modelos-MLB · Última actualización: Junio 2026</p>
+
+
+    <div class="social-footer">
+      <div class="social-info">
+        <svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/>
+        </svg>
+        <div>
+          <div class="social-label">Sígueme en X</div>
+          <div class="social-handle">@Ernesto17</div>
+        </div>
+      </div>
+      <a class="social-link" href="https://x.com/Ernesto17" target="_blank" rel="noopener noreferrer" aria-label="Abrir la cuenta @Ernesto17 en X">Ver cuenta en X</a>
+    </div>
+  </div>
+
+</body>
+</html>
