@@ -3,242 +3,523 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mejor postura PRO del día · 20 agosto 2026</title>
+<title>Mejor postura PRO del día · 20 agosto 2026 · PRO Black Edition</title>
 <style>
 :root{
-  --bg:#f4f6f8;--card:#fff;--text:#131820;--muted:#68717d;
-  --border:#dfe4ea;--green:#148447;--greenbg:#eef9f2;
-  --yellow:#b07a00;--yellowbg:#fff8df;--navy:#111b2b;--gold:#d5aa43;
+  --bg:#080808;
+  --bg2:#101010;
+  --panel:#111111;
+  --panel2:#151515;
+  --panel3:#1a1a1a;
+  --line:#2a2a2a;
+  --text:#f5f0e6;
+  --muted:#b7aa90;
+  --muted2:#8e816a;
+  --gold:#d9b15f;
+  --gold-2:#f3d08b;
+  --gold-soft:rgba(217,177,95,.12);
+  --green:#7fe0ae;
+  --green-soft:rgba(127,224,174,.14);
+  --yellow:#f0c56b;
+  --yellow-soft:rgba(240,197,107,.12);
+  --shadow:0 18px 48px rgba(0,0,0,.38);
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;background:var(--bg);color:var(--text);
+  margin:0;
+  color:var(--text);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(217,177,95,.09), transparent 24%),
+    radial-gradient(circle at top right, rgba(255,215,130,.06), transparent 22%),
+    linear-gradient(180deg, #050505 0%, #0b0b0b 42%, #0f0f0f 100%);
 }
-.wrap{max-width:980px;margin:42px auto;padding:0 18px 40px}
-header{
-  background:linear-gradient(135deg,#0e1725,#18283e);
-  color:white;border-radius:20px;padding:28px 30px;
-  box-shadow:0 14px 40px rgba(20,30,45,.14);
-  border-bottom:4px solid var(--gold);
+.wrap{max-width:1220px;margin:0 auto;padding:34px 18px 48px}
+.hero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(217,177,95,.26);
+  border-radius:28px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.02), rgba(255,255,255,0) 30%),
+    linear-gradient(135deg, #0d0d0d 0%, #141414 38%, #0e0e0e 100%);
+  box-shadow:var(--shadow);
+  padding:34px;
 }
-h1{margin:0;font-size:34px;letter-spacing:-.03em}
-.subtitle{margin:8px 0 0;color:#cbd5e1;font-size:15px}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;font-size:12px;color:#dbe3ec}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:22px}
-.card{
-  background:var(--card);border:1px solid var(--border);border-radius:15px;
-  padding:20px;box-shadow:0 5px 16px rgba(20,30,45,.05);
+.hero:before{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(217,177,95,.07), transparent);
+  pointer-events:none;
 }
-.card.green{border-left:6px solid var(--green);background:linear-gradient(90deg,var(--greenbg),#fff 30%)}
-.card.yellow{border-left:6px solid var(--yellow);background:linear-gradient(90deg,var(--yellowbg),#fff 30%)}
-.game{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
-.pick{font-size:22px;font-weight:900;margin:8px 0 10px;letter-spacing:-.02em}
-.badge{font-size:11px;font-weight:800}
-.green .badge,.green .meta strong{color:var(--green)}
-.yellow .badge,.yellow .meta strong{color:var(--yellow)}
-.meta{margin-top:12px}
-.meta strong{font-size:31px;letter-spacing:-.04em}
-.rank-section{
-  margin-top:28px;background:#fff;border:1px solid var(--border);
-  border-radius:18px;overflow:hidden;box-shadow:0 5px 16px rgba(20,30,45,.05)
+.brand-strip{
+  display:inline-flex; align-items:center; gap:10px;
+  border:1px solid rgba(217,177,95,.28);
+  background:rgba(217,177,95,.08);
+  color:var(--gold-2);
+  border-radius:999px;
+  padding:8px 14px;
+  font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase;
+}
+.hero-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:26px;align-items:end;margin-top:18px}
+h1{
+  margin:14px 0 0;
+  font-size:48px;
+  line-height:1;
+  letter-spacing:-.045em;
+  font-weight:950;
+}
+.subtitle{
+  margin:14px 0 0;
+  color:#d5ccb8;
+  font-size:15px;
+  max-width:720px;
+}
+.hero-meta{
+  display:flex; gap:12px; flex-wrap:wrap; margin-top:22px;
+}
+.meta-chip{
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  color:#e9dfcd;
+  padding:11px 14px;
+  border-radius:16px;
+  min-width:145px;
+}
+.meta-chip .k{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+.meta-chip strong{font-size:24px;letter-spacing:-.03em}
+.hero-pick{
+  border:1px solid rgba(217,177,95,.24);
+  background:
+    linear-gradient(180deg, rgba(217,177,95,.13), rgba(217,177,95,.04)),
+    rgba(255,255,255,.02);
+  border-radius:24px;
+  padding:22px;
+  min-height:100%;
+}
+.hero-pick-label{
+  color:var(--gold-2);
+  font-size:11px; font-weight:900; letter-spacing:.16em; text-transform:uppercase;
+}
+.hero-pick-game{margin-top:16px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.hero-pick-name{margin-top:8px;font-size:24px;font-weight:900;letter-spacing:-.03em;line-height:1.15}
+.hero-pick-pct{margin-top:18px;font-size:42px;font-weight:950;color:var(--gold-2);letter-spacing:-.05em}
+.legend{
+  display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;
+}
+.legend span{
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  color:#d0c5b0;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+}
+.section-head{
+  display:flex;justify-content:space-between;align-items:end;gap:18px;margin-top:30px;margin-bottom:16px;
+}
+.section-head h2{margin:0;font-size:26px;letter-spacing:-.03em}
+.section-head p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.pick-card{
+  border:1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
+    var(--panel);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 10px 24px rgba(0,0,0,.20);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.pick-card:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(0,0,0,.34)}
+.pick-card.high{border-color:rgba(127,224,174,.24)}
+.pick-card.medium{border-color:rgba(240,197,107,.25)}
+.pick-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.game-label{font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.pick-title{margin:10px 0 0;font-size:25px;line-height:1.14;letter-spacing:-.03em}
+.signal{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  font-size:16px;font-weight:900;flex:0 0 auto;
+  border:1px solid;
+}
+.signal.high{background:var(--green-soft);color:var(--green);border-color:rgba(127,224,174,.22)}
+.signal.medium{background:var(--yellow-soft);color:var(--yellow);border-color:rgba(240,197,107,.24)}
+.pick-foot{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-top:22px}
+.confidence-pill{
+  border-radius:999px;padding:9px 12px;font-size:12px;font-weight:800;letter-spacing:.03em
+}
+.confidence-pill.high{background:var(--green-soft);color:var(--green)}
+.confidence-pill.medium{background:var(--yellow-soft);color:var(--yellow)}
+.prob-block{text-align:right}
+.prob-caption{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
+.prob-block strong{font-size:34px;letter-spacing:-.05em;color:var(--gold-2)}
+.ranking{
+  margin-top:28px;
+  border:1px solid rgba(217,177,95,.20);
+  border-radius:26px;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+    var(--panel2);
+  box-shadow:var(--shadow);
 }
 .rank-head{
-  background:var(--navy);color:#fff;padding:20px 22px;border-bottom:3px solid var(--gold)
+  padding:24px 24px 20px;
+  border-bottom:1px solid rgba(217,177,95,.18);
+  background:
+    linear-gradient(90deg, rgba(217,177,95,.12), rgba(217,177,95,0) 42%),
+    #111111;
 }
-.rank-head h2{margin:0;font-size:24px}
-.rank-head p{margin:6px 0 0;color:#bdc7d4;font-size:13px}
+.rank-head h2{margin:0;font-size:26px;letter-spacing:-.03em}
+.rank-head p{margin:7px 0 0;color:var(--muted);font-size:13px}
 .rank-row{
-  display:grid;grid-template-columns:54px 1fr 90px;align-items:center;
-  gap:12px;padding:15px 20px;border-bottom:1px solid #edf0f3
+  display:grid;grid-template-columns:66px 1fr 120px;align-items:center;gap:16px;
+  padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.05);
 }
 .rank-row:last-child{border-bottom:0}
-.rank-num{font-size:14px;font-weight:900;color:#76808c}
-.rank-game{font-size:11px;font-weight:800;color:#737d89;letter-spacing:.05em}
-.rank-pick{font-size:17px;font-weight:850;margin-top:2px}
-.rank-pct{font-size:22px;font-weight:950;color:var(--green);text-align:right}
-footer{text-align:center;margin-top:24px;font-size:13px;line-height:1.7;color:var(--muted)}
-footer strong{color:#273345}
-@media(max-width:700px){
+.rank-row.tier-top{
+  background:linear-gradient(90deg, rgba(217,177,95,.10), rgba(217,177,95,.02) 40%, transparent 100%);
+}
+.rank-num{
+  font-size:15px;font-weight:950;color:var(--gold-2);
+}
+.rank-game{font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.rank-pick{font-size:18px;font-weight:850;margin-top:4px}
+.rank-pct{text-align:right;font-size:28px;font-weight:950;letter-spacing:-.05em;color:var(--gold-2)}
+.footer{
+  margin-top:24px;
+  text-align:center;
+  color:#b0a38d;
+  font-size:13px;
+  line-height:1.7;
+}
+.footer strong{color:var(--gold-2)}
+.signature{
+  margin-top:10px;
+  color:#7e725f;
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .wrap{padding:22px 14px 32px}
+  .hero{padding:24px}
+  h1{font-size:36px}
   .grid{grid-template-columns:1fr}
-  .wrap{margin:22px auto}
-  header{padding:23px 20px}
-  h1{font-size:28px}
-  .rank-row{grid-template-columns:42px 1fr 74px;padding:13px 14px}
-  .rank-pct{font-size:19px}
+  .rank-row{grid-template-columns:50px 1fr 86px;padding:15px 16px;gap:12px}
+  .rank-pct{font-size:21px}
+  .pick-title{font-size:22px}
+  .prob-block strong{font-size:28px}
 }
 </style>
 </head>
 <body>
-<main class="wrap">
-<header>
-  <h1>Mejor postura PRO del día</h1>
-  <p class="subtitle">Benchmark oficial · 20 de agosto de 2026 · Mezcla A</p>
-  <div class="legend">
-    <span>🟢 Confianza alta</span>
-    <span>🟡 Confianza media</span>
-    <span>Benchmark oficial previo a resultados</span>
-  </div>
-</header>
-
-<section class="grid">
-
-    <article class="card green">
-      <div class="game">STL @ CIN</div>
-      <div class="pick">STL más de 3 carreras</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>80.4%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">SF @ CLE</div>
-      <div class="pick">SF menos de 5 carreras</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>80.4%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">TOR @ TB</div>
-      <div class="pick">TOR más de 3 carreras</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>74.8%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">SEA @ MIL</div>
-      <div class="pick">MIL más de 3 carreras</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>88.1%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">ATL @ CHW</div>
-      <div class="pick">CHW +1.5</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>78.7%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">OAK @ KC</div>
-      <div class="pick">KC ML</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>88.0%</strong></div>
-    </article>
-
-    <article class="card yellow">
-      <div class="game">NYY @ BAL</div>
-      <div class="pick">BAL menos de 5 carreras</div>
-      <div class="badge">🟡 CONFIANZA MEDIA</div>
-      <div class="meta"><strong>70.3%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">WAS @ TEX</div>
-      <div class="pick">TEX menos de 5 carreras</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>76.4%</strong></div>
-    </article>
-
-    <article class="card green">
-      <div class="game">LAA @ HOU</div>
-      <div class="pick">HOU ML</div>
-      <div class="badge">🟢 CONFIANZA ALTA</div>
-      <div class="meta"><strong>88.0%</strong></div>
-    </article>
-
-</section>
-
-<section class="rank-section">
-  <div class="rank-head">
-    <h2>Ranking por probabilidad de hit</h2>
-    <p>Ordenado estrictamente de mayor a menor probabilidad estimada de hit.</p>
-  </div>
-
-    <div class="rank-row">
-      <div class="rank-num">#1</div>
-      <div class="rank-main">
-        <div class="rank-game">SEA @ MIL</div>
-        <div class="rank-pick">MIL más de 3 carreras</div>
+  <main class="wrap">
+    <header class="hero">
+      <div class="brand-strip">PRO Sports Analytics · Black Edition</div>
+      <div class="hero-grid">
+        <div>
+          <h1>Mejor postura PRO del día</h1>
+          <p class="subtitle">Benchmark oficial · 20 de agosto de 2026 · Mezcla A</p>
+          <div class="hero-meta">
+            <div class="meta-chip"><span class="k">Juegos</span><strong>9</strong></div>
+            <div class="meta-chip"><span class="k">Confianza alta</span><strong>8</strong></div>
+            <div class="meta-chip"><span class="k">Confianza media</span><strong>1</strong></div>
+          </div>
+          <div class="legend">
+            <span>Black Luxury Skin</span>
+            <span>Benchmark oficial previo a resultados</span>
+            <span>Jerarquía premium de picks</span>
+          </div>
+        </div>
+        
+      <div class="hero-pick">
+        <div class="hero-pick-label">TOP EDGE DEL DÍA</div>
+        <div class="hero-pick-game">SEA @ MIL</div>
+        <div class="hero-pick-name">MIL más de 3 carreras</div>
+        <div class="hero-pick-pct">88.1%</div>
       </div>
-      <div class="rank-pct">88.1%</div>
-    </div>
-
-    <div class="rank-row">
-      <div class="rank-num">#2</div>
-      <div class="rank-main">
-        <div class="rank-game">OAK @ KC</div>
-        <div class="rank-pick">KC ML</div>
+    
       </div>
-      <div class="rank-pct">88.0%</div>
-    </div>
+    </header>
 
-    <div class="rank-row">
-      <div class="rank-num">#3</div>
-      <div class="rank-main">
-        <div class="rank-game">LAA @ HOU</div>
-        <div class="rank-pick">HOU ML</div>
+    <section class="section-head">
+      <div>
+        <h2>Benchmark oficial por juego</h2>
+        <p>Selección final del modelo con tratamiento visual premium y lectura inmediata por nivel de confianza.</p>
       </div>
-      <div class="rank-pct">88.0%</div>
-    </div>
+    </section>
 
-    <div class="rank-row">
-      <div class="rank-num">#4</div>
-      <div class="rank-main">
-        <div class="rank-game">STL @ CIN</div>
-        <div class="rank-pick">STL más de 3 carreras</div>
+    <section class="grid">
+      
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">STL @ CIN</div>
+            <h3 class="pick-title">STL más de 3 carreras</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>80.4%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">SF @ CLE</div>
+            <h3 class="pick-title">SF menos de 5 carreras</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>80.4%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">TOR @ TB</div>
+            <h3 class="pick-title">TOR más de 3 carreras</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>74.8%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">SEA @ MIL</div>
+            <h3 class="pick-title">MIL más de 3 carreras</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>88.1%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">ATL @ CHW</div>
+            <h3 class="pick-title">CHW +1.5</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>78.7%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">OAK @ KC</div>
+            <h3 class="pick-title">KC ML</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>88.0%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card medium">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">NYY @ BAL</div>
+            <h3 class="pick-title">BAL menos de 5 carreras</h3>
+          </div>
+          <div class="signal medium">◆</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill medium">Confianza media</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>70.3%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">WAS @ TEX</div>
+            <h3 class="pick-title">TEX menos de 5 carreras</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>76.4%</strong>
+          </div>
+        </div>
+      </article>
+    
+
+      <article class="pick-card high">
+        <div class="pick-head">
+          <div>
+            <div class="game-label">LAA @ HOU</div>
+            <h3 class="pick-title">HOU ML</h3>
+          </div>
+          <div class="signal high">▲</div>
+        </div>
+        <div class="pick-foot">
+          <span class="confidence-pill high">Confianza alta</span>
+          <div class="prob-block">
+            <span class="prob-caption">Probabilidad</span>
+            <strong>88.0%</strong>
+          </div>
+        </div>
+      </article>
+    
+    </section>
+
+    <section class="ranking">
+      <div class="rank-head">
+        <h2>Ranking por probabilidad de hit</h2>
+        <p>Ordenado estrictamente de mayor a menor probabilidad estimada. Los tres primeros quedan resaltados como capa elite.</p>
       </div>
-      <div class="rank-pct">80.4%</div>
-    </div>
-
-    <div class="rank-row">
-      <div class="rank-num">#5</div>
-      <div class="rank-main">
-        <div class="rank-game">SF @ CLE</div>
-        <div class="rank-pick">SF menos de 5 carreras</div>
+      
+      <div class="rank-row tier-top">
+        <div class="rank-num">#1</div>
+        <div class="rank-main">
+          <div class="rank-game">SEA @ MIL</div>
+          <div class="rank-pick">MIL más de 3 carreras</div>
+        </div>
+        <div class="rank-pct">88.1%</div>
       </div>
-      <div class="rank-pct">80.4%</div>
-    </div>
+    
 
-    <div class="rank-row">
-      <div class="rank-num">#6</div>
-      <div class="rank-main">
-        <div class="rank-game">ATL @ CHW</div>
-        <div class="rank-pick">CHW +1.5</div>
+      <div class="rank-row tier-top">
+        <div class="rank-num">#2</div>
+        <div class="rank-main">
+          <div class="rank-game">OAK @ KC</div>
+          <div class="rank-pick">KC ML</div>
+        </div>
+        <div class="rank-pct">88.0%</div>
       </div>
-      <div class="rank-pct">78.7%</div>
-    </div>
+    
 
-    <div class="rank-row">
-      <div class="rank-num">#7</div>
-      <div class="rank-main">
-        <div class="rank-game">WAS @ TEX</div>
-        <div class="rank-pick">TEX menos de 5 carreras</div>
+      <div class="rank-row tier-top">
+        <div class="rank-num">#3</div>
+        <div class="rank-main">
+          <div class="rank-game">LAA @ HOU</div>
+          <div class="rank-pick">HOU ML</div>
+        </div>
+        <div class="rank-pct">88.0%</div>
       </div>
-      <div class="rank-pct">76.4%</div>
-    </div>
+    
 
-    <div class="rank-row">
-      <div class="rank-num">#8</div>
-      <div class="rank-main">
-        <div class="rank-game">TOR @ TB</div>
-        <div class="rank-pick">TOR más de 3 carreras</div>
+      <div class="rank-row tier-regular">
+        <div class="rank-num">#4</div>
+        <div class="rank-main">
+          <div class="rank-game">STL @ CIN</div>
+          <div class="rank-pick">STL más de 3 carreras</div>
+        </div>
+        <div class="rank-pct">80.4%</div>
       </div>
-      <div class="rank-pct">74.8%</div>
-    </div>
+    
 
-    <div class="rank-row">
-      <div class="rank-num">#9</div>
-      <div class="rank-main">
-        <div class="rank-game">NYY @ BAL</div>
-        <div class="rank-pick">BAL menos de 5 carreras</div>
+      <div class="rank-row tier-regular">
+        <div class="rank-num">#5</div>
+        <div class="rank-main">
+          <div class="rank-game">SF @ CLE</div>
+          <div class="rank-pick">SF menos de 5 carreras</div>
+        </div>
+        <div class="rank-pct">80.4%</div>
       </div>
-      <div class="rank-pct" style="color:var(--yellow)">70.3%</div>
-    </div>
-</section>
+    
 
-<footer>
-  Benchmark definitivo previo a resultados · <strong>Powered by PRO</strong>
-</footer>
-</main>
+      <div class="rank-row tier-regular">
+        <div class="rank-num">#6</div>
+        <div class="rank-main">
+          <div class="rank-game">ATL @ CHW</div>
+          <div class="rank-pick">CHW +1.5</div>
+        </div>
+        <div class="rank-pct">78.7%</div>
+      </div>
+    
+
+      <div class="rank-row tier-regular">
+        <div class="rank-num">#7</div>
+        <div class="rank-main">
+          <div class="rank-game">WAS @ TEX</div>
+          <div class="rank-pick">TEX menos de 5 carreras</div>
+        </div>
+        <div class="rank-pct">76.4%</div>
+      </div>
+    
+
+      <div class="rank-row tier-regular">
+        <div class="rank-num">#8</div>
+        <div class="rank-main">
+          <div class="rank-game">TOR @ TB</div>
+          <div class="rank-pick">TOR más de 3 carreras</div>
+        </div>
+        <div class="rank-pct">74.8%</div>
+      </div>
+    
+
+      <div class="rank-row tier-regular">
+        <div class="rank-num">#9</div>
+        <div class="rank-main">
+          <div class="rank-game">NYY @ BAL</div>
+          <div class="rank-pick">BAL menos de 5 carreras</div>
+        </div>
+        <div class="rank-pct">70.3%</div>
+      </div>
+    
+    </section>
+
+    <footer class="footer">
+      Benchmark definitivo previo a resultados · <strong>Powered by PRO</strong>
+      <div class="signature">Designed for premium presentation · PRO Sports</div>
+    </footer>
+  </main>
 </body>
 </html>
