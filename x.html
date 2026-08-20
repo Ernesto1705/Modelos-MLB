@@ -2,202 +2,594 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Modelos MLB</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PRO Sports · Oferta de Modelos MLB</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      padding: 40px;
+    :root{
+      --bg:#07090d;
+      --bg2:#0d1117;
+      --panel:#11161d;
+      --panel2:#151c24;
+      --line:#27313c;
+      --text:#f2f5f8;
+      --muted:#a8b2bf;
+      --soft:#c8d0da;
+      --silver:#d8dee6;
+      --silver2:#aeb8c5;
+      --silver3:#8e99a8;
+      --accent:#eef2f6;
+      --glow:rgba(255,255,255,.08);
+      --shadow:0 18px 44px rgba(0,0,0,.42);
     }
 
-    .container {
-      max-width: 900px;
-      margin: auto;
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.06), transparent 22%),
+        radial-gradient(circle at top right, rgba(216,222,230,.05), transparent 20%),
+        linear-gradient(180deg,#05070a 0%, #0a0e13 45%, #0f141b 100%);
     }
 
-    h1 {
-      font-size: 44px;
-      color: #38bdf8;
-      margin-bottom: 10px;
+    .wrap{
+      max-width:1240px;
+      margin:0 auto;
+      padding:34px 18px 48px;
     }
 
-    .subtitle {
-      color: #cbd5e1;
-      font-size: 18px;
-      margin-bottom: 35px;
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(216,222,230,.14);
+      border-radius:28px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.04), rgba(255,255,255,0) 35%),
+        linear-gradient(135deg,#0d1218 0%,#131a22 42%,#0d1218 100%);
+      box-shadow:var(--shadow);
+      padding:34px;
     }
 
-    .card {
-      background: #1e293b;
-      padding: 22px;
-      margin: 18px 0;
-      border-radius: 16px;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.25);
-      border: 1px solid #334155;
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+      pointer-events:none;
     }
 
-    .card h2 {
-      margin: 0 0 8px 0;
-      color: #f8fafc;
-      font-size: 24px;
+    .hero-top{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:1px solid rgba(216,222,230,.18);
+      color:var(--silver);
+      background:rgba(255,255,255,.03);
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
     }
 
-    .card p {
-      color: #cbd5e1;
-      margin-bottom: 16px;
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.25fr .75fr;
+      gap:26px;
+      align-items:end;
+      margin-top:18px;
     }
 
-    a {
-      display: inline-block;
-      background: #22c55e;
-      color: #052e16;
-      padding: 10px 16px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
+    h1{
+      margin:14px 0 0;
+      font-size:52px;
+      line-height:0.98;
+      letter-spacing:-.05em;
+      font-weight:950;
     }
 
-    a:hover {
-      background: #86efac;
+    .subtitle{
+      margin:14px 0 0;
+      color:#d6dde5;
+      font-size:17px;
+      max-width:760px;
+      line-height:1.65;
     }
 
-    .note {
-      margin-top: 35px;
-      color: #94a3b8;
-      font-size: 14px;
+    .hero-points{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:24px;
     }
 
-
-    .social-footer {
-      margin-top: 28px;
-      padding: 20px 22px;
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      box-shadow: 0 8px 22px rgba(0,0,0,0.22);
+    .hero-pill{
+      border:1px solid rgba(216,222,230,.12);
+      background:rgba(255,255,255,.03);
+      color:#d8e0e8;
+      border-radius:14px;
+      padding:12px 14px;
+      min-width:170px;
     }
 
-    .social-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+    .hero-pill span{
+      display:block;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--silver3);
+      margin-bottom:6px;
     }
 
-    .x-logo {
-      width: 48px;
-      height: 48px;
-      padding: 11px;
-      border-radius: 14px;
-      background: #020617;
-      color: #ffffff;
-      flex: 0 0 auto;
-      box-sizing: border-box;
+    .hero-pill strong{
+      font-size:22px;
+      letter-spacing:-.03em;
     }
 
-    .social-label {
-      color: #94a3b8;
-      font-size: 13px;
-      margin-bottom: 4px;
+    .feature-box{
+      border:1px solid rgba(216,222,230,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        rgba(17,22,29,.9);
+      border-radius:24px;
+      padding:22px;
+      min-height:100%;
+      box-shadow:0 12px 28px rgba(0,0,0,.25);
     }
 
-    .social-handle {
-      color: #f8fafc;
-      font-size: 21px;
-      font-weight: bold;
+    .feature-label{
+      color:var(--silver2);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
     }
 
-    .social-link {
-      background: #f8fafc;
-      color: #020617;
-      white-space: nowrap;
+    .feature-title{
+      margin-top:14px;
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.03em;
+      line-height:1.1;
     }
 
-    .social-link:hover {
-      background: #cbd5e1;
+    .feature-copy{
+      margin-top:10px;
+      color:#c7d0da;
+      font-size:14px;
+      line-height:1.65;
     }
 
-    @media (max-width: 620px) {
-      body { padding: 22px; }
-      .social-footer {
-        align-items: flex-start;
-        flex-direction: column;
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      text-decoration:none;
+      border-radius:14px;
+      padding:13px 18px;
+      font-weight:800;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .btn:hover{ transform:translateY(-1px); }
+
+    .btn-primary{
+      margin-top:16px;
+      background:linear-gradient(180deg,#eef2f6,#d6dee7);
+      color:#091018;
+      box-shadow:0 10px 22px rgba(255,255,255,.08);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.03);
+      color:var(--silver);
+      border:1px solid rgba(216,222,230,.15);
+    }
+
+    .section{
+      margin-top:28px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:18px;
+      margin-bottom:16px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:28px;
+      letter-spacing:-.04em;
+    }
+
+    .section-head p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+      max-width:760px;
+    }
+
+    .about{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+    }
+
+    .info-card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
+        var(--panel);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 10px 28px rgba(0,0,0,.18);
+    }
+
+    .info-card h3{
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.03em;
+    }
+
+    .info-card p{
+      margin:0;
+      color:#c7cfda;
+      font-size:15px;
+      line-height:1.75;
+    }
+
+    .checklist{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:12px;
+    }
+
+    .checklist li{
+      display:flex;
+      gap:12px;
+      color:#d7dde5;
+      font-size:14px;
+      line-height:1.6;
+      align-items:flex-start;
+    }
+
+    .check{
+      width:24px;
+      height:24px;
+      border-radius:8px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(216,222,230,.16);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      color:var(--silver);
+      font-size:13px;
+      font-weight:900;
+    }
+
+    .models-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+    }
+
+    .model-card{
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:230px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
+        var(--panel2);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 10px 24px rgba(0,0,0,.20);
+      transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+
+    .model-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(216,222,230,.24);
+      box-shadow:0 18px 34px rgba(0,0,0,.26);
+    }
+
+    .model-kicker{
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--silver3);
+      margin-bottom:8px;
+    }
+
+    .model-card h3{
+      margin:0;
+      font-size:24px;
+      line-height:1.15;
+      letter-spacing:-.03em;
+    }
+
+    .model-card p{
+      margin:12px 0 0;
+      color:#c6ced8;
+      font-size:14px;
+      line-height:1.72;
+    }
+
+    .card-actions{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .model-tag{
+      color:var(--silver2);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.04em;
+    }
+
+    .benchmark-card{
+      border:1px solid rgba(216,222,230,.22);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.01)),
+        #111821;
+    }
+
+    .footer{
+      margin-top:30px;
+      border:1px solid rgba(216,222,230,.12);
+      background:rgba(255,255,255,.02);
+      border-radius:20px;
+      padding:22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .footer p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    .foot-note{
+      color:#7f8a98;
+      font-size:12px;
+      margin-top:10px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    @media (max-width:980px){
+      .hero-grid,.about{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width:760px){
+      .wrap{ padding:22px 14px 34px; }
+      .hero{ padding:24px; }
+      h1{ font-size:38px; }
+      .models-grid{ grid-template-columns:1fr; }
+      .footer{
+        flex-direction:column;
+        align-items:flex-start;
       }
     }
   </style>
 </head>
 <body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="hero-top">PRO Sports · Oferta de Modelos MLB</div>
+      <div class="hero-grid">
+        <div>
+          <h1>Modelos MLB con enfoque profesional, estructural y accionable</h1>
+          <p class="subtitle">
+            Desarrollo y publico modelos propios orientados a la lectura avanzada de béisbol,
+            combinando información de abridores, forma reciente de los equipos, antecedentes
+            directos, proyecciones por mercado y tableros especializados para tomar decisiones
+            más informadas antes de cada jornada.
+          </p>
+          <div class="hero-points">
+            <div class="hero-pill"><span>Proyecto</span><strong>Modelos MLB</strong></div>
+            <div class="hero-pill"><span>Formato</span><strong>Dashboards HTML</strong></div>
+            <div class="hero-pill"><span>Enfoque</span><strong>Lectura pregame</strong></div>
+          </div>
+        </div>
 
-  <div class="container">
-    <h1>Modelos MLB</h1>
-    <p class="subtitle">Dashboards y modelos HTML de análisis avanzado para MLB.</p>
-
-    <div class="card">
-      <h2>Dashboard MLB</h2>
-      <p>Vista general del análisis MLB con métricas principales y resumen del modelo.</p>
-      <a href="mlb_dashboard.html">Abrir modelo</a>
-    </div>
-
-    <div class="card">
-      <h2>Escalera Teaser</h2>
-      <p>Modelo de escalera para líneas alternativas, probabilidades y puntos óptimos.</p>
-      <a href="Escalera_teaser.HTML">Abrir modelo</a>
-    </div>
-
-    <div class="card">
-      <h2>Modelo Integrado MLB</h2>
-      <p>Modelo completo con integración de capas, abridores, equipos y señales de mercado.</p>
-      <a href="modelo_integrado_mlb.html">Abrir modelo</a>
-    </div>
-
-    <div class="card">
-      <h2>Modelo Termómetro MLB</h2>
-      <p>Modelo diagnóstico que separa P.E.A. y E.E.A. con muestra completa, compara el daño recibido por el abridor contra el daño total del equipo y ordena los cruces del día según su fortaleza competitiva.</p>
-      <a href="Modelo_Termometro_MLB_v2.html">Abrir modelo</a>
-    </div>
-
-    <div class="card">
-      <h2>Modelo F5 · Ventaja al Salir</h2>
-      <p>Modelo especializado en primeras cinco entradas que analiza cómo dejaron el juego los abridores en sus tres aperturas más recientes. Identifica cruces 3–0 vs 0–3, ventajas F5, diferenciales al salir y sides de carreras por equipo.</p>
-      <a href="F5_v5_comercial.html">Abrir modelo</a>
-    </div>
-   <div class="card">
-      <h2>Modelo Climático · Clima al momento de los juegos</h2>
-      <p>Modelo especializado en leer los datos del clima al momento del juego y determinar como podria afectar en los totales de carreras esperados, sugiere ajustes OU.</p>
-      <a href="mlb_climate_dashboard.html">Abrir modelo</a>
-    </div>
-
-    <div class="card">
-      <h2>Modelo Caballo Pitcher · Ranking interno de temporada</h2>
-      <p>Modelo especializado en comparar al abridor del día contra la rotación interna de su propio equipo usando únicamente la temporada más reciente del dataset. Detecta cuándo un equipo sale con su caballo real, cuándo expone su peor brazo disponible y qué cruces tienen mayor diferencial de abridor para mercados F5, ML, Run Line, team totals y alertas de riesgo.</p>
-      <a href="Modelo_Caballo_Pitcher_MLB.html">Abrir modelo</a>
-    </div>
-
-    <div class="card">
-      <h2>Roster Report · Alineaciones del día</h2>
-      <p>Reporte de validación de roster, lineups y ausencias relevantes para MLB, enfocado en detectar impactos de jugadores disponibles/no disponibles antes de tomar una postura de mercado..</p>
-      <a href="mlb_roster_report.html">Abrir modelo</a>
-    </div>
-
-    
-
-    <p class="note">Repositorio: Modelos-MLB · Última actualización: Junio 2026</p>
-
-
-    <div class="social-footer">
-      <div class="social-info">
-        <svg class="x-logo" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/>
-        </svg>
-        
+        <div class="feature-box">
+          <div class="feature-label">Modelo destacado</div>
+          <div class="feature-title">Mejor postura PRO del día</div>
+          <div class="feature-copy">
+            Benchmark oficial que resume la mejor selección por juego, ordena las posturas por
+            probabilidad de hit y presenta la lectura final del día en un formato limpio, directo y premium.
+          </div>
+          <a class="btn btn-primary" href="Mejor_postura_PRO_del_dia.html">Abrir benchmark oficial</a>
+        </div>
       </div>
-     
-  </div>
+    </header>
 
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>¿Qué ofrece este proyecto?</h2>
+          <p>
+            Esta oferta está dirigida a usuarios que buscan una lectura más seria del mercado MLB.
+            El objetivo no es “adivinar”, sino estructurar información, modelar escenarios y detectar
+            oportunidades con respaldo analítico en distintos ángulos del juego.
+          </p>
+        </div>
+      </div>
+
+      <div class="about">
+        <div class="info-card">
+          <h3>Descripción de la oferta de modelos</h3>
+          <p>
+            PRO Sports reúne una colección de modelos complementarios diseñados para evaluar
+            la jornada desde distintas capas: abridores, estado actual del equipo, enfrentamientos,
+            escenarios F5, clima, roster, rankings internos y benchmark final. Cada dashboard tiene
+            un propósito específico y en conjunto forman un ecosistema de apoyo para seleccionar
+            posturas con mayor contexto, disciplina y criterio.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <h3>Principales ventajas</h3>
+          <ul class="checklist">
+            <li><span class="check">✓</span><span>Modelos separados por función, evitando mezclar todo en una sola lectura genérica.</span></li>
+            <li><span class="check">✓</span><span>Entrega visual profesional en HTML, ideal para consulta rápida y presentación pública.</span></li>
+            <li><span class="check">✓</span><span>Énfasis en lectura pregame: ML, Run Line, F5, team totals, sides y riesgo estructural.</span></li>
+            <li><span class="check">✓</span><span>Benchmark oficial para consolidar la mejor postura por juego dentro de la jornada.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Biblioteca de modelos</h2>
+          <p>Selecciona el modelo que deseas consultar. Todos los accesos están organizados con una presentación más corporativa y ordenada.</p>
+        </div>
+      </div>
+
+      <div class="models-grid">
+
+        <article class="model-card benchmark-card">
+          <div>
+            <div class="model-kicker">Benchmark premium</div>
+            <h3>Mejor postura PRO del día</h3>
+            <p>
+              Resumen oficial con una sola postura por juego, ranking por probabilidad de hit
+              y presentación final del benchmark previo a resultados.
+            </p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Formato premium</span>
+            <a class="btn btn-primary" href="Mejor_postura_PRO_del_dia.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Vista general</div>
+            <h3>Dashboard MLB</h3>
+            <p>Vista general del análisis MLB con métricas principales y resumen ejecutivo del modelo base.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Resumen diario</span>
+            <a class="btn btn-secondary" href="mlb_dashboard.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Líneas alternativas</div>
+            <h3>Escalera Teaser</h3>
+            <p>Modelo de escalera para líneas alternativas, probabilidades estimadas y selección de puntos óptimos.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Escenarios teaser</span>
+            <a class="btn btn-secondary" href="Escalera_teaser.HTML">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Integración multicapa</div>
+            <h3>Modelo Integrado MLB</h3>
+            <p>Modelo completo con integración de capas, abridores, equipos y señales de mercado para una lectura estructural integral.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Modelo central</span>
+            <a class="btn btn-secondary" href="modelo_integrado_mlb.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Diagnóstico estructural</div>
+            <h3>Modelo Termómetro MLB</h3>
+            <p>Separa P.E.A. y E.E.A. con muestra completa, compara daño del abridor y daño total del equipo, y ordena cruces según fortaleza competitiva.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Diagnóstico técnico</span>
+            <a class="btn btn-secondary" href="Modelo_Termometro_MLB_v2.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Primeras cinco entradas</div>
+            <h3>Modelo F5 · Ventaja al Salir</h3>
+            <p>Analiza cómo dejaron el juego los abridores en sus tres aperturas más recientes para detectar ventajas F5 y diferenciales al salir.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Mercado F5</span>
+            <a class="btn btn-secondary" href="F5_v5_comercial.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Factores externos</div>
+            <h3>Modelo Climático</h3>
+            <p>Lee las condiciones climáticas al momento del juego y evalúa su posible impacto sobre los totales de carreras esperados y ajustes OU.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Clima & Totales</span>
+            <a class="btn btn-secondary" href="mlb_climate_dashboard.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Ranking interno</div>
+            <h3>Modelo Caballo Pitcher</h3>
+            <p>Compara al abridor del día contra la rotación interna de su propio equipo para detectar caballos reales, brazos débiles y diferenciales de valor.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Rotación interna</span>
+            <a class="btn btn-secondary" href="Modelo_Caballo_Pitcher_MLB.html">Abrir modelo</a>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div>
+            <div class="model-kicker">Validación pregame</div>
+            <h3>Roster Report</h3>
+            <p>Reporte enfocado en lineups, ausencias relevantes y validación de disponibilidad antes de tomar una postura de mercado.</p>
+          </div>
+          <div class="card-actions">
+            <span class="model-tag">Lineups & Ausencias</span>
+            <a class="btn btn-secondary" href="mlb_roster_report.html">Abrir modelo</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <p><strong>Repositorio:</strong> Modelos-MLB</p>
+        <div class="foot-note">Última actualización visual · Agosto 2026</div>
+      </div>
+      <a class="btn btn-secondary" href="Mejor_postura_PRO_del_dia.html">Ir al benchmark principal</a>
+    </footer>
+  </main>
 </body>
 </html>
